@@ -1,17 +1,23 @@
 ---
-
+import HeroCourtyard from "@/components/hero/hero-courtyard.astro";
+import GetConnected from "@/components/home/get-connected.astro";
+import Giving from "@/components/home/giving.astro";
+import Ministries from "@/components/home/ministries.astro";
+import PlanVisit from "@/components/home/plan-visit.astro";
+import ServiceTimes from "@/components/home/service-times.astro";
+import WhoWeAre from "@/components/home/who-we-are.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  description="Iglesia Fresno: crece en la fe, comparte el evangelio y alcanza a los perdidos. Domingos 11 a. m. y 6 p. m., jueves 7 p. m."
+  title="Iglesia Fresno"
+>
+  <HeroCourtyard />
+  <ServiceTimes />
+  <Ministries />
+  <WhoWeAre />
+  <PlanVisit />
+  <GetConnected />
+  <Giving />
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import { Button } from "@/components/starwind/button";
+import { Image } from "@/components/starwind/image";
+import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
+---
+
+<section
+  class="scroll-mt-8 border-t border-border px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  id="ofrendas"
+>
+  <div
+    class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-14"
+  >
+    <div class="grid gap-5">
+      <p
+        class="text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
+      >
+        Ofrendas
+      </p>
+      <h2
+        class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+      >
+        Da en línea, en cualquier momento
+      </h2>
+      <p class="text-muted-foreground sm:text-lg">
+        Tu ofrenda fiel sostiene el ministerio de Iglesia Fresno mientras
+        compartimos el evangelio, servimos a nuestra comunidad y ayudamos a
+        llevar las buenas nuevas de Jesucristo alrededor del mundo.
+      </p>
+      <div>
+        <Button href="/dar" size="lg" variant="primary"> Dar en línea </Button>
+      </div>
+    </div>
+
+    <div class="relative overflow-hidden rounded-xl border border-border">
+      <Image
+        alt="Vista previa de la página de ofrendas en línea en una laptop y un teléfono"
+        class="aspect-4/3 size-full object-cover"
+        loading="lazy"
+        sizes="(max-width: 1024px) 100vw, 50vw"
+        src={givingPhoto}
+        widths={[640, 960, 1280]}
+      />
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-accent/20"
+      ></div>
+    </div>
+  </div>
+</section>

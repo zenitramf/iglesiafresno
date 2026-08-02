@@ -8,6 +8,18 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Language
+
+This is a **Spanish-language website** (primary locale: `es`).
+
+- Use `lang="es"` on the root `<html>` element (and any document/layout that sets language).
+- Write all user-facing copy in Spanish: headings, body text, buttons, labels, placeholders, form validation messages, empty states, toasts, tooltips, and navigation.
+- Write accessibility text in Spanish: `alt`, `aria-label`, `aria-describedby` content, and visually hidden helper text.
+- Write SEO/metadata in Spanish: page titles, descriptions, Open Graph, and similar meta content unless a field must stay in a brand/legal English form.
+- Prefer natural, clear Spanish suitable for a church/community audience (Iglesia Fresno). Avoid Spanglish and machine-translated phrasing when drafting or editing copy.
+- Code identifiers (component names, CSS classes, file paths, props) stay in English as usual; only user-visible strings are Spanish.
+- Do not add English UI as the default. If bilingual content is requested later, keep Spanish as the primary experience unless the user says otherwise.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
@@ -20,6 +32,31 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## Starwind UI
+
+This project uses **Starwind UI** (Astro + Tailwind CSS v4). When creating, composing, fixing, theming, or styling UI components, **always** pull current guidance via the Context7 CLI before implementing. Do not guess props, composition patterns, or CLI flags from memory.
+
+### Required ctx7 sources
+
+| Source | Library ID | Use for |
+|--------|------------|---------|
+| Starwind docs | `/websites/starwind_dev` | Component APIs, install/CLI, theming, dark mode, examples |
+| Starwind skills | `/starwind-ui/skills` | Agent workflows for install, compose, theme, and Pro usage |
+
+```bash
+# Docs and examples (prefer specific component/topic queries)
+npx ctx7@latest docs /websites/starwind_dev "How to use the Button and Dialog components"
+npx ctx7@latest docs /websites/starwind_dev "CLI add components and starwind.config.json"
+
+# Skills / agent patterns for UI work
+npx ctx7@latest docs /starwind-ui/skills "How to compose forms cards and dialogs with Starwind"
+npx ctx7@latest docs /starwind-ui/skills "Theming CSS variables and dark mode"
+```
+
+Also load the local **starwind-ui** skill (if installed) and follow its critical rules: prefer existing components, compose with variants/tokens, Astro `class`/`for` syntax, and install missing pieces with `pnpm dlx starwind@latest add <component>` (this project uses pnpm).
+
+Project anchors: `starwind.config.json`, `src/styles/starwind.css`, and installed components under `src/components/starwind` (local source is the final authority for already-installed components).
 
 
 # Ultracite Code Standards

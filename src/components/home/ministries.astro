@@ -1,0 +1,118 @@
+---
+import { Button } from "@/components/starwind/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/starwind/card";
+
+const ministries = [
+  {
+    description:
+      "Enseñanza bíblica sólida en un ambiente seguro para bebés hasta sexto grado los domingos, más un programa infantil los jueves. Todos los voluntarios completan capacitación de seguridad y verificación de antecedentes.",
+    title: "Niños",
+  },
+  {
+    description:
+      "Un lugar espiritualmente sano para que los jóvenes construyan amistades, hagan preguntas difíciles y crezcan mediante enseñanza bíblica relevante, clases semanales y actividades mensuales.",
+    title: "Adolescentes",
+  },
+  {
+    description:
+      "Reuniones regulares para egresados de secundaria y jóvenes universitarios que desean fortalecer su fe y cultivar amistades piadosas en una etapa clave de la vida.",
+    title: "Jóvenes adultos",
+  },
+  {
+    description:
+      "Actividades regulares que animan a los hombres a crecer en devoción personal a Dios y en liderazgo espiritual en el hogar y en la iglesia.",
+    title: "Hombres",
+  },
+  {
+    description:
+      "Estudios bíblicos y comunión que refrescan y animan a las mujeres a crecer en fe y amistad mediante la enseñanza y la oración.",
+    title: "Mujeres",
+  },
+  {
+    description:
+      "Nuestro grupo anima a los adultos mayores con estudio bíblico y oración, cultivando compañerismo y esperanza en esta etapa de la vida.",
+    title: "Adultos mayores",
+  },
+] as const;
+---
+
+<section
+  class="scroll-mt-8 px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  id="ministerios"
+>
+  <div class="mx-auto grid max-w-7xl gap-12">
+    <div class="grid max-w-3xl gap-3">
+      <p
+        class="text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
+      >
+        Ministerios
+      </p>
+      <h2
+        class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+      >
+        El alcance es nuestro corazón.
+      </h2>
+      <p class="text-muted-foreground sm:text-lg">
+        Cada ministerio de Iglesia Fresno sirve a una sola misión: alcanzar
+        Fresno — y el mundo — con el evangelio de Jesucristo.
+      </p>
+    </div>
+
+    <Card class="border-primary/20 bg-card" id="evangelismo">
+      <CardHeader class="gap-3">
+        <p
+          class="text-xs font-medium tracking-[0.16em] text-primary-accent uppercase"
+        >
+          Destacado
+        </p>
+        <CardTitle class="text-2xl sm:text-3xl">Evangelismo</CardTitle>
+        <CardDescription class="text-base text-muted-foreground">
+          Cada semana, en nuestra ciudad y más allá.
+        </CardDescription>
+      </CardHeader>
+      <CardContent class="grid gap-5">
+        <p class="max-w-3xl text-muted-foreground">
+          Una de nuestras mayores responsabilidades es alcanzar a otros con el
+          evangelio de Jesucristo. Participamos en evangelismo de puerta en
+          puerta, eventos comunitarios, apoyo misionero y capacitación para que
+          los creyentes compartan el evangelio.
+        </p>
+        <p class="max-w-3xl text-muted-foreground">
+          No necesitas experiencia para acompañarnos: solo un corazón dispuesto.
+          Te emparejaremos con alguien y te mostraremos cómo hacerlo.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <Button href="/cielo" size="md" variant="primary">
+            Camino a la salvación
+          </Button>
+          <Button href="/eventos" size="md" variant="outline">
+            Ver horarios de alcance
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {ministries.map((ministry) => (
+          <li>
+            <Card class="h-full">
+              <CardHeader>
+                <CardTitle>{ministry.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription class="text-muted-foreground text-sm leading-relaxed">
+                  {ministry.description}
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </li>
+        ))}
+    </ul>
+  </div>
+</section>

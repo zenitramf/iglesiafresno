@@ -1,0 +1,174 @@
+---
+import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import { Button } from "@/components/starwind/button";
+import { Image } from "@/components/starwind/image";
+import heroImage from "@/images/home-page_fvbc_hero.webp";
+---
+
+<section class="bg-background px-3 py-4 sm:px-4 lg:px-6 lg:py-6" id="inicio">
+  <!-- Desktop / tablet: full-width image card with stepped content column -->
+  <div
+    class="relative hidden min-h-[min(54rem,92svh)] overflow-hidden rounded-[2.5rem] ring-1 ring-primary/60 md:flex"
+  >
+    <Image
+      alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
+      class="absolute inset-0 size-full object-cover object-center"
+      fetchpriority="high"
+      loading="eager"
+      sizes="100vw"
+      src={heroImage}
+      widths={[960, 1440, 1920, 2560]}
+    />
+
+    <div
+      class="relative z-10 flex min-h-[48rem] w-[30rem] flex-col lg:w-[34rem]"
+    >
+      <!-- Top step -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none relative min-h-8 w-68 flex-1 rounded-tl-[2.5rem] rounded-tr-4xl bg-background lg:w-80"
+      >
+        <svg
+          aria-hidden="true"
+          class="-right-8 -scale-x-100 absolute bottom-0 size-8 text-background"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 200A200 200 0 0 0 200 0V200H0Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Content step -->
+      <div
+        class="relative flex w-full flex-col justify-center rounded-tr-4xl bg-background px-10 py-12 lg:px-12"
+      >
+        <p
+          class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
+        >
+          Iglesia Fresno
+        </p>
+
+        <h1
+          class="mt-5 text-balance font-light text-5xl text-foreground leading-[1.06] tracking-tight lg:text-6xl 2xl:text-7xl"
+        >
+          Crece en la fe. Comparte el evangelio. Alcanza a los perdidos.
+        </h1>
+
+        <p
+          class="mt-7 max-w-sm text-pretty text-muted-foreground text-sm leading-normal lg:text-base"
+        >
+          Arraigados en las Escrituras, creciendo en Cristo y llevando el
+          evangelio por todo Fresno. Ven y crece con nosotros.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-4">
+          <Button class="group" href="/visita" size="md" variant="primary">
+            Planifica tu visita
+            <ArrowRight
+              aria-hidden="true"
+              class="transition-transform group-hover:translate-x-1"
+            />
+          </Button>
+          <Button class="group" href="/sermones" size="md" variant="ghost">
+            Último sermón
+            <ArrowRight
+              aria-hidden="true"
+              class="transition-transform group-hover:translate-x-1"
+            />
+          </Button>
+        </div>
+
+        <!-- Widest ledge at the bottom of the content step -->
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute right-0 bottom-0 h-[45%] w-20 translate-x-full rounded-r-4xl bg-background"
+        ></div>
+        <svg
+          aria-hidden="true"
+          class="-right-8 -scale-x-100 pointer-events-none absolute bottom-[45%] size-8 text-background"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 200A200 200 0 0 0 200 0V200H0Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Bottom step -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none relative min-h-8 w-40 flex-1 rounded-br-4xl rounded-bl-[2.5rem] bg-background lg:w-56"
+      >
+        <svg
+          aria-hidden="true"
+          class="-right-8 absolute top-0 size-8 rotate-180 text-background"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 200A200 200 0 0 0 200 0V200H0Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile: stacked image card + content -->
+  <div class="grid gap-9 md:hidden">
+    <div class="overflow-hidden rounded-[1.5rem] ring-1 ring-primary/60">
+      <Image
+        alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
+        class="aspect-[9/8] size-full object-cover object-center"
+        fetchpriority="high"
+        loading="eager"
+        sizes="100vw"
+        src={heroImage}
+        widths={[480, 768, 960]}
+      />
+    </div>
+
+    <div class="grid gap-5 px-2">
+      <p
+        class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
+      >
+        Iglesia Fresno
+      </p>
+
+      <h1
+        class="text-balance font-light text-4xl text-foreground leading-[1.12] tracking-tight"
+      >
+        Crece en la fe. Comparte el evangelio. Alcanza a los perdidos.
+      </h1>
+
+      <p
+        class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
+      >
+        Arraigados en las Escrituras, creciendo en Cristo y llevando el
+        evangelio por todo Fresno. Ven y crece con nosotros.
+      </p>
+
+      <div class="grid gap-3 pt-3">
+        <Button class="group w-full" href="/visita" size="lg" variant="primary">
+          Planifica tu visita
+          <ArrowRight
+            aria-hidden="true"
+            class="transition-transform group-hover:translate-x-1"
+          />
+        </Button>
+        <Button class="group w-full" href="/sermones" size="lg" variant="ghost">
+          Último sermón
+          <ArrowRight
+            aria-hidden="true"
+            class="transition-transform group-hover:translate-x-1"
+          />
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

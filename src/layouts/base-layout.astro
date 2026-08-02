@@ -1,0 +1,48 @@
+---
+import SiteFooter from "@/components/layout/site-footer.astro";
+import SiteHeader from "@/components/layout/site-header.astro";
+import "@/styles/starwind.css";
+
+interface Props {
+  description?: string;
+  title?: string;
+}
+
+const {
+  title = "Iglesia Fresno",
+  description = "Iglesia Fresno: una familia de fe en el corazón de Fresno. Te invitamos a visitarnos.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml">
+    <link href="/favicon.ico" rel="icon">
+    <meta content="width=device-width" name="viewport">
+    <meta content={Astro.generator} name="generator">
+    <meta content="dark" name="color-scheme">
+    <title>{title}</title>
+    <meta content={description} name="description">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    >
+  </head>
+  <body class="min-h-svh bg-background font-sans text-foreground antialiased">
+    <a
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+      href="#contenido-principal"
+    >
+      Saltar al contenido principal
+    </a>
+    <SiteHeader />
+    <main id="contenido-principal">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

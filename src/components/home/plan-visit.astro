@@ -1,0 +1,63 @@
+---
+import { Button } from "@/components/starwind/button";
+
+const details = [
+  {
+    label: "Estudio bíblico (jueves)",
+    value: "7:00 p. m.",
+  },
+  {
+    label: "Domingo",
+    value: "10:00 a. m. estudio bíblico · 11:00 a. m. culto principal",
+  },
+  {
+    label: "Ubicación",
+    value: "1717 N Gateway Blvd Ste. #105, Fresno, CA 93727",
+  },
+] as const;
+---
+
+<section
+  class="scroll-mt-8 border-t border-border bg-card px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  id="visita"
+>
+  <div
+    class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+  >
+    <div class="grid gap-5">
+      <p
+        class="font-medium text-primary-accent text-sm tracking-[0.18em] uppercase"
+      >
+        Planifica tu visita
+      </p>
+      <h2
+        class="font-semibold text-3xl text-foreground tracking-tight sm:text-4xl"
+      >
+        Nos encantaría conocerte esta semana
+      </h2>
+      <p class="text-muted-foreground sm:text-lg">
+        Ven a visitarnos. Encuentra un asiento, conoce rostros amables y escucha
+        el evangelio predicado con claridad desde las Escrituras.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <Button href="/visita" size="md" variant="primary">
+          Planifica tu visita
+        </Button>
+        <Button href="/ubicacion" size="md" variant="outline">
+          Abrir en Google Maps
+        </Button>
+      </div>
+    </div>
+
+    <ul class="grid gap-3">
+      {details.map((item) => (
+          <li class="rounded-xl border border-border bg-background px-5 py-4">
+            <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
+              {item.label}
+            </p>
+            <p class="mt-1 font-medium text-base text-foreground">{item.value}</p>
+          </li>
+        ))}
+    </ul>
+  </div>
+</section>
