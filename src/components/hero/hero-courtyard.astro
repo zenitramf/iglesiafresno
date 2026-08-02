@@ -6,9 +6,9 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
 ---
 
 <section class="bg-background px-3 py-4 sm:px-4 lg:px-6 lg:py-6" id="inicio">
-  <!-- Desktop / tablet: full-width image card with stepped content column -->
+  <!-- Desktop: full-width image card with stepped content column (xl+) -->
   <div
-    class="relative hidden min-h-[min(54rem,92svh)] overflow-hidden rounded-[2.5rem] ring-1 ring-primary/60 md:flex"
+    class="relative hidden min-h-[min(54rem,92svh)] overflow-hidden rounded-[2.5rem] ring-1 ring-primary/60 xl:flex"
   >
     <Image
       alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
@@ -20,19 +20,23 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
       widths={[960, 1440, 1920, 2560]}
     />
 
+    <!--
+      Step widths scale fluidly from xl (~1280px) up to 2300px,
+      then hold at their max. Mobile/tablet layout takes over below xl.
+    -->
     <div
-      class="relative z-10 flex min-h-[48rem] w-[30rem] flex-col lg:w-[80rem]"
+      class="relative z-10 flex min-h-[48rem] w-[clamp(30rem,calc(100vw*1280/2300),80rem)] flex-col"
     >
-      <!-- Top step -->
+      <!-- Top step — overlaps into the content step so the join is continuous -->
       <div
         aria-hidden="true"
-        class="pointer-events-none relative min-h-8 w-68 flex-1  bg-background lg:w-180"
+        class="pointer-events-none relative z-0 min-h-8 w-[clamp(17rem,calc(100vw*720/2300),45rem)] flex-1 -mb-6 bg-background"
       >
       </div>
 
       <!-- Content step -->
       <div
-        class="relative flex w-full flex-col justify-center bg-background px-10 py-12 lg:px-12"
+        class="relative z-10 flex w-full flex-col justify-center bg-background px-10 py-12 lg:px-12"
       >
         <p
           class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
@@ -73,46 +77,64 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
         <!-- Widest ledge at the bottom of the content step -->
         <div
           aria-hidden="true"
-          class="pointer-events-none absolute right-0 bottom-0 h-[55%] w-20 translate-x-full bg-background"
+          class="pointer-events-none absolute right-0 bottom-0 h-[55%] w-[clamp(6.5rem,calc(100vw*80/2300),5rem)] translate-x-[calc(100%-5px)] bg-background"
         ></div>
       </div>
 
-      <!-- Bottom step -->
+      <!-- Bottom step — overlaps into the content step so the join is continuous -->
       <div
         aria-hidden="true"
-        class="pointer-events-none relative min-h-8 w-40 flex-1 bg-background lg:w-250"
+        class="pointer-events-none relative z-0 -mt-6 min-h-8 w-[clamp(30rem,calc(100vw*1000/2300),62.5rem)] flex-1 bg-background"
       >
       </div>
     </div>
   </div>
 
-  <!-- Mobile: stacked image card + content -->
-  <div class="grid gap-9 md:hidden">
-    <div class="overflow-hidden rounded-[1.5rem] ring-1 ring-primary/60">
+  <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
+  <div class="grid gap-9 xl:hidden">
+    <div
+      class="relative min-h-[min(32rem,78svh)] overflow-hidden rounded-[1.5rem] ring-1 ring-primary/60"
+    >
       <Image
         alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
-        class="aspect-[9/8] size-full object-cover object-center"
+        class="absolute inset-0 size-full object-cover object-center"
         fetchpriority="high"
         loading="eager"
         sizes="100vw"
         src={heroImage}
         widths={[480, 768, 960]}
       />
+
+      <!-- Scrim so the hero title stays readable on the photo -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-black/45"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
+      >
+      </div>
+
+      <div
+        class="relative z-10 flex min-h-[min(32rem,78svh)] flex-col items-center justify-center px-6 py-10 text-center"
+      >
+        <p
+          class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
+        >
+          Iglesia Fresno
+        </p>
+
+        <h1
+          class="mt-4 max-w-[18ch] text-balance font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
+        >
+          Crece en la fe. Comparte el evangelio. Alcanza a los perdidos.
+        </h1>
+      </div>
     </div>
 
     <div class="grid gap-5 px-2">
-      <p
-        class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
-      >
-        Iglesia Fresno
-      </p>
-
-      <h1
-        class="text-balance font-light text-4xl text-foreground leading-[1.12] tracking-tight"
-      >
-        Crece en la fe. Comparte el evangelio. Alcanza a los perdidos.
-      </h1>
-
       <p
         class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
       >
