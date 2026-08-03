@@ -16,7 +16,7 @@ This is a **Spanish-language website** (primary locale: `es`).
 - Write all user-facing copy in Spanish: headings, body text, buttons, labels, placeholders, form validation messages, empty states, toasts, tooltips, and navigation.
 - Write accessibility text in Spanish: `alt`, `aria-label`, `aria-describedby` content, and visually hidden helper text.
 - Write SEO/metadata in Spanish: page titles, descriptions, Open Graph, and similar meta content unless a field must stay in a brand/legal English form.
-- Prefer natural, clear Spanish suitable for a church/community audience (Iglesia Fresno). Avoid Spanglish and machine-translated phrasing when drafting or editing copy.
+- Prefer natural, clear Spanish suitable for a church/community audience (Iglesia Bautista Victory). Avoid Spanglish and machine-translated phrasing when drafting or editing copy.
 - Code identifiers (component names, CSS classes, file paths, props) stay in English as usual; only user-visible strings are Spanish.
 - Do not add English UI as the default. If bilingual content is requested later, keep Spanish as the primary experience unless the user says otherwise.
 

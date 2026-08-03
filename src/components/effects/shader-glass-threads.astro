@@ -1,0 +1,428 @@
+---
+/**
+ * Local visual stand-in for Starwind Pro `ShaderGlassThreads`.
+ * For look-testing only — replace with the Pro component once
+ * STARWIND_LICENSE_KEY is available.
+ */
+interface Props {
+  class?: string;
+  facetScale?: number;
+  glassBaseColor?: string;
+  glintColor?: string;
+  highlightStrength?: number;
+  maxDpr?: number;
+  maxFps?: 30 | 45 | 60;
+  opacity?: number;
+  refractionDrift?: number;
+  threadColor?: string;
+}
+
+const {
+  class: className,
+  facetScale = 5.5,
+  glassBaseColor = "#08121a",
+  glintColor = "#fae09e",
+  highlightStrength = 0.72,
+  maxDpr = 1.5,
+  maxFps = 60,
+  opacity = 0.92,
+  refractionDrift = 0.3,
+  threadColor = "#94e0f2",
+} = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  data-shader-glass-threads
+  data-shader-state="loading"
+  style={`opacity: ${opacity}`}
+  class:list={[
+    "pointer-events-none absolute inset-0 overflow-hidden",
+    className,
+  ]}
+>
+  <div class="shader-glass-threads-fallback absolute inset-0"></div>
+  <canvas
+    class="absolute inset-0 size-full"
+    data-shader-facet-scale={facetScale}
+    data-shader-glass-base-color={glassBaseColor}
+    data-shader-glass-threads-canvas
+    data-shader-glint-color={glintColor}
+    data-shader-highlight-strength={highlightStrength}
+    data-shader-max-dpr={maxDpr}
+    data-shader-max-fps={maxFps}
+    data-shader-refraction-drift={refractionDrift}
+    data-shader-thread-color={threadColor}
+  ></canvas>
+</div>
+
+<style>
+  .shader-glass-threads-fallback {
+    background:
+      radial-gradient(
+        120% 80% at 20% 10%,
+        color-mix(in oklab, #94e0f2 18%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        90% 70% at 85% 75%,
+        color-mix(in oklab, #fae09e 14%, transparent),
+        transparent 50%
+      ),
+      linear-gradient(160deg, #08121a 0%, #0c1a24 45%, #061018 100%);
+  }
+
+  [data-shader-glass-threads][data-shader-state="ready"]
+    .shader-glass-threads-fallback {
+    opacity: 0;
+  }
+
+  [data-shader-glass-threads][data-shader-state="fallback"] canvas {
+    display: none;
+  }
+</style>
+
+<script>
+  type Vec3 = [number, number, number];
+
+  const VERT = `#version 300 es
+  in vec2 a_pos;
+  out vec2 v_uv;
+  void main() {
+    v_uv = a_pos * 0.5 + 0.5;
+    gl_Position = vec4(a_pos, 0.0, 1.0);
+  }`;
+
+  const FRAG = `#version 300 es
+  precision highp float;
+
+  in vec2 v_uv;
+  out vec4 fragColor;
+
+  uniform vec2 u_res;
+  uniform float u_time;
+  uniform float u_facet;
+  uniform float u_refract;
+  uniform float u_highlight;
+  uniform vec3 u_base;
+  uniform vec3 u_thread;
+  uniform vec3 u_glint;
+
+  float hash(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+  }
+
+  float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+  }
+
+  float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    for (int i = 0; i < 5; i++) {
+      v += a * noise(p);
+      p = p * 2.02 + vec2(17.1, 9.7);
+      a *= 0.5;
+    }
+    return v;
+  }
+
+  vec2 voronoi(vec2 x) {
+    vec2 n = floor(x);
+    vec2 f = fract(x);
+    float md = 8.0;
+    float md2 = 8.0;
+    for (int j = -1; j <= 1; j++) {
+      for (int i = -1; i <= 1; i++) {
+        vec2 g = vec2(float(i), float(j));
+        vec2 o = vec2(hash(n + g), hash(n + g + 19.7));
+        o = 0.5 + 0.5 * sin(u_time * 0.15 + 6.2831 * o);
+        vec2 r = g + o - f;
+        float d = dot(r, r);
+        if (d < md) {
+          md2 = md;
+          md = d;
+        } else if (d < md2) {
+          md2 = d;
+        }
+      }
+    }
+    return vec2(sqrt(md), sqrt(md2));
+  }
+
+  void main() {
+    vec2 uv = v_uv;
+    float aspect = u_res.x / max(u_res.y, 1.0);
+    vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
+
+    float t = u_time * 0.12;
+    vec2 flow = vec2(
+      fbm(p * 1.4 + vec2(t, -t * 0.7)),
+      fbm(p * 1.4 + vec2(-t * 0.6, t * 0.9))
+    );
+    vec2 warped = p + (flow - 0.5) * u_refract * 1.8;
+
+    float scale = mix(2.2, 8.5, clamp((u_facet - 2.4) / 6.6, 0.0, 1.0));
+    vec2 cells = voronoi(warped * scale + vec2(t * 0.35, -t * 0.22));
+    float edge = smoothstep(0.0, 0.12, cells.y - cells.x);
+    float facet = 1.0 - smoothstep(0.02, 0.28, cells.x);
+
+    float ribbons = fbm(warped * vec2(3.2, 1.1) + vec2(0.0, t * 1.4));
+    ribbons = smoothstep(0.42, 0.72, ribbons);
+    float cross = fbm(warped * vec2(1.0, 3.4) - vec2(t * 1.1, 0.0));
+    cross = smoothstep(0.48, 0.78, cross);
+    float threads = max(ribbons * 0.85, cross * 0.55);
+
+    float shine = pow(facet * edge, mix(1.4, 0.55, u_highlight));
+    float glints = pow(max(0.0, 1.0 - cells.x * 4.5), 8.0) * u_highlight;
+
+    vec3 col = u_base;
+    col += u_thread * threads * (0.35 + 0.45 * u_highlight);
+    col += u_thread * shine * 0.55;
+    col += u_glint * glints * 1.4;
+    col += u_glint * threads * shine * 0.25;
+
+    float vignette = smoothstep(1.15, 0.25, length(p * vec2(0.85, 1.0)));
+    col *= mix(0.72, 1.0, vignette);
+
+    fragColor = vec4(col, 1.0);
+  }`;
+
+  const parseColor = (value: string): Vec3 => {
+    const hex = value.trim();
+    if (hex.startsWith("#") && (hex.length === 7 || hex.length === 4)) {
+      const full =
+        hex.length === 4
+          ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
+          : hex;
+      const r = Number.parseInt(full.slice(1, 3), 16) / 255;
+      const g = Number.parseInt(full.slice(3, 5), 16) / 255;
+      const b = Number.parseInt(full.slice(5, 7), 16) / 255;
+      return [r, g, b];
+    }
+    return [0.031, 0.071, 0.102];
+  };
+
+  const compile = (
+    gl: WebGL2RenderingContext,
+    type: number,
+    source: string
+  ): WebGLShader | null => {
+    const shader = gl.createShader(type);
+    if (!shader) {
+      return null;
+    }
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  };
+
+  const init = (root: HTMLElement): (() => void) | undefined => {
+    const canvas = root.querySelector<HTMLCanvasElement>(
+      "[data-shader-glass-threads-canvas]"
+    );
+    if (!canvas) {
+      root.dataset.shaderState = "fallback";
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const gl = canvas.getContext("webgl2", {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      powerPreference: "low-power",
+      premultipliedAlpha: false,
+    });
+
+    if (!gl) {
+      root.dataset.shaderState = "fallback";
+      return;
+    }
+
+    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!(vs && fs)) {
+      root.dataset.shaderState = "fallback";
+      return;
+    }
+
+    const program = gl.createProgram();
+    if (!program) {
+      root.dataset.shaderState = "fallback";
+      return;
+    }
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      root.dataset.shaderState = "fallback";
+      return;
+    }
+
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+      gl.STATIC_DRAW
+    );
+
+    const aPos = gl.getAttribLocation(program, "a_pos");
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+    gl.useProgram(program);
+
+    const uRes = gl.getUniformLocation(program, "u_res");
+    const uTime = gl.getUniformLocation(program, "u_time");
+    const uFacet = gl.getUniformLocation(program, "u_facet");
+    const uRefract = gl.getUniformLocation(program, "u_refract");
+    const uHighlight = gl.getUniformLocation(program, "u_highlight");
+    const uBase = gl.getUniformLocation(program, "u_base");
+    const uThread = gl.getUniformLocation(program, "u_thread");
+    const uGlint = gl.getUniformLocation(program, "u_glint");
+
+    const readNumber = (attr: string, fallback: number): number => {
+      const raw = canvas.getAttribute(attr);
+      const n = raw === null ? Number.NaN : Number(raw);
+      return Number.isFinite(n) ? n : fallback;
+    };
+
+    const maxDpr = readNumber("data-shader-max-dpr", 1.5);
+    const maxFps = readNumber("data-shader-max-fps", 60);
+    const frameMs = 1000 / maxFps;
+
+    gl.uniform1f(uFacet, readNumber("data-shader-facet-scale", 5.5));
+    gl.uniform1f(uRefract, readNumber("data-shader-refraction-drift", 0.3));
+    gl.uniform1f(
+      uHighlight,
+      readNumber("data-shader-highlight-strength", 0.72)
+    );
+    gl.uniform3fv(
+      uBase,
+      parseColor(
+        canvas.getAttribute("data-shader-glass-base-color") ?? "#08121a"
+      )
+    );
+    gl.uniform3fv(
+      uThread,
+      parseColor(canvas.getAttribute("data-shader-thread-color") ?? "#94e0f2")
+    );
+    gl.uniform3fv(
+      uGlint,
+      parseColor(canvas.getAttribute("data-shader-glint-color") ?? "#fae09e")
+    );
+
+    let raf = 0;
+    let last = 0;
+    let running = true;
+    let visible = true;
+
+    const resize = (): void => {
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+      const w = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+      const h = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+      }
+      gl.uniform2f(uRes, w, h);
+    };
+
+    const draw = (timeMs: number): void => {
+      gl.uniform1f(uTime, timeMs * 0.001);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
+
+    const tick = (now: number): void => {
+      if (!running) {
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+      if (!(visible && document.visibilityState === "visible")) {
+        return;
+      }
+      if (now - last < frameMs) {
+        return;
+      }
+      last = now;
+      resize();
+      draw(now);
+    };
+
+    resize();
+    draw(0);
+    root.dataset.shaderState = "ready";
+
+    if (!reduceMotion) {
+      raf = requestAnimationFrame(tick);
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        visible = entries.some((entry) => entry.isIntersecting);
+      },
+      { rootMargin: "10% 0px", threshold: 0.01 }
+    );
+    io.observe(root);
+
+    const onVisibility = (): void => {
+      if (document.visibilityState === "visible" && !reduceMotion) {
+        last = 0;
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      gl.deleteProgram(program);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      gl.deleteBuffer(buffer);
+    };
+  };
+
+  const cleanups = new Map<HTMLElement, () => void>();
+
+  const mountAll = (): void => {
+    for (const root of document.querySelectorAll<HTMLElement>(
+      "[data-shader-glass-threads]"
+    )) {
+      if (cleanups.has(root)) {
+        continue;
+      }
+      const cleanup = init(root);
+      if (cleanup) {
+        cleanups.set(root, cleanup);
+      }
+    }
+  };
+
+  mountAll();
+  document.addEventListener("astro:page-load", mountAll);
+  document.addEventListener("astro:before-swap", () => {
+    for (const cleanup of cleanups.values()) {
+      cleanup();
+    }
+    cleanups.clear();
+  });
+</script>
