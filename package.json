@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
+    "@playwright/test": "^1.62.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "ultracite": "7.9.4"
@@ -23,7 +24,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "ultracite check",
-    "fix": "ultracite fix"
+    "fix": "ultracite fix",
+    "test:e2e": "playwright test",
+    "test:e2e:vision": "playwright test tests/vision-bento.spec.ts"
   },
   "type": "module",
   "version": "0.0.1",

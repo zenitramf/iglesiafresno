@@ -29,6 +29,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  /* Hero courtyard step fill (top / content / ledge / bottom + fillets) */
+  --color-hero-courtyard-step: var(--hero-courtyard-step);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -95,6 +97,16 @@
 :root {
   --background: oklch(0.147 0.004 49.25);
   --foreground: oklch(0.87 0 0);
+  /*
+   * Hero courtyard glass steps — change opacity in one place.
+   * 100% = solid page background; lower = more photo show-through.
+   */
+  --hero-courtyard-step-opacity: 30%;
+  --hero-courtyard-step: color-mix(
+    in oklab,
+    var(--background) var(--hero-courtyard-step-opacity),
+    transparent
+  );
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.87 0 0);
   --popover: oklch(0 0 0);

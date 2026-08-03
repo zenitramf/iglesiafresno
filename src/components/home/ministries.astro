@@ -1,12 +1,11 @@
 ---
 import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import Bible from "@tabler/icons/outline/bible.svg";
 import Check from "@tabler/icons/outline/check.svg";
-import Friends from "@tabler/icons/outline/friends.svg";
-import Man from "@tabler/icons/outline/man.svg";
-import MoodKid from "@tabler/icons/outline/mood-kid.svg";
-import School from "@tabler/icons/outline/school.svg";
-import Walk from "@tabler/icons/outline/walk.svg";
-import Woman from "@tabler/icons/outline/woman.svg";
+import Cross from "@tabler/icons/outline/cross.svg";
+import Home from "@tabler/icons/outline/home.svg";
+import UserHeart from "@tabler/icons/outline/user-heart.svg";
+import World from "@tabler/icons/outline/world.svg";
 import { Button } from "@/components/starwind/button";
 
 const featuredHighlights = [
@@ -16,48 +15,40 @@ const featuredHighlights = [
   "Capacitación para compartir el evangelio",
 ] as const;
 
-const ministries = [
+/**
+ * Vision pillars (excluding Evangelismo Personal — that is the featured bento).
+ * Five cards + featured 2×2 cell fill a 3×3 at @4xl with no orphan.
+ */
+const visionPillars = [
   {
     description:
-      "Enseñanza bíblica sólida en un ambiente seguro para bebés hasta sexto grado los domingos, más un programa infantil los jueves.",
-    href: "#visita",
-    icon: MoodKid,
-    title: "Niños",
+      "Exposición fiel de las Escrituras, enseñando precepto por precepto.",
+    icon: Bible,
+    title: "Predicación y Enseñanza Bíblica",
   },
   {
     description:
-      "Un lugar espiritualmente sano para que los jóvenes construyan amistades, hagan preguntas difíciles y crezcan en la fe.",
-    href: "#visita",
-    icon: School,
-    title: "Adolescentes",
+      "Equipar a los nuevos creyentes para que crezcan en su fe y sirvan dentro de la iglesia local.",
+    icon: UserHeart,
+    title: "Discipulado Personal",
   },
   {
     description:
-      "Reuniones para egresados de secundaria y universitarios que desean fortalecer su fe y cultivar amistades piadosas.",
-    href: "#visita",
-    icon: Friends,
-    title: "Jóvenes adultos",
+      "Enseñar y ministrar a cada miembro del hogar, fortaleciendo las familias cristianas.",
+    icon: Home,
+    title: "Ministerio Familiar",
   },
   {
     description:
-      "Actividades que animan a los hombres a crecer en devoción personal a Dios y en liderazgo espiritual en el hogar.",
-    href: "#visita",
-    icon: Man,
-    title: "Hombres",
+      "Apoyar y enviar misioneros, así como plantar iglesias en otras comunidades y en el extranjero.",
+    icon: World,
+    title: "Mentalidad Misionera",
   },
   {
     description:
-      "Estudios bíblicos y comunión que refrescan y animan a las mujeres a crecer en fe y amistad mediante la oración.",
-    href: "#visita",
-    icon: Woman,
-    title: "Mujeres",
-  },
-  {
-    description:
-      "Estudio bíblico y oración para adultos mayores, cultivando compañerismo y esperanza en esta etapa de la vida.",
-    href: "#visita",
-    icon: Walk,
-    title: "Adultos mayores",
+      "Vivir una vida cristiana apartada de la cultura secular, conforme a la imagen de Cristo.",
+    icon: Cross,
+    title: "Santificación Personal",
   },
 ] as const;
 
@@ -68,30 +59,42 @@ const featuredImageSrc =
 
 <section
   class="@container scroll-mt-8 px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
-  id="ministerios"
+  data-vision-bento
+  id="vision"
 >
   <div class="mx-auto w-full max-w-7xl">
     <div class="mb-12 max-w-xl">
       <p
         class="mb-3 text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
       >
-        Ministerios
+        Visión
       </p>
       <h2
         class="font-heading text-3xl font-semibold tracking-tight @xl:text-4xl @3xl:text-5xl"
       >
-        El alcance es nuestro corazón.
+        Lo que nos guía.
       </h2>
       <p class="mt-4 text-pretty text-muted-foreground @xl:text-lg">
-        Cada ministerio de Iglesia Fresno sirve a una sola misión: alcanzar
-        Fresno — y el mundo — con el evangelio de Jesucristo.
+        Estos pilares orientan la vida y el alcance de Iglesia Fresno: predicar
+        la Escritura, evangelizar, discipular, fortalecer familias, enviar
+        misioneros y vivir apartados para Cristo.
       </p>
     </div>
 
-    <div class="grid gap-6 @2xl:grid-cols-2 @4xl:grid-cols-3">
-      <!-- Featured: Evangelismo -->
+    <!--
+      Bento: featured Evangelismo Personal (2×2 at @4xl) + 5 vision cards.
+      At 3 columns the 2×2 + 5 cells fill a 3×3 with no orphan.
+      At 2 columns featured is full-width; five cards use an even fill via
+      the last card spanning when alone would look stray — see last-card class.
+    -->
+    <div
+      class="grid grid-cols-1 gap-6 @2xl:grid-cols-2 @4xl:grid-cols-3"
+      data-vision-grid
+    >
+      <!-- Featured: Evangelismo Personal -->
       <div
         class="group relative overflow-hidden rounded-2xl bg-muted @2xl:col-span-2 @4xl:row-span-2"
+        data-featured-evangelism
         id="evangelismo"
       >
         <div class="grid h-full @xl:grid-cols-2">
@@ -116,25 +119,23 @@ const featuredImageSrc =
               Destacado
             </span>
             <h3 class="font-heading text-2xl font-semibold @xl:text-3xl">
-              Evangelismo
+              Evangelismo Personal
             </h3>
             <p class="mt-3 text-pretty text-muted-foreground">
-              Una de nuestras mayores responsabilidades es alcanzar a otros con
-              el evangelio de Jesucristo. No necesitas experiencia: solo un
-              corazón dispuesto. Te emparejaremos con alguien y te mostraremos
-              cómo hacerlo.
+              Alcanzar a nuestra comunidad con el mensaje del evangelio mediante
+              visitas regulares y ministerios de alcance.
             </p>
 
             <ul class="mt-6 flex flex-col gap-2">
               {featuredHighlights.map((item) => (
-                                    <li class="flex items-center gap-2 text-sm">
-                                        <Check
-                                            aria-hidden="true"
-                                            class="size-4 shrink-0 text-primary-accent"
-                                        />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
+                <li class="flex items-center gap-2 text-sm">
+                  <Check
+                    aria-hidden="true"
+                    class="size-4 shrink-0 text-primary-accent"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
 
             <div class="mt-6">
@@ -155,34 +156,31 @@ const featuredImageSrc =
         </div>
       </div>
 
-      <!-- Ministry cards -->
-      {ministries.map((ministry) => {
-                    const Icon = ministry.icon;
+      <!-- Vision pillar cards (Evangelismo Personal is only in the featured cell) -->
+      {visionPillars.map((pillar, index) => {
+        const Icon = pillar.icon;
+        const isLast = index === visionPillars.length - 1;
 
-                    return (
-                        <div class="group rounded-2xl border bg-card @xl:p-8 p-6 transition-colors hover:border-primary-accent/50">
-                            <div class="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary-accent/10 text-primary-accent transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                                <Icon aria-hidden="true" class="size-6" />
-                            </div>
-                            <h3 class="font-heading font-semibold text-lg">
-                                {ministry.title}
-                            </h3>
-                            <p class="mt-2 text-pretty text-muted-foreground text-sm">
-                                {ministry.description}
-                            </p>
-                            <a
-                                class="mt-4 inline-flex items-center gap-1 font-medium text-primary-accent text-sm transition-colors hover:underline"
-                                href={ministry.href}
-                            >
-                                Saber más
-                                <ArrowRight
-                                    aria-hidden="true"
-                                    class="size-4 transition-transform group-hover:translate-x-1"
-                                />
-                            </a>
-                        </div>
-                    );
-                })}
+        return (
+          <div
+            data-vision-card
+            class:list={[
+              "group rounded-2xl border bg-card @xl:p-8 p-6 transition-colors hover:border-primary-accent/50",
+              // At 2 cols, 5 cards leave one alone — span full width so it is not a stray half-row box.
+              // At 3 cols the classic 2×2 featured + 5 fills a 3×3; reset span.
+              isLast && "@2xl:col-span-2 @4xl:col-span-1",
+            ]}
+          >
+            <div class="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary-accent/10 text-primary-accent transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <Icon aria-hidden="true" class="size-6" />
+            </div>
+            <h3 class="font-heading font-semibold text-lg">{pillar.title}</h3>
+            <p class="mt-2 text-pretty text-muted-foreground text-sm">
+              {pillar.description}
+            </p>
+          </div>
+        );
+      })}
     </div>
   </div>
 </section>
