@@ -9,6 +9,8 @@ const navLinks = [
   { href: "/eventos", label: "Eventos" },
   { href: "/dar", label: "Dar" },
 ] as const;
+
+const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 ---
 
 <header class="sticky top-0 z-50" data-navbar-3>
@@ -17,18 +19,31 @@ const navLinks = [
     class="@container relative inset-x-0 px-4 py-3 transition-all duration-500"
   >
     <!--
-      Flex row (not absolute-centered links) so the pill never shrinks over the nav.
-      On scroll: width hugs content (max-w-max), brand name hides, sticky header pins it.
+      Starwind Navbar 3 layout:
+      - logo (left) + CTA (right) in normal flow with z-10
+      - nav links absolutely centered so logo width changes never shift them
+      - max-w-full → max-w-2xl on scroll (both lengths, so width animates)
     -->
     <div
-      class="group/pill mx-auto flex h-14 w-full max-w-full items-center justify-between gap-3 rounded-full border border-border bg-muted/50 px-3 shadow-[inset_0_1px_0_0] shadow-muted backdrop-blur transition-[max-width,padding,gap,box-shadow] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] data-[scrolled]:max-w-max data-[scrolled]:gap-2 data-[scrolled]:px-2 data-[scrolled]:shadow-md sm:data-[scrolled]:px-3"
       data-navbar-3-pill
+      class:list={[
+        "group/pill relative mx-auto flex h-14 w-full max-w-full items-center justify-between rounded-full border border-border bg-muted/50 px-3 shadow-[inset_0_1px_0_0] shadow-muted backdrop-blur",
+        "transition-[max-width,box-shadow] duration-500",
+        ease,
+        "data-[scrolled]:max-w-2xl data-[scrolled]:shadow-md",
+      ]}
     >
-      <div class="flex shrink-0 items-center pl-1 sm:pl-2">
+      <!-- Brand (left) — name collapses without affecting centered links -->
+      <div class="relative z-10 flex shrink-0 items-center pl-2">
         <a
           aria-label="Iglesia Fresno — inicio"
-          class="flex min-w-0 items-center gap-2.5"
           href="/"
+          class:list={[
+            "flex items-center gap-2.5",
+            "transition-[gap] duration-500",
+            ease,
+            "group-data-[scrolled]/pill:gap-0",
+          ]}
         >
           <span
             aria-hidden="true"
@@ -38,33 +53,47 @@ const navLinks = [
           </span>
           <span
             aria-hidden="true"
-            class="max-w-[10rem] overflow-hidden font-semibold text-sm tracking-tight whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] group-data-[scrolled]/pill:max-w-0 group-data-[scrolled]/pill:opacity-0 sm:text-base"
+            class:list={[
+              "grid grid-cols-[1fr] opacity-100",
+              "transition-[grid-template-columns,opacity] duration-500",
+              ease,
+              "group-data-[scrolled]/pill:grid-cols-[0fr] group-data-[scrolled]/pill:opacity-0",
+            ]}
           >
-            Iglesia Fresno
+            <span
+              class="min-w-0 overflow-hidden font-semibold text-sm tracking-tight whitespace-nowrap sm:text-base"
+            >
+              Iglesia Fresno
+            </span>
           </span>
         </a>
       </div>
 
+      <!-- Nav links — absolute center; independent of brand width -->
       <div
-        class="hidden min-w-0 shrink-0 items-center gap-0.5 @2xl:flex sm:gap-1"
+        class="pointer-events-none absolute inset-x-0 hidden justify-center @2xl:flex"
       >
-        {navLinks.map((link) => (
-            <a
-              class="rounded-md px-2.5 py-2 text-muted-foreground text-sm transition-colors hover:text-foreground sm:px-3"
-              href={link.href}
-            >
-              {link.label}
-            </a>
-          ))}
+        <div class="pointer-events-auto flex items-center gap-1">
+          {navLinks.map((link) => (
+              <a
+                class="rounded-md px-3 py-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
+                href={link.href}
+              >
+                {link.label}
+              </a>
+            ))}
+        </div>
       </div>
 
-      <div class="hidden shrink-0 items-center gap-2 @2xl:flex">
+      <!-- CTA (desktop) -->
+      <div class="relative z-10 hidden items-center gap-2 @2xl:flex">
         <Button class="rounded-full" href="/visita" size="sm" variant="default">
           Visítanos
         </Button>
       </div>
 
-      <div class="shrink-0 pr-0.5 @2xl:hidden">
+      <!-- Hamburger (mobile) -->
+      <div class="relative z-10 pr-0.5 @2xl:hidden">
         <button
           aria-controls="navbar-3-menu"
           aria-expanded="false"
@@ -229,7 +258,6 @@ const navLinks = [
       menu.classList.remove("hidden");
       setExpanded(true);
 
-      // Force layout so the open animation starts from the closed state.
       menu.style.clipPath = CLOSED_CLIP;
       menu.style.opacity = "0";
       menu.style.transform = "translateY(-8px)";
@@ -283,8 +311,17 @@ const navLinks = [
       }
     });
 
+    // Match Starwind: scroll root can be a nested overflow container or window.
+    const scrollRoot =
+      root.closest(".overflow-y-auto, .overflow-y-scroll") ?? window;
+
     const updateScrolled = () => {
-      if (window.scrollY > 10) {
+      const scrollY =
+        scrollRoot === window
+          ? window.scrollY
+          : (scrollRoot as HTMLElement).scrollTop;
+
+      if (scrollY > 10) {
         pill.setAttribute("data-scrolled", "");
       } else {
         pill.removeAttribute("data-scrolled");
@@ -292,7 +329,7 @@ const navLinks = [
     };
 
     updateScrolled();
-    window.addEventListener("scroll", updateScrolled, { passive: true });
+    scrollRoot.addEventListener("scroll", updateScrolled, { passive: true });
   }
 
   initNavbar3();
