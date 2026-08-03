@@ -1,0 +1,24 @@
+---
+import ArrowDown from "@tabler/icons/outline/arrow-down.svg";
+import PageHero from "@/components/layout/page-hero.astro";
+---
+
+<PageHero
+  description="La Biblia responde esta pregunta con cuatro pasos claros. Tómate un momento para leerlos con calma."
+  eyebrow="El mensaje de la salvación"
+  id="inicio-cielo"
+  title="¿Cómo puedo ir al cielo?"
+>
+  <a
+    class="mt-4 flex flex-col items-center gap-2 font-medium text-muted-foreground text-sm tracking-wide transition-colors hover:text-foreground"
+    href="#paso-1"
+  >
+    <span class="flex items-center gap-2">
+      Comienza a leer
+      <ArrowDown aria-hidden="true" class="size-4" />
+    </span>
+    <span
+      class="h-10 w-px bg-linear-to-b from-primary-accent/60 to-transparent"
+    ></span>
+  </a>
+</PageHero>

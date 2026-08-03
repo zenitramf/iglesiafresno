@@ -1,0 +1,42 @@
+---
+interface Props {
+  citation: string;
+  emphasis?: "default" | "monument";
+  quote: string;
+}
+
+const { citation, emphasis = "default", quote } = Astro.props;
+
+const shell = {
+  default: "border-border bg-card/60",
+  monument:
+    "border-primary-accent/50 bg-linear-to-br from-primary-accent/12 via-card to-card",
+} as const;
+
+const quoteClass = {
+  default: "text-foreground sm:text-lg",
+  monument:
+    "text-foreground text-xl leading-relaxed sm:text-2xl sm:leading-relaxed",
+} as const;
+---
+
+<figure
+  class:list={[
+    "rounded-2xl border px-5 py-5 sm:px-7 sm:py-7",
+    shell[emphasis],
+  ]}
+>
+  <blockquote
+    class:list={[
+      "text-pretty font-medium leading-relaxed",
+      quoteClass[emphasis],
+    ]}
+  >
+    {quote}
+  </blockquote>
+  <cite
+    class="mt-4 block font-medium text-muted-foreground text-sm not-italic tracking-wide"
+  >
+    — {citation}
+  </cite>
+</figure>

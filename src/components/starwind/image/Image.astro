@@ -1,16 +1,23 @@
 ---
-import type { ComponentProps } from "astro/types";
 import { Image as AstroImage } from "astro:assets";
+import type { ComponentProps } from "astro/types";
 
 import { image } from "./variants";
 
-type Props = Partial<ComponentProps<typeof AstroImage>> & { inferSize?: boolean };
+type Props = Partial<ComponentProps<typeof AstroImage>> & {
+  inferSize?: boolean;
+};
 
-const { class: className, src, alt = "", inferSize = true, ...rest } = Astro.props;
+const {
+  class: className,
+  src,
+  alt = "",
+  inferSize = true,
+  ...rest
+} = Astro.props;
 ---
 
-{
-  src && (
+{src && (
     <AstroImage
       class={image({ class: className })}
       src={src}
@@ -19,5 +26,4 @@ const { class: className, src, alt = "", inferSize = true, ...rest } = Astro.pro
       {...(rest as any)}
       data-slot="image"
     />
-  )
-}
+  )}

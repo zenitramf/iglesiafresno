@@ -1,0 +1,139 @@
+---
+import VerseCard from "@/components/cielo/verse-card.astro";
+
+type Block =
+  | { kind: "prose"; text: string }
+  | { citation: string; kind: "verse"; quote: string };
+
+interface Step {
+  blocks: readonly Block[];
+  id: string;
+  title: string;
+}
+
+const steps = [
+  {
+    blocks: [
+      {
+        citation: "Romanos 3:10",
+        kind: "verse",
+        quote: "Como está escrito: No hay justo, ni aun uno",
+      },
+      {
+        kind: "prose",
+        text: "Todos hemos pecado. Pecar es desobedecer la ley de Dios.",
+      },
+      {
+        citation: "Romanos 3:23",
+        kind: "verse",
+        quote:
+          "Por cuanto todos pecaron, y están destituidos de la gloria de Dios",
+      },
+      {
+        kind: "prose",
+        text: "Esto significa que ningún ser humano es perfecto. Tal vez seamos buenos en comparación con otras personas, pero no en comparación con Dios.",
+      },
+    ],
+    id: "paso-1",
+    number: "1",
+    title: "Reconozca que es pecador",
+  },
+  {
+    blocks: [
+      {
+        citation: "Romanos 6:23",
+        kind: "verse",
+        quote: "Porque la paga del pecado es muerte",
+      },
+      {
+        kind: "prose",
+        text: "Esto no solo habla de la muerte física, sino también de la muerte espiritual: la separación eterna de Dios en el infierno.",
+      },
+      {
+        citation: "Apocalipsis 21:8",
+        kind: "verse",
+        quote:
+          "Pero los cobardes e incrédulos, los abominables y homicidas, los fornicarios y hechiceros, los idólatras y todos los mentirosos tendrán su parte en el lago que arde con fuego y azufre, que es la muerte segunda.",
+      },
+      {
+        kind: "prose",
+        text: "Todos hemos mentido. El pecado tiene una consecuencia: separarnos de Dios para siempre.",
+      },
+    ],
+    id: "paso-2",
+    number: "2",
+    title: "Reconozca que hay un precio por el pecado",
+  },
+  {
+    blocks: [
+      {
+        citation: "Romanos 5:8",
+        kind: "verse",
+        quote:
+          "Mas Dios muestra su amor para con nosotros, en que siendo aún pecadores, Cristo murió por nosotros",
+      },
+      {
+        kind: "prose",
+        text: "Jesucristo vino al mundo, vivió sin pecado y murió en la cruz por nuestros pecados. Luego resucitó al tercer día para darnos vida eterna.",
+      },
+      {
+        kind: "prose",
+        text: "Él tomó nuestro lugar. Nosotros merecíamos el castigo, pero Él lo recibió en nuestro lugar.",
+      },
+    ],
+    id: "paso-3",
+    number: "3",
+    title: "Reconozca que Cristo pagó por sus pecados",
+  },
+  {
+    blocks: [
+      {
+        citation: "Romanos 10:9",
+        kind: "verse",
+        quote:
+          "Que si confesares con tu boca que Jesús es el Señor, y creyeres en tu corazón que Dios le levantó de los muertos, serás salvo",
+      },
+      {
+        kind: "prose",
+        text: "La salvación es un regalo gratuito. No se gana por obras, ni por ser religioso, sino por fe en Cristo.",
+      },
+      {
+        citation: "Efesios 2:8-9",
+        kind: "verse",
+        quote:
+          "Porque por gracia sois salvos por medio de la fe; y esto no de vosotros, pues es don de Dios; no por obras, para que nadie se gloríe",
+      },
+      {
+        kind: "prose",
+        text: "Si usted cree en Jesucristo como su único Salvador, puede orar a Dios y confesar su fe.",
+      },
+    ],
+    id: "paso-4",
+    number: "4",
+    title: "Deposite su fe en Cristo y profese su fe",
+  },
+] as const satisfies readonly Step[];
+---
+
+{steps.map((step) => (
+    <section
+      class="scroll-mt-24 border-border border-t px-4 py-16 sm:px-6 sm:py-20"
+      id={step.id}
+    >
+      <div class="mx-auto grid max-w-3xl gap-7">
+        <h2 class="text-balance font-semibold text-3xl tracking-tight sm:text-4xl">
+          {step.title}
+        </h2>
+
+        {step.blocks.map((block) =>
+          block.kind === "verse" ? (
+            <VerseCard citation={block.citation} quote={block.quote} />
+          ) : (
+            <p class="text-pretty text-lg text-muted-foreground leading-relaxed">
+              {block.text}
+            </p>
+          )
+        )}
+      </div>
+    </section>
+  ))}

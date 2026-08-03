@@ -1,0 +1,27 @@
+---
+import Assurance from "@/components/cielo/assurance.astro";
+import Hero from "@/components/cielo/hero.astro";
+import Invitation from "@/components/cielo/invitation.astro";
+import Prayer from "@/components/cielo/prayer.astro";
+import Steps from "@/components/cielo/steps.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
+---
+
+<BaseLayout
+  description="¿Cómo puedo ir al cielo? Lee el mensaje bíblico de la salvación en cuatro pasos y descubre cómo tener vida eterna por medio de Jesucristo."
+  title="Cielo | Iglesia Fresno"
+>
+  <Hero />
+  <Steps />
+  <Prayer />
+  <Assurance />
+  <Invitation />
+</BaseLayout>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+</style>

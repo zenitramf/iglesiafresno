@@ -2,18 +2,18 @@ import { tv } from "tailwind-variants";
 
 export const card = tv({
   base: [
-    "bg-card text-card-foreground group/card ring-border flex flex-col rounded-xl ring-1",
-    "has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0",
+    "group/card flex flex-col rounded-xl bg-card text-card-foreground ring-1 ring-border",
+    "has-[>img:first-child]:pt-0 has-data-[slot=card-footer]:pb-0",
     "*:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
   ],
+  defaultVariants: {
+    size: "default",
+  },
   variants: {
     size: {
       default: "gap-6 py-6",
       sm: "gap-4 py-4 text-sm",
     },
-  },
-  defaultVariants: {
-    size: "default",
   },
 });
 
@@ -26,11 +26,11 @@ export const cardContent = tv({
 });
 
 export const cardDescription = tv({
-  base: "text-muted-foreground text-base group-data-[size=sm]/card:text-sm",
+  base: "text-base text-muted-foreground group-data-[size=sm]/card:text-sm",
 });
 
 export const cardFooter = tv({
-  base: "bg-muted/50 flex items-center rounded-b-xl border-t p-6 group-data-[size=sm]/card:p-4",
+  base: "flex items-center rounded-b-xl border-t bg-muted/50 p-6 group-data-[size=sm]/card:p-4",
 });
 
 export const cardHeader = tv({
@@ -41,5 +41,5 @@ export const cardHeader = tv({
 });
 
 export const cardTitle = tv({
-  base: "font-heading text-xl leading-snug font-medium group-data-[size=sm]/card:text-base",
+  base: "font-heading font-medium text-xl leading-snug group-data-[size=sm]/card:text-base",
 });
