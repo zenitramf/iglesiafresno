@@ -17,7 +17,9 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
   -->
 
   <!-- Desktop: full-bleed image + stepped content column -->
-  <div class="relative hidden min-h-[48rem] bg-background xl:block">
+  <div
+    class="relative hidden h-[min(48rem,calc(75svh-3rem))] overflow-hidden bg-background xl:block"
+  >
     <div
       class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
     >
@@ -38,16 +40,19 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
 
     <!--
       Step widths scale fluidly from xl (~1280px) up to 2300px,
-      then hold at their max. Courtyard height matches this column
-      (48rem) rather than stretching the steps taller.
+      then hold at their max. Height is capped at 75svh so the hero
+      never fills more than three-quarters of the viewport.
+
+      Short laptop heights (e.g. 1080p @ 125% → 864svh) compress type
+      and spacing so the content step fits without overflowing the cutout.
     -->
     <div
-      class="relative flex min-h-[48rem] w-[clamp(30rem,calc(100vw*1280/2300),80rem)] flex-col"
+      class="relative flex h-full min-h-0 w-[clamp(30rem,calc(100vw*1280/2300),80rem)] flex-col"
     >
       <!-- Top step -->
       <div
         aria-hidden="true"
-        class="pointer-events-none relative w-[clamp(17rem,calc(100vw*720/2300),45rem)] flex-1 rounded-t-4xl bg-hero-courtyard-step"
+        class="pointer-events-none relative min-h-6 w-[clamp(17rem,calc(100vw*720/2300),45rem)] flex-1 rounded-t-4xl bg-hero-courtyard-step"
       >
         <svg
           aria-hidden="true"
@@ -64,7 +69,7 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
 
       <!-- Content step -->
       <div
-        class="relative flex w-full flex-col justify-center rounded-tr-4xl bg-hero-courtyard-step px-10 py-12 2xl:px-12"
+        class="relative flex w-full shrink-0 flex-col justify-center rounded-tr-4xl bg-hero-courtyard-step px-8 py-5 2xl:px-12 [@media(min-height:900px)]:px-10 [@media(min-height:900px)]:py-8 [@media(min-height:1000px)]:py-12"
       >
         <p
           class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
@@ -73,7 +78,7 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
         </p>
 
         <h1
-          class="mt-5 text-balance font-heading font-light text-6xl tracking-tight 2xl:text-7xl"
+          class="mt-3 text-balance font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
         >
           Crece en la fe.<br>
           Comparte el evangelio.<br>
@@ -81,13 +86,15 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
         </h1>
 
         <p
-          class="mt-7 max-w-sm text-pretty text-muted-foreground text-base leading-normal"
+          class="mt-4 max-w-sm text-pretty text-muted-foreground text-sm leading-normal [@media(min-height:900px)]:mt-6 [@media(min-height:900px)]:text-base [@media(min-height:1000px)]:mt-7"
         >
           Arraigados en las Escrituras, creciendo en Cristo y llevando el
           evangelio por todo Fresno. Ven y crece con nosotros.
         </p>
 
-        <div class="mt-8 flex flex-wrap items-center gap-4">
+        <div
+          class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
+        >
           <Button class="group" href="/visita" size="md" variant="primary">
             Planifica tu visita
             <ArrowRight
@@ -125,7 +132,7 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
       <!-- Bottom step -->
       <div
         aria-hidden="true"
-        class="pointer-events-none relative w-[clamp(30rem,calc(100vw*1000/2300),62.5rem)] flex-1 rounded-b-4xl bg-hero-courtyard-step"
+        class="pointer-events-none relative min-h-6 w-[clamp(30rem,calc(100vw*1000/2300),62.5rem)] flex-1 rounded-b-4xl bg-hero-courtyard-step"
       >
         <svg
           aria-hidden="true"
@@ -145,7 +152,7 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
   <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
   <div class="grid gap-9 xl:hidden">
     <div
-      class="relative min-h-[min(32rem,78svh)] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
+      class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
     >
       <Image
         alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
@@ -168,7 +175,7 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
       ></div>
 
       <div
-        class="relative z-10 flex min-h-[min(32rem,78svh)] flex-col items-center justify-center px-6 py-10 text-center"
+        class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
       >
         <p
           class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
