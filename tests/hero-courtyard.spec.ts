@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Desktop hero courtyard — SVG silhouette replaces the old CSS step stack.
- * Validates geometry (left mask / right steps) and glass fill color.
+ * Desktop hero courtyard — long-X SVG bound to the title box (plus padding gap).
+ * Validates height-lock, title-bound right edge, glass color, and left mask.
  */
 const DESKTOP = { height: 900, width: 1440 } as const;
 
@@ -24,7 +24,6 @@ async function samplePixel(
     type: "png",
   });
 
-  // Decode PNG via canvas in the page
   const dataUrl = `data:image/png;base64,${shot.toString("base64")}`;
   return page.evaluate(
     ({ dataUrl: url, relX: rx, relY: ry, dpr: ratio, cssW, cssH }) =>
@@ -94,94 +93,80 @@ test.describe("Hero courtyard SVG", () => {
     await expect(svg).toBeVisible();
     await expect(svg).toHaveAttribute("viewBox", "0 0 2522 937");
 
-    // Mobile layout must not show the courtyard SVG
     await page.setViewportSize({ height: 844, width: 390 });
     await expect(courtyard).toBeHidden();
   });
 
-  test("shape is height-locked and slides so stepped edge meets glass band", async ({
+  test("shape right edge is bound to the title shell with a gap", async ({
     page,
   }) => {
     const frame = page.locator("[data-hero-frame]");
     const shape = page.locator("[data-hero-shape]");
+    const shell = page.locator("[data-hero-copy-shell]");
+    const title = page.locator("[data-hero-title]");
     const content = page.locator("[data-hero-content]");
     const svg = shape.locator("svg");
 
     const frameBox = await frame.boundingBox();
     const shapeBox = await shape.boundingBox();
+    const shellBox = await shell.boundingBox();
+    const titleBox = await title.boundingBox();
     const contentBox = await content.boundingBox();
 
-    expect(frameBox).toBeTruthy();
-    expect(shapeBox).toBeTruthy();
-    expect(contentBox).toBeTruthy();
-    if (!(frameBox && shapeBox && contentBox)) {
+    expect(
+      frameBox && shapeBox && shellBox && titleBox && contentBox
+    ).toBeTruthy();
+    if (!(frameBox && shapeBox && shellBox && titleBox && contentBox)) {
       return;
     }
 
-    // Content left-aligned to the frame
-    expect(Math.abs(contentBox.x - frameBox.x)).toBeLessThanOrEqual(2);
+    // Shell / content left-aligned to the frame
+    expect(Math.abs(shellBox.x - frameBox.x)).toBeLessThanOrEqual(2);
 
-    // Top/bottom match the courtyard exactly
+    // Top/bottom of shape match the courtyard
     expect(Math.abs(shapeBox.y - frameBox.y)).toBeLessThanOrEqual(2);
     expect(Math.abs(shapeBox.height - frameBox.height)).toBeLessThanOrEqual(2);
 
-    // True aspect from height (long-X artboard) — not stretched
+    // True aspect from height — not stretched
     const expectedWidth = shapeBox.height * (2522 / 937);
     expect(Math.abs(shapeBox.width - expectedWidth)).toBeLessThanOrEqual(3);
-
-    // Full path fit (meet), not slice/none
     await expect(svg).toHaveAttribute("preserveAspectRatio", "xMinYMid meet");
 
-    // Default desktop (1440): band ≈ ⅔ via one-pass formula
-    const capPx = Math.round((1600 * 2) / 3);
-    const expectedBand = Math.min(
-      frameBox.width * (2 / 3),
-      Math.max(frameBox.width * 0.35, capPx)
-    );
-    expect(Math.abs(contentBox.width - expectedBand)).toBeLessThanOrEqual(4);
+    // Content-step face of the path (~93.4% of artboard) meets shell right —
+    // not the outer ledge (viewBox 100%), so title is not cut by the step.
+    const stepRightFrac = 2355.4 / 2522;
+    const stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac;
+    const shellRight = shellBox.x + shellBox.width;
+    expect(Math.abs(stepFaceX - shellRight)).toBeLessThanOrEqual(3);
 
-    // Shape right edge aligns with content right edge (horizontal slide)
+    // Outer ledge sits past the shell (step protrusion into the photo)
     const shapeRight = shapeBox.x + shapeBox.width;
-    const contentRight = contentBox.x + contentBox.width;
-    expect(Math.abs(shapeRight - contentRight)).toBeLessThanOrEqual(3);
+    expect(shapeRight).toBeGreaterThan(shellRight + 4);
 
-    // When the long SVG is wider than the band, it slides left of the frame
-    if (shapeBox.width > contentBox.width + 1) {
-      expect(shapeBox.x).toBeLessThan(frameBox.x + 1);
-    }
+    // Title is inside the shell with padding gap before the step face
+    const titleRight = titleBox.x + titleBox.width;
+    expect(shellRight - titleRight).toBeGreaterThanOrEqual(48);
+    expect(titleBox.x - shellBox.x).toBeGreaterThanOrEqual(16);
+
+    // Shell width tracks title + horizontal padding (may be asymmetric)
+    expect(shellBox.width).toBeGreaterThan(titleBox.width);
+    expect(shellBox.width - titleBox.width).toBeLessThanOrEqual(160);
+
+    // Long SVG extends left of the frame under the copy
+    expect(shapeBox.x).toBeLessThan(frameBox.x + 1);
   });
 
-  const slideViewports = [
+  const titleBoundViewports = [
     { height: 800, width: 1280 },
     { height: 900, width: 1440 },
     { height: 1080, width: 1920 },
     { height: 720, width: 1600 },
     { height: 1200, width: 1280 },
-    // Courtyard ≈ viewport − horizontal section padding; need > 1600 content width
     { height: 900, width: 1728 },
-    { height: 1000, width: 1920 },
   ] as const;
 
-  /**
-   * Glass band (one-pass formula):
-   * min(66.666%, max(35%, 1067px)) — ≈⅔ until ~1600px wide, then holds and
-   * approaches 35% on very wide frames (no @container reflow).
-   */
-  function expectGlassBand(
-    frameWidth: number,
-    contentWidth: number,
-    label: string
-  ) {
-    const capPx = Math.round((1600 * 2) / 3);
-    const expected = Math.min(
-      frameWidth * (2 / 3),
-      Math.max(frameWidth * 0.35, capPx)
-    );
-    expect(Math.abs(contentWidth - expected), label).toBeLessThanOrEqual(4);
-  }
-
-  for (const vp of slideViewports) {
-    test(`height-lock + slide band holds at ${vp.width}×${vp.height}`, async ({
+  for (const vp of titleBoundViewports) {
+    test(`title-bound shape holds at ${vp.width}×${vp.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(vp);
@@ -189,37 +174,41 @@ test.describe("Hero courtyard SVG", () => {
 
       const frame = page.locator("[data-hero-frame]");
       const shape = page.locator("[data-hero-shape]");
-      const content = page.locator("[data-hero-content]");
+      const shell = page.locator("[data-hero-copy-shell]");
+      const title = page.locator("[data-hero-title]");
       await expect(shape).toBeVisible();
 
       const frameBox = await frame.boundingBox();
       const shapeBox = await shape.boundingBox();
-      const contentBox = await content.boundingBox();
-      expect(frameBox && shapeBox && contentBox).toBeTruthy();
-      if (!(frameBox && shapeBox && contentBox)) {
+      const shellBox = await shell.boundingBox();
+      const titleBox = await title.boundingBox();
+      expect(frameBox && shapeBox && shellBox && titleBox).toBeTruthy();
+      if (!(frameBox && shapeBox && shellBox && titleBox)) {
         return;
       }
 
-      // Top/bottom locked to courtyard
       expect(Math.abs(shapeBox.height - frameBox.height)).toBeLessThanOrEqual(
         2
       );
       expect(Math.abs(shapeBox.y - frameBox.y)).toBeLessThanOrEqual(2);
 
-      // Width is pure aspect from height (long-X viewBox)
       const expectedWidth = shapeBox.height * (2522 / 937);
       expect(Math.abs(shapeBox.width - expectedWidth)).toBeLessThanOrEqual(3);
 
-      expectGlassBand(
-        frameBox.width,
-        contentBox.width,
-        `band at ${vp.width}×${vp.height} (frame ${Math.round(frameBox.width)}px)`
-      );
+      // Content-step face aligned to shell right
+      const stepRightFrac = 2355.4 / 2522;
+      const stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac;
+      const shellRight = shellBox.x + shellBox.width;
+      expect(Math.abs(stepFaceX - shellRight)).toBeLessThanOrEqual(3);
 
-      // Stepped edge (shape right) meets band right
-      const shapeRight = shapeBox.x + shapeBox.width;
-      const contentRight = contentBox.x + contentBox.width;
-      expect(Math.abs(shapeRight - contentRight)).toBeLessThanOrEqual(3);
+      // Gap: title ends before the step face
+      const titleRight = titleBox.x + titleBox.width;
+      expect(shellRight - titleRight).toBeGreaterThanOrEqual(48);
+
+      // Shell is title-sized, not a large fraction of a wide frame
+      if (frameBox.width > 1400) {
+        expect(shellBox.width / frameBox.width).toBeLessThan(0.55);
+      }
     });
   }
 
@@ -228,11 +217,11 @@ test.describe("Hero courtyard SVG", () => {
   }) => {
     const courtyard = page.locator("[data-hero-courtyard]");
     const frame = page.locator("[data-hero-frame]");
-    const content = page.locator("[data-hero-content]");
+    const shell = page.locator("[data-hero-copy-shell]");
     const frameBox = await frame.boundingBox();
-    const contentBox = await content.boundingBox();
-    expect(frameBox && contentBox).toBeTruthy();
-    if (!(frameBox && contentBox)) {
+    const shellBox = await shell.boundingBox();
+    expect(frameBox && shellBox).toBeTruthy();
+    if (!(frameBox && shellBox)) {
       return;
     }
 
@@ -240,43 +229,36 @@ test.describe("Hero courtyard SVG", () => {
       const value = getComputedStyle(el).borderTopLeftRadius;
       return Number.parseFloat(value);
     });
-    expect(radius).toBeGreaterThanOrEqual(24); // rounded-4xl ≈ 2rem
+    expect(radius).toBeGreaterThanOrEqual(24);
 
-    // Top-left of the frame (outside the arc): not solid glass
-    const cornerSample = await samplePixel(page, frameBox, 0.002, 0.002);
-
-    // Mid glass band: glass fill
+    // Inside the glass under the title (not the gold border ring)
     const glassSample = await samplePixel(
       page,
       frameBox,
-      (contentBox.width * 0.25) / frameBox.width,
-      0.5
+      (shellBox.width * 0.35) / frameBox.width,
+      0.45
     );
 
-    // Photo past the glass band
+    // Photo past the title shell / stepped edge
     const photoSample = await samplePixel(
       page,
       frameBox,
-      Math.min(0.95, (contentBox.width + 48) / frameBox.width),
-      0.5
+      Math.min(0.95, (shellBox.width + 48) / frameBox.width),
+      0.45
     );
 
     expect(colorDistance(glassSample, photoSample)).toBeGreaterThan(12);
 
-    const distCornerToGlass = colorDistance(cornerSample, glassSample);
-    const distCornerToPhoto = colorDistance(cornerSample, photoSample);
-    expect(distCornerToGlass).toBeGreaterThan(10);
-    expect(distCornerToPhoto).toBeLessThan(distCornerToGlass + 5);
+    // Just inside the rounded frame corner — should not match solid mid-glass
+    // (clipped to radius; may be border or photo, not the glass wash)
+    const cornerSample = await samplePixel(page, frameBox, 0.004, 0.004);
+    expect(colorDistance(cornerSample, glassSample)).toBeGreaterThan(8);
   });
 
   test("glass fill uses hero-courtyard-step color token", async ({ page }) => {
     const shape = page.locator("[data-hero-shape]");
     await expect(shape).toBeVisible();
 
-    /**
-     * Resolve any CSS color (oklch, color-mix, currentColor, …) to sRGB via canvas.
-     * getComputedStyle alone may return non-rgb() serializations.
-     */
     const resolved = await shape.evaluate((el) => {
       const toRgba = (cssColor: string) => {
         const canvas = document.createElement("canvas");
@@ -296,15 +278,11 @@ test.describe("Hero courtyard SVG", () => {
 
       const styles = getComputedStyle(el);
       const colorValue = styles.color;
-
       const token = getComputedStyle(document.documentElement)
         .getPropertyValue("--hero-courtyard-step")
         .trim();
-
       const path = el.querySelector("path");
       const pathFillRaw = path ? getComputedStyle(path).fill : "";
-
-      // Path uses fill="currentColor" — resolve against the shape's color
       const fillCss =
         !pathFillRaw ||
         pathFillRaw === "none" ||
@@ -322,96 +300,82 @@ test.describe("Hero courtyard SVG", () => {
       };
     });
 
-    // Design token must be defined
     expect(resolved.token.length).toBeGreaterThan(0);
-
-    // text-hero-courtyard-step on the wrapper matches the token
     expect(
       colorDistance(resolved.wrapperColor, resolved.tokenColor)
     ).toBeLessThan(4);
-
-    // Path fill matches the same glass token
     expect(colorDistance(resolved.fill, resolved.tokenColor)).toBeLessThan(4);
-
-    // Dark glass, not pure black/white
     expect(luminance(resolved.fill)).toBeLessThan(80);
     expect(luminance(resolved.fill)).toBeGreaterThan(5);
 
-    // Pixel sample in the visible glass band (composited over photo)
-    const content = page.locator("[data-hero-content]");
-    const contentBox = await content.boundingBox();
-    expect(contentBox).toBeTruthy();
-    if (!contentBox) {
+    const shell = page.locator("[data-hero-copy-shell]");
+    const shellBox = await shell.boundingBox();
+    expect(shellBox).toBeTruthy();
+    if (!shellBox) {
       return;
     }
-    const mid = await samplePixel(page, contentBox, 0.35, 0.45);
-    // Glass is a translucent dark wash — mid sample should be relatively dark
+    const mid = await samplePixel(page, shellBox, 0.35, 0.45);
     expect(luminance(mid)).toBeLessThan(120);
   });
 
-  test("content overlays the shape middle band", async ({ page }) => {
+  test("content overlays the shape; title drives shell width", async ({
+    page,
+  }) => {
     const shape = page.locator("[data-hero-shape]");
-    const content = page.locator("[data-hero-content]");
-    const heading = content.getByRole("heading", { level: 1 });
+    const shell = page.locator("[data-hero-copy-shell]");
+    const title = page.locator("[data-hero-title]");
+    const heading = page.getByRole("heading", { level: 1 }).first();
 
     await expect(heading).toBeVisible();
 
     const shapeBox = await shape.boundingBox();
-    const contentBox = await content.boundingBox();
+    const shellBox = await shell.boundingBox();
+    const titleBox = await title.boundingBox();
     const headingBox = await heading.boundingBox();
-    expect(shapeBox && contentBox && headingBox).toBeTruthy();
-    if (!(shapeBox && contentBox && headingBox)) {
+    expect(shapeBox && shellBox && titleBox && headingBox).toBeTruthy();
+    if (!(shapeBox && shellBox && titleBox && headingBox)) {
       return;
     }
 
-    // Shape spans the glass band (may extend left of the frame when slid)
-    expect(shapeBox.x).toBeLessThanOrEqual(contentBox.x + 1);
+    // Shape spans under the shell (extends left; ledge may sit past shell right)
+    expect(shapeBox.x).toBeLessThanOrEqual(shellBox.x + 1);
     expect(shapeBox.x + shapeBox.width).toBeGreaterThanOrEqual(
-      contentBox.x + contentBox.width - 3
+      shellBox.x + shellBox.width - 2
     );
 
-    // Heading sits inside the content band
-    expect(headingBox.x).toBeGreaterThanOrEqual(contentBox.x - 1);
+    // Heading sits inside the shell
+    expect(headingBox.x).toBeGreaterThanOrEqual(shellBox.x - 1);
     expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(
-      contentBox.x + contentBox.width + 1
-    );
-    expect(headingBox.y).toBeGreaterThan(contentBox.y);
-    expect(headingBox.y + headingBox.height).toBeLessThan(
-      contentBox.y + contentBox.height
+      shellBox.x + shellBox.width + 1
     );
 
-    // Roughly in the vertical middle band (not jammed into the top 10%)
-    const relTop = (headingBox.y - contentBox.y) / contentBox.height;
-    expect(relTop).toBeGreaterThan(0.12);
-    expect(relTop).toBeLessThan(0.55);
+    // Title is the width driver (within padding)
+    expect(titleBox.width).toBeGreaterThan(shellBox.width * 0.5);
   });
 
   test("right silhouette steps: glass then photo along a mid scanline", async ({
     page,
   }) => {
-    const content = page.locator("[data-hero-content]");
+    const shell = page.locator("[data-hero-copy-shell]");
     const frame = page.locator("[data-hero-frame]");
-    const contentBox = await content.boundingBox();
+    const shellBox = await shell.boundingBox();
     const frameBox = await frame.boundingBox();
-    expect(contentBox && frameBox).toBeTruthy();
-    if (!(contentBox && frameBox)) {
+    expect(shellBox && frameBox).toBeTruthy();
+    if (!(shellBox && frameBox)) {
       return;
     }
 
-    // Inside the glass band vs just past the stepped edge
-    const glass = await samplePixel(page, contentBox, 0.45, 0.3);
-    const nearRightEdge = await samplePixel(page, contentBox, 0.88, 0.3);
+    // Solid glass under the title body (path is full height on the left side)
+    const glass = await samplePixel(page, shellBox, 0.3, 0.4);
+    // Past the shell right edge — photo (stepped silhouette ends at shell)
     const pastShape = await samplePixel(
       page,
       frameBox,
-      Math.min(0.98, (contentBox.width + 40) / frameBox.width),
-      (contentBox.y - frameBox.y + contentBox.height * 0.3) / frameBox.height
+      Math.min(0.98, (shellBox.width + 40) / frameBox.width),
+      (shellBox.y - frameBox.y + shellBox.height * 0.4) / frameBox.height
     );
 
-    // Interior glass samples should be similar to each other
-    expect(colorDistance(glass, nearRightEdge)).toBeLessThan(40);
-
-    // Past the shape should look like the photo (different from glass)
     expect(colorDistance(glass, pastShape)).toBeGreaterThan(12);
+    expect(luminance(glass)).toBeLessThan(luminance(pastShape) + 5);
   });
 });

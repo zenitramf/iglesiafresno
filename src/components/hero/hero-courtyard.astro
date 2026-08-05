@@ -8,21 +8,23 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
 /**
  * SVG viewBox 2522×937 — long-X artboard for height-locked horizontal slide.
  *
- * All sizes use the same first-paint lengths (svh/rem/% of CB) — no cqh and
- * no @container, which reflow after measure and flash (shrink then grow).
+ * The copy shell is width: max-content sized by the title (longest line).
+ * Horizontal padding is the gap between the words and the silhouette.
  *
- * Glass band: min(66.666%, max(35%, ⅔×1600px)) — ~⅔ until courtyard ~1600px,
- * then holds and settles to 35% on very wide frames.
+ * Important: the path’s right edge is not a vertical line. The ledge is at
+ * viewBox right (100%), but the title sits in the content-step band whose
+ * right face is ~93.4% of the artboard. Align that face to the shell right
+ * (not the ledge) so the step does not cut through the letters.
  */
 const SHAPE_VB_W = 2522;
 const SHAPE_VB_H = 937;
+/** Content-step right face X in viewBox space (after export transform). */
+const SHAPE_STEP_RIGHT_X = 2355.4;
+/** Fraction of shape width where the title-band glass edge sits. */
+const SHAPE_STEP_RIGHT_FRAC = SHAPE_STEP_RIGHT_X / SHAPE_VB_W;
 const HERO_HEIGHT = "min(48rem, calc(75svh - 3rem))" as const;
 const SHAPE_WIDTH =
   `calc((${HERO_HEIGHT}) * ${SHAPE_VB_W} / ${SHAPE_VB_H})` as const;
-/** ⅔ of 1600px — glass width cap before the band eases toward 35%. */
-const GLASS_BAND_CAP_PX = Math.round((1600 * 2) / 3);
-const GLASS_BAND =
-  `min(66.666%, max(35%, ${GLASS_BAND_CAP_PX}px))` as const;
 ---
 
 <section
@@ -30,19 +32,17 @@ const GLASS_BAND =
   id="inicio"
 >
   <!--
-    Desktop (xl+): full-bleed photo with a long-X SVG courtyard silhouette.
-    Height-locked; slides horizontally so the stepped edge sits in the glass
-    band. Mobile/tablet (< xl): title over image with scrim; CTAs below.
+    Desktop (xl+): photo + SVG glass whose right edge is bound to the title
+    box (plus padding gap). Mobile/tablet: title over image; CTAs below.
   -->
 
-  <!-- Desktop: full-bleed image + SVG courtyard shape -->
+  <!-- Desktop: full-bleed image + title-bound courtyard shape -->
   <div
     class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
     data-hero-courtyard
     style={`
       height: ${HERO_HEIGHT};
       --hero-shape-w: ${SHAPE_WIDTH};
-      --hero-glass-band: ${GLASS_BAND};
     `}
   >
     <div
@@ -65,36 +65,26 @@ const GLASS_BAND =
     </div>
 
     <!--
-      Height-locked shape width from the same HERO_HEIGHT as the frame (svh/rem).
-      `left` slides the long artboard so the stepped edge meets the glass band.
-      Percentages in --hero-glass-band resolve against the courtyard (CB), not
-      the shape — avoid transform translate % which re-resolves against self.
+      Sizing container: width = title max-content + horizontal padding (gap).
+      Shape is full height; `right` offsets so the content-step face (not the
+      outer ledge) lands on the shell’s right edge — keeps letters inside glass.
     -->
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-y-0 z-[1] h-full text-hero-courtyard-step"
-      data-hero-shape
-      style={`
-        width: var(--hero-shape-w);
-        left: min(0px, calc(var(--hero-glass-band) - var(--hero-shape-w)));
-      `}
-    >
-      <CourtyardShape class="size-full" preserveAspectRatio="xMinYMid meet" />
-    </div>
-
-    <!--
-      Copy sits in the glass band. Vertical flex keeps type in the middle band;
-      horizontal padding clears the stepped right edge.
-    -->
-    <div
-      class="relative z-[2] flex h-full min-h-0 flex-col"
-      data-hero-content
-      style="width: var(--hero-glass-band);"
-    >
-      <div aria-hidden="true" class="min-h-6 flex-1"></div>
+    <div class="relative z-[2] flex h-full w-max flex-col" data-hero-copy-shell>
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-y-0 z-0 h-full text-hero-courtyard-step"
+        data-hero-shape
+        style={`
+          width: var(--hero-shape-w);
+          right: calc((${SHAPE_STEP_RIGHT_FRAC} - 1) * var(--hero-shape-w));
+        `}
+      >
+        <CourtyardShape class="size-full" preserveAspectRatio="xMinYMid meet" />
+      </div>
 
       <div
-        class="relative flex w-[85%] shrink-0 flex-col justify-center px-8 py-5 2xl:px-12 [@media(min-height:900px)]:px-10 [@media(min-height:900px)]:py-8 [@media(min-height:1000px)]:py-12"
+        class="relative z-[1] flex min-h-0 flex-1 flex-col justify-center py-5 pr-16 pl-8 2xl:pr-24 2xl:pl-12 [@media(min-height:900px)]:py-8 [@media(min-height:900px)]:pr-20 [@media(min-height:900px)]:pl-10 [@media(min-height:1000px)]:py-12"
+        data-hero-content
       >
         <p
           class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
@@ -102,42 +92,51 @@ const GLASS_BAND =
           Iglesia Bautista Victory
         </p>
 
+        <!--
+          Title defines the shell width (longest line). text-balance is avoided
+          so line breaks stay explicit and max-content is stable.
+        -->
         <h1
-          class="mt-3 text-balance font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
+          class="mt-3 font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
+          data-hero-title
         >
           Crece en la fe.<br>
           Comparte el evangelio.<br>
           Alcanza a los perdidos.
         </h1>
 
-        <p
-          class="mt-4 max-w-sm text-pretty text-muted-foreground text-sm leading-normal [@media(min-height:900px)]:mt-6 [@media(min-height:900px)]:text-base [@media(min-height:1000px)]:mt-7"
-        >
-          Arraigados en las Escrituras, creciendo en Cristo y llevando el
-          evangelio por todo Fresno. Ven y crece con nosotros.
-        </p>
+        <!--
+          w-0 min-w-full: fill the title width without expanding the shell
+          if subtitle/buttons would otherwise be wider.
+        -->
+        <div class="w-0 min-w-full">
+          <p
+            class="mt-4 text-pretty text-muted-foreground text-sm leading-normal [@media(min-height:900px)]:mt-6 [@media(min-height:900px)]:text-base [@media(min-height:1000px)]:mt-7"
+          >
+            Arraigados en las Escrituras, creciendo en Cristo y llevando el
+            evangelio por todo Fresno. Ven y crece con nosotros.
+          </p>
 
-        <div
-          class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
-        >
-          <Button class="group" href="/visita" size="md" variant="primary">
-            Planifica tu visita
-            <ArrowRight
-              aria-hidden="true"
-              class="transition-transform group-hover:translate-x-1"
-            />
-          </Button>
-          <Button class="group" href="/sermones" size="md" variant="ghost">
-            Último sermón
-            <ArrowRight
-              aria-hidden="true"
-              class="transition-transform group-hover:translate-x-1"
-            />
-          </Button>
+          <div
+            class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
+          >
+            <Button class="group" href="/visita" size="md" variant="primary">
+              Planifica tu visita
+              <ArrowRight
+                aria-hidden="true"
+                class="transition-transform group-hover:translate-x-1"
+              />
+            </Button>
+            <Button class="group" href="/sermones" size="md" variant="ghost">
+              Último sermón
+              <ArrowRight
+                aria-hidden="true"
+                class="transition-transform group-hover:translate-x-1"
+              />
+            </Button>
+          </div>
         </div>
       </div>
-
-      <div aria-hidden="true" class="min-h-6 flex-1"></div>
     </div>
   </div>
 
