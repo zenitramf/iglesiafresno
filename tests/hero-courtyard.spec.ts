@@ -132,10 +132,13 @@ test.describe("Hero courtyard SVG", () => {
     // Full path fit (meet), not slice/none
     await expect(svg).toHaveAttribute("preserveAspectRatio", "xMinYMid meet");
 
-    // Glass band is ½–⅔ of the frame
-    const bandRatio = contentBox.width / frameBox.width;
-    expect(bandRatio).toBeGreaterThanOrEqual(0.5 - 0.01);
-    expect(bandRatio).toBeLessThanOrEqual(2 / 3 + 0.01);
+    // Default desktop (1440): band ≈ ⅔ via one-pass formula
+    const capPx = Math.round((1600 * 2) / 3);
+    const expectedBand = Math.min(
+      frameBox.width * (2 / 3),
+      Math.max(frameBox.width * 0.35, capPx)
+    );
+    expect(Math.abs(contentBox.width - expectedBand)).toBeLessThanOrEqual(4);
 
     // Shape right edge aligns with content right edge (horizontal slide)
     const shapeRight = shapeBox.x + shapeBox.width;
@@ -154,7 +157,28 @@ test.describe("Hero courtyard SVG", () => {
     { height: 1080, width: 1920 },
     { height: 720, width: 1600 },
     { height: 1200, width: 1280 },
+    // Courtyard ≈ viewport − horizontal section padding; need > 1600 content width
+    { height: 900, width: 1728 },
+    { height: 1000, width: 1920 },
   ] as const;
+
+  /**
+   * Glass band (one-pass formula):
+   * min(66.666%, max(35%, 1067px)) — ≈⅔ until ~1600px wide, then holds and
+   * approaches 35% on very wide frames (no @container reflow).
+   */
+  function expectGlassBand(
+    frameWidth: number,
+    contentWidth: number,
+    label: string
+  ) {
+    const capPx = Math.round((1600 * 2) / 3);
+    const expected = Math.min(
+      frameWidth * (2 / 3),
+      Math.max(frameWidth * 0.35, capPx)
+    );
+    expect(Math.abs(contentWidth - expected), label).toBeLessThanOrEqual(4);
+  }
 
   for (const vp of slideViewports) {
     test(`height-lock + slide band holds at ${vp.width}×${vp.height}`, async ({
@@ -186,10 +210,11 @@ test.describe("Hero courtyard SVG", () => {
       const expectedWidth = shapeBox.height * (2522 / 937);
       expect(Math.abs(shapeBox.width - expectedWidth)).toBeLessThanOrEqual(3);
 
-      // Glass band ½–⅔
-      const bandRatio = contentBox.width / frameBox.width;
-      expect(bandRatio).toBeGreaterThanOrEqual(0.5 - 0.01);
-      expect(bandRatio).toBeLessThanOrEqual(2 / 3 + 0.01);
+      expectGlassBand(
+        frameBox.width,
+        contentBox.width,
+        `band at ${vp.width}×${vp.height} (frame ${Math.round(frameBox.width)}px)`
+      );
 
       // Stepped edge (shape right) meets band right
       const shapeRight = shapeBox.x + shapeBox.width;

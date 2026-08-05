@@ -8,19 +8,21 @@ import heroImage from "@/images/home-page_fvbc_hero.webp";
 /**
  * SVG viewBox 2522×937 — long-X artboard for height-locked horizontal slide.
  *
- * - Top/bottom always match the hero-courtyard height (uniform scale).
- * - Width = height × (2522/937); path is never stretched or viewBox-sliced.
- * - Glass band is clamp(½, shape, ⅔) of the frame; the shape slides so its
- *   stepped right edge lands on that band (extra length runs off the left).
- * - Frame overflow + rounded-4xl masks the left bevel; left extension of the
- *   path keeps solid glass under the copy while steps stay in view.
+ * All sizes use the same first-paint lengths (svh/rem/% of CB) — no cqh and
+ * no @container, which reflow after measure and flash (shrink then grow).
+ *
+ * Glass band: min(66.666%, max(35%, ⅔×1600px)) — ~⅔ until courtyard ~1600px,
+ * then holds and settles to 35% on very wide frames.
  */
 const SHAPE_VB_W = 2522;
 const SHAPE_VB_H = 937;
-const SHAPE_WIDTH = `calc(100cqh * ${SHAPE_VB_W} / ${SHAPE_VB_H})`;
-/** Visible glass / content width: at least ½ frame, at most ⅔. */
+const HERO_HEIGHT = "min(48rem, calc(75svh - 3rem))" as const;
+const SHAPE_WIDTH =
+  `calc((${HERO_HEIGHT}) * ${SHAPE_VB_W} / ${SHAPE_VB_H})` as const;
+/** ⅔ of 1600px — glass width cap before the band eases toward 35%. */
+const GLASS_BAND_CAP_PX = Math.round((1600 * 2) / 3);
 const GLASS_BAND =
-  "clamp(50%, min(var(--hero-shape-w), 66.666%), 66.666%)" as const;
+  `min(66.666%, max(35%, ${GLASS_BAND_CAP_PX}px))` as const;
 ---
 
 <section
@@ -35,9 +37,13 @@ const GLASS_BAND =
 
   <!-- Desktop: full-bleed image + SVG courtyard shape -->
   <div
-    class="relative hidden h-[min(48rem,calc(75svh-3rem))] overflow-hidden rounded-4xl bg-background [container-type:size] xl:block"
+    class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
     data-hero-courtyard
-    style={`--hero-shape-w: ${SHAPE_WIDTH}; --hero-glass-band: ${GLASS_BAND};`}
+    style={`
+      height: ${HERO_HEIGHT};
+      --hero-shape-w: ${SHAPE_WIDTH};
+      --hero-glass-band: ${GLASS_BAND};
+    `}
   >
     <div
       class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
@@ -59,10 +65,10 @@ const GLASS_BAND =
     </div>
 
     <!--
-      Glass silhouette: height-locked, true aspect. `left` slides the long
-      artboard so the stepped right edge aligns with the glass band; the long
-      solid left runs under the copy (and off-frame). Path itself is not clipped
-      or stretched — only the frame/courtyard rounded overflow crops the view.
+      Height-locked shape width from the same HERO_HEIGHT as the frame (svh/rem).
+      `left` slides the long artboard so the stepped edge meets the glass band.
+      Percentages in --hero-glass-band resolve against the courtyard (CB), not
+      the shape — avoid transform translate % which re-resolves against self.
     -->
     <div
       aria-hidden="true"
@@ -77,8 +83,8 @@ const GLASS_BAND =
     </div>
 
     <!--
-      Copy sits in the glass band (½–⅔ of the frame). Vertical flex keeps type
-      in the middle band; horizontal padding clears the stepped right edge.
+      Copy sits in the glass band. Vertical flex keeps type in the middle band;
+      horizontal padding clears the stepped right edge.
     -->
     <div
       class="relative z-[2] flex h-full min-h-0 flex-col"
