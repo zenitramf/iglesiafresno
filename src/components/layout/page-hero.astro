@@ -14,9 +14,12 @@ const { class: className, description, eyebrow, id, title } = Astro.props;
 
 <section
   id={id}
-  class:list={["site-gutter pt-20 pb-16 sm:pt-28 sm:pb-20", className]}
+  class:list={[
+    "site-gutter flex min-h-[28rem] items-center pt-20 pb-16 sm:min-h-[32rem] sm:pt-28 sm:pb-20",
+    className,
+  ]}
 >
-  <SiteContainer class="flex flex-col items-center gap-7 text-center">
+  <SiteContainer class="flex w-full flex-col items-center gap-7 text-center">
     <p
       class="font-medium text-primary-accent text-sm tracking-[0.22em] uppercase"
     >
