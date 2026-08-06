@@ -6,6 +6,7 @@ import Cross from "@tabler/icons/outline/cross.svg";
 import Home from "@tabler/icons/outline/home.svg";
 import UserHeart from "@tabler/icons/outline/user-heart.svg";
 import World from "@tabler/icons/outline/world.svg";
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 
 const featuredHighlights = [
@@ -58,11 +59,11 @@ const featuredImageSrc =
 ---
 
 <section
-  class="@container scroll-mt-8 px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  class="site-gutter @container scroll-mt-8 py-16 sm:py-20"
   data-vision-bento
   id="vision"
 >
-  <div class="mx-auto w-full max-w-7xl">
+  <SiteContainer>
     <div class="mb-12 max-w-xl">
       <p
         class="mb-3 text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
@@ -75,9 +76,9 @@ const featuredImageSrc =
         Lo que nos guía.
       </h2>
       <p class="mt-4 text-pretty text-muted-foreground @xl:text-lg">
-        Estos pilares orientan la vida y el alcance de Iglesia Bautista Victory: predicar
-        la Escritura, evangelizar, discipular, fortalecer familias, enviar
-        misioneros y vivir apartados para Cristo.
+        Estos pilares orientan la vida y el alcance de Iglesia Bautista Victory:
+        predicar la Escritura, evangelizar, discipular, fortalecer familias,
+        enviar misioneros y vivir apartados para Cristo.
       </p>
     </div>
 
@@ -182,5 +183,5 @@ const featuredImageSrc =
         );
       })}
     </div>
-  </div>
+  </SiteContainer>
 </section>

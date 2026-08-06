@@ -1,0 +1,21 @@
+---
+/**
+ * Standard site content shell (max-width + center).
+ *
+ * Pair with `site-gutter` on the parent <section>/<footer> so full-bleed
+ * backgrounds still edge-to-edge while content aligns across all pages.
+ *
+ * Width token: --container-site (see src/styles/starwind.css).
+ * Put layout classes on this component (e.g. class="grid gap-7"); do not wrap
+ * another page-level max-width inside.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["site-container", className]}>
+  <slot />
+</div>

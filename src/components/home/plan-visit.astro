@@ -1,29 +1,27 @@
 ---
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
+import { churchInfo } from "@/lib/church-data";
+import { getSpanishServiceTimes } from "@/lib/service-times";
 
+const serviceTimes = await getSpanishServiceTimes();
 const details = [
-  {
-    label: "Estudio bíblico (jueves)",
-    value: "7:00 p. m.",
-  },
-  {
-    label: "Domingo",
-    value: "10:00 a. m. estudio bíblico · 11:00 a. m. culto principal",
-  },
+  ...serviceTimes.map((item) => ({
+    label: item.label,
+    value: item.time,
+  })),
   {
     label: "Ubicación",
-    value: "1717 N Gateway Blvd Ste. #105, Fresno, CA 93727",
+    value: `${churchInfo.addressLine1}, ${churchInfo.addressLine2}`,
   },
-] as const;
+];
 ---
 
 <section
-  class="scroll-mt-8 border-t border-border bg-card px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  class="site-gutter scroll-mt-8 border-t border-border bg-card py-16 sm:py-20"
   id="visita"
 >
-  <div
-    class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
-  >
+  <SiteContainer class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
     <div class="grid gap-5">
       <p
         class="font-medium text-primary-accent text-sm tracking-[0.18em] uppercase"
@@ -59,5 +57,5 @@ const details = [
           </li>
         ))}
     </ul>
-  </div>
+  </SiteContainer>
 </section>

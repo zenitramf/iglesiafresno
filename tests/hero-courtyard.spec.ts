@@ -97,6 +97,28 @@ test.describe("Hero courtyard SVG", () => {
     await expect(courtyard).toBeHidden();
   });
 
+  test("hero stays within site content width (not full viewport)", async ({
+    page,
+  }) => {
+    // site-container = --container-site 90rem ≈ 1440px
+    await page.setViewportSize({ height: 900, width: 1920 });
+    await page.goto("/");
+
+    const courtyard = page.locator("[data-hero-courtyard]");
+    await expect(courtyard).toBeVisible();
+    const box = await courtyard.boundingBox();
+    expect(box).toBeTruthy();
+    if (!box) {
+      return;
+    }
+
+    // Capped by site shell; site-gutter keeps it under the viewport
+    expect(box.width).toBeLessThanOrEqual(1440);
+    expect(box.width).toBeLessThan(1920 * 0.85);
+    // Centered with gutters on both sides
+    expect(box.x).toBeGreaterThan(80);
+  });
+
   test("shape right edge is bound to the title shell with a gap", async ({
     page,
   }) => {
@@ -205,10 +227,9 @@ test.describe("Hero courtyard SVG", () => {
       const titleRight = titleBox.x + titleBox.width;
       expect(shellRight - titleRight).toBeGreaterThanOrEqual(48);
 
-      // Shell is title-sized, not a large fraction of a wide frame
-      if (frameBox.width > 1400) {
-        expect(shellBox.width / frameBox.width).toBeLessThan(0.55);
-      }
+      // Shell leaves room for the photo past the stepped silhouette
+      expect(shellBox.width / frameBox.width).toBeLessThan(0.85);
+      expect(frameBox.width - shellBox.width).toBeGreaterThan(80);
     });
   }
 

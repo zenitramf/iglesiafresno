@@ -1,5 +1,6 @@
 ---
 import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import CourtyardShape from "@/images/hero-courtyard-shape.svg";
@@ -28,186 +29,199 @@ const SHAPE_WIDTH =
 ---
 
 <section
-  class="bg-background px-3 py-4 text-foreground sm:px-4 lg:px-6 lg:py-6"
+  class="site-gutter bg-background py-4 text-foreground sm:py-5 lg:py-6"
   id="inicio"
 >
   <!--
-    Desktop (xl+): photo + SVG glass whose right edge is bound to the title
-    box (plus padding gap). Mobile/tablet: title over image; CTAs below.
+    Standard site shell (SiteContainer). Desktop (xl+): photo + SVG glass
+    whose right edge is bound to the title box. Mobile/tablet: title over
+    image; CTAs below.
   -->
-
-  <!-- Desktop: full-bleed image + title-bound courtyard shape -->
-  <div
-    class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
-    data-hero-courtyard
-    style={`
-      height: ${HERO_HEIGHT};
-      --hero-shape-w: ${SHAPE_WIDTH};
-    `}
-  >
+  <SiteContainer>
+    <!-- Desktop: image + title-bound courtyard shape -->
     <div
-      class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
-      data-hero-frame
+      class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
+      data-hero-courtyard
+      style={`
+        height: ${HERO_HEIGHT};
+        --hero-shape-w: ${SHAPE_WIDTH};
+      `}
     >
-      <Image
-        alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
-        class="absolute inset-0 size-full object-cover object-center"
-        fetchpriority="high"
-        loading="eager"
-        sizes="100vw"
-        src={heroImage}
-        widths={[960, 1440, 1920, 2560]}
-      />
       <div
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 bg-linear-to-br from-background/40 via-background/5 to-background/20"
-      ></div>
-    </div>
-
-    <!--
-      Sizing container: width = title max-content + horizontal padding (gap).
-      Shape is full height; `right` offsets so the content-step face (not the
-      outer ledge) lands on the shell’s right edge — keeps letters inside glass.
-    -->
-    <div class="relative z-[2] flex h-full w-max flex-col" data-hero-copy-shell>
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 z-0 h-full text-hero-courtyard-step"
-        data-hero-shape
-        style={`
-          width: var(--hero-shape-w);
-          right: calc((${SHAPE_STEP_RIGHT_FRAC} - 1) * var(--hero-shape-w));
-        `}
+        class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
+        data-hero-frame
       >
-        <CourtyardShape class="size-full" preserveAspectRatio="xMinYMid meet" />
+        <Image
+          alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
+          class="absolute inset-0 size-full object-cover object-center"
+          fetchpriority="high"
+          loading="eager"
+          sizes="(max-width: 1440px) 100vw, 1440px"
+          src={heroImage}
+          widths={[960, 1280, 1440, 1920]}
+        />
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 bg-linear-to-br from-background/40 via-background/5 to-background/20"
+        ></div>
       </div>
 
+      <!--
+        Sizing container: width = title max-content + horizontal padding (gap).
+        Shape is full height; `right` offsets so the content-step face (not the
+        outer ledge) lands on the shell’s right edge — keeps letters inside glass.
+      -->
       <div
-        class="relative z-[1] flex min-h-0 flex-1 flex-col justify-center py-5 pr-16 pl-8 2xl:pr-24 2xl:pl-12 [@media(min-height:900px)]:py-8 [@media(min-height:900px)]:pr-20 [@media(min-height:900px)]:pl-10 [@media(min-height:1000px)]:py-12"
-        data-hero-content
+        class="relative z-[2] flex h-full w-max flex-col"
+        data-hero-copy-shell
       >
-        <p
-          class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-y-0 z-0 h-full text-hero-courtyard-step"
+          data-hero-shape
+          style={`
+            width: var(--hero-shape-w);
+            right: calc((${SHAPE_STEP_RIGHT_FRAC} - 1) * var(--hero-shape-w));
+          `}
         >
-          Iglesia Bautista Victory
-        </p>
+          <CourtyardShape
+            class="size-full"
+            preserveAspectRatio="xMinYMid meet"
+          />
+        </div>
 
-        <!--
-          Title defines the shell width (longest line). text-balance is avoided
-          so line breaks stay explicit and max-content is stable.
-        -->
-        <h1
-          class="mt-3 font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
-          data-hero-title
+        <div
+          class="relative z-[1] flex min-h-0 flex-1 flex-col justify-center py-5 pr-16 pl-8 2xl:pr-24 2xl:pl-12 [@media(min-height:900px)]:py-8 [@media(min-height:900px)]:pr-20 [@media(min-height:900px)]:pl-10 [@media(min-height:1000px)]:py-12"
+          data-hero-content
         >
-          Crece en la fe.<br>
-          Comparte el evangelio.<br>
-          Alcanza a los perdidos.
-        </h1>
-
-        <!--
-          w-0 min-w-full: fill the title width without expanding the shell
-          if subtitle/buttons would otherwise be wider.
-        -->
-        <div class="w-0 min-w-full">
           <p
-            class="mt-4 text-pretty text-muted-foreground text-sm leading-normal [@media(min-height:900px)]:mt-6 [@media(min-height:900px)]:text-base [@media(min-height:1000px)]:mt-7"
+            class="font-medium text-primary-accent text-xs tracking-[0.24em] uppercase"
           >
-            Arraigados en las Escrituras, creciendo en Cristo y llevando el
-            evangelio por todo Fresno. Ven y crece con nosotros.
+            Iglesia Bautista Victory
           </p>
 
-          <div
-            class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
+          <!--
+            Title defines the shell width (longest line). text-balance is avoided
+            so line breaks stay explicit and max-content is stable.
+          -->
+          <h1
+            class="mt-3 font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
+            data-hero-title
           >
-            <Button class="group" href="/visita" size="md" variant="primary">
-              Planifica tu visita
-              <ArrowRight
-                aria-hidden="true"
-                class="transition-transform group-hover:translate-x-1"
-              />
-            </Button>
-            <Button class="group" href="/sermones" size="md" variant="ghost">
-              Último sermón
-              <ArrowRight
-                aria-hidden="true"
-                class="transition-transform group-hover:translate-x-1"
-              />
-            </Button>
+            Crece en la fe.<br>
+            Comparte el evangelio.<br>
+            Alcanza a los perdidos.
+          </h1>
+
+          <!--
+            w-0 min-w-full: fill the title width without expanding the shell
+            if subtitle/buttons would otherwise be wider.
+          -->
+          <div class="w-0 min-w-full">
+            <p
+              class="mt-4 text-pretty text-muted-foreground text-sm leading-normal [@media(min-height:900px)]:mt-6 [@media(min-height:900px)]:text-base [@media(min-height:1000px)]:mt-7"
+            >
+              Arraigados en las Escrituras, creciendo en Cristo y llevando el
+              evangelio por todo Fresno. Ven y crece con nosotros.
+            </p>
+
+            <div
+              class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
+            >
+              <Button class="group" href="/visita" size="md" variant="primary">
+                Planifica tu visita
+                <ArrowRight
+                  aria-hidden="true"
+                  class="transition-transform group-hover:translate-x-1"
+                />
+              </Button>
+              <Button class="group" href="/cielo" size="md" variant="ghost">
+                Cómo ir al cielo
+                <ArrowRight
+                  aria-hidden="true"
+                  class="transition-transform group-hover:translate-x-1"
+                />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
-  <div class="grid gap-9 xl:hidden">
-    <div
-      class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
-    >
-      <Image
-        alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
-        class="absolute inset-0 size-full object-cover object-center"
-        fetchpriority="high"
-        loading="eager"
-        sizes="100vw"
-        src={heroImage}
-        widths={[480, 768, 960]}
-      />
-
-      <!-- Scrim so the hero title stays readable on the photo -->
+    <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
+    <div class="grid gap-9 xl:hidden">
       <div
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 bg-black/45"
-      ></div>
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
-      ></div>
-
-      <div
-        class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
+        class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
       >
-        <p
-          class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
+        <Image
+          alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
+          class="absolute inset-0 size-full object-cover object-center"
+          fetchpriority="high"
+          loading="eager"
+          sizes="(max-width: 1440px) 100vw, 1440px"
+          src={heroImage}
+          widths={[480, 768, 960, 1440]}
+        />
+
+        <!-- Scrim so the hero title stays readable on the photo -->
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 bg-black/45"
+        ></div>
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
+        ></div>
+
+        <div
+          class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
         >
-          Iglesia Bautista Victory
+          <p
+            class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
+          >
+            Iglesia Bautista Victory
+          </p>
+
+          <h1
+            class="mt-4 font-heading font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
+          >
+            Crece en la fe.<br>
+            Comparte el evangelio.<br>
+            Alcanza a los perdidos.
+          </h1>
+        </div>
+      </div>
+
+      <div class="grid gap-5 px-2">
+        <p
+          class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
+        >
+          Arraigados en las Escrituras, creciendo en Cristo y llevando el
+          evangelio por todo Fresno. Ven y crece con nosotros.
         </p>
 
-        <h1
-          class="mt-4 font-heading font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
-        >
-          Crece en la fe.<br>
-          Comparte el evangelio.<br>
-          Alcanza a los perdidos.
-        </h1>
+        <div class="grid gap-3 pt-3">
+          <Button
+            class="group w-full"
+            href="/visita"
+            size="lg"
+            variant="primary"
+          >
+            Planifica tu visita
+            <ArrowRight
+              aria-hidden="true"
+              class="transition-transform group-hover:translate-x-1"
+            />
+          </Button>
+          <Button class="group w-full" href="/cielo" size="lg" variant="ghost">
+            Cómo ir al cielo
+            <ArrowRight
+              aria-hidden="true"
+              class="transition-transform group-hover:translate-x-1"
+            />
+          </Button>
+        </div>
       </div>
     </div>
-
-    <div class="grid gap-5 px-2">
-      <p
-        class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
-      >
-        Arraigados en las Escrituras, creciendo en Cristo y llevando el
-        evangelio por todo Fresno. Ven y crece con nosotros.
-      </p>
-
-      <div class="grid gap-3 pt-3">
-        <Button class="group w-full" href="/visita" size="lg" variant="primary">
-          Planifica tu visita
-          <ArrowRight
-            aria-hidden="true"
-            class="transition-transform group-hover:translate-x-1"
-          />
-        </Button>
-        <Button class="group w-full" href="/sermones" size="lg" variant="ghost">
-          Último sermón
-          <ArrowRight
-            aria-hidden="true"
-            class="transition-transform group-hover:translate-x-1"
-          />
-        </Button>
-      </div>
-    </div>
-  </div>
+  </SiteContainer>
 </section>

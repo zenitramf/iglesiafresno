@@ -1,12 +1,13 @@
 ---
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 ---
 
 <section
-  class="scroll-mt-8 border-t border-border px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  class="site-gutter scroll-mt-8 border-t border-border py-16 sm:py-20"
   id="conectar"
 >
-  <div class="mx-auto grid max-w-7xl gap-10">
+  <SiteContainer class="grid gap-10">
     <div class="grid max-w-3xl gap-3">
       <p
         class="font-medium text-primary-accent text-sm tracking-[0.18em] uppercase"
@@ -46,35 +47,32 @@ import { Button } from "@/components/starwind/button";
 
       <a
         class="group grid gap-4 rounded-2xl border border-border bg-card p-8 transition-colors hover:border-primary/40 hover:bg-card/80 md:p-10"
-        href="/eventos"
+        href="/cielo"
       >
         <p
           class="font-medium text-primary-accent text-sm tracking-[0.16em] uppercase"
         >
-          Eventos
+          Cielo
         </p>
         <h3 class="font-semibold text-2xl text-card-foreground tracking-tight">
-          Lo que se acerca
+          Cómo ir al cielo
         </h3>
         <p class="text-muted-foreground">
-          Desde los cultos del domingo hasta noches de alcance, siempre hay algo
-          ocurriendo. Ven y sé parte.
+          El evangelio es claro y para todos. Descubre lo que la Biblia enseña
+          sobre la salvación y la vida eterna.
         </p>
         <span
           class="font-medium text-primary-accent text-sm transition-transform group-hover:translate-x-1"
         >
-          Ver calendario →
+          Leer más →
         </span>
       </a>
     </div>
 
     <div class="flex flex-wrap gap-3">
-      <Button href="/sermones" size="lg" variant="primary">
-        Explorar sermones
-      </Button>
-      <Button href="/visita" size="lg" variant="secondary">
+      <Button href="/visita" size="lg" variant="primary">
         Planifica tu visita
       </Button>
     </div>
-  </div>
+  </SiteContainer>
 </section>

@@ -1,26 +1,26 @@
 ---
-const times = [
-  { label: "Escuela Dominical", time: "10:00 a. m." },
-  { label: "Culto de la mañana", time: "11:00 a. m." },
-  { label: "Culto de la tarde", time: "6:00 p. m." },
-  { label: "Estudio bíblico (jueves)", time: "7:00 p. m." },
-] as const;
+import SiteContainer from "@/components/layout/site-container.astro";
+import { getSpanishServiceTimes } from "@/lib/service-times";
+
+const times = await getSpanishServiceTimes();
 ---
 
-<section
-  aria-label="Horarios de servicio"
-  class="border-y border-border bg-card px-4 py-8 sm:px-6 md:px-10 lg:px-14"
->
-  <div class="mx-auto grid max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    {times.map((item) => (
-        <div class="grid gap-1 rounded-lg border border-border/70 bg-background/40 px-4 py-4">
-          <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.16em]">
-            {item.label}
-          </p>
-          <p class="font-semibold text-foreground text-lg tracking-tight">
-            {item.time}
-          </p>
-        </div>
-      ))}
-  </div>
-</section>
+{times.length > 0 && (
+    <section
+      aria-label="Horarios de servicio"
+      class="site-gutter border-border border-y bg-card py-8"
+    >
+      <SiteContainer class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {times.map((item) => (
+          <div class="grid gap-1 rounded-lg border border-border/70 bg-background/40 px-4 py-4">
+            <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.16em]">
+              {item.label}
+            </p>
+            <p class="font-semibold text-foreground text-lg tracking-tight">
+              {item.time}
+            </p>
+          </div>
+        ))}
+      </SiteContainer>
+    </section>
+  )}

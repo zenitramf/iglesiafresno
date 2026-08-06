@@ -20,6 +20,28 @@ This is a **Spanish-language website** (primary locale: `es`).
 - Code identifiers (component names, CSS classes, file paths, props) stay in English as usual; only user-visible strings are Spanish.
 - Do not add English UI as the default. If bilingual content is requested later, keep Spanish as the primary experience unless the user says otherwise.
 
+## Layout width (standardized)
+
+All pages share one content shell:
+
+| Primitive | Where | Role |
+|-----------|--------|------|
+| `--container-site` (90rem / 1440px) | `src/styles/starwind.css` | Token |
+| `site-gutter` | section / footer / nav outer | Horizontal padding |
+| `site-container` or `<SiteContainer />` | inner content | Max-width + center |
+
+**Do not** invent alternate page shells with `max-w-7xl`, ad-hoc `max-w-[…]`, or one-off gutters. Content fills the site shell unless a *local* element needs a tighter measure (e.g. a short intro block).
+
+```astro
+<section class="site-gutter …">
+  <SiteContainer>
+    <!-- page content uses the full shell width -->
+  </SiteContainer>
+</section>
+```
+
+Component: `src/components/layout/site-container.astro`.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

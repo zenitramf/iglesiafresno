@@ -1,14 +1,16 @@
 ---
 import Mail from "@tabler/icons/outline/mail.svg";
 import Phone from "@tabler/icons/outline/phone.svg";
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
+import { churchInfo } from "@/lib/church-data";
 ---
 
 <section
-  class="scroll-mt-24 border-t border-border px-4 py-16 sm:px-6 sm:py-24"
+  class="site-gutter scroll-mt-24 border-t border-border py-16 sm:py-24"
   id="conversemos"
 >
-  <div class="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+  <SiteContainer class="flex flex-col items-center gap-8 text-center">
     <p class="text-pretty text-muted-foreground text-lg leading-relaxed">
       Gracias por tomarte el tiempo para leer este mensaje. Si deseas saber más
       sobre la vida eterna o lo que Dios espera de ti, no dudes en llamarnos,
@@ -41,11 +43,11 @@ import { Button } from "@/components/starwind/button";
       </a>
       <a
         class="inline-flex items-center gap-2 transition-colors hover:text-foreground"
-        href="tel:+15593941989"
+        href={`tel:${churchInfo.phoneE164}`}
       >
         <Phone aria-hidden="true" class="size-4 text-primary-accent" />
-        559-394-1989
+        {churchInfo.phone}
       </a>
     </div>
-  </div>
+  </SiteContainer>
 </section>

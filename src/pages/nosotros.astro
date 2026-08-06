@@ -1,0 +1,153 @@
+---
+import PageHero from "@/components/layout/page-hero.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
+import { Button } from "@/components/starwind/button";
+import BaseLayout from "@/layouts/base-layout.astro";
+
+const pillars = [
+  {
+    body: "Centramos cada servicio en el Señor Jesucristo y le adoramos en espíritu y en verdad.",
+    title: "Exaltar al Salvador",
+  },
+  {
+    body: "Enseñamos y aplicamos las Escrituras para que los creyentes crezcan firmes en la fe, la doctrina y la obediencia diaria.",
+    title: "Edificar a los santos",
+  },
+  {
+    body: "Compartimos con alegría las buenas nuevas de la salvación por medio de Cristo en Fresno y más allá.",
+    title: "Evangelizar al pecador",
+  },
+] as const;
+
+const beliefs = [
+  {
+    body: "Creemos que la Biblia es la Palabra de Dios inspirada e inerrante, y nuestra autoridad final en fe y práctica.",
+    title: "La Biblia",
+  },
+  {
+    body: "Creemos que Dios existe eternamente como Padre, Hijo y Espíritu Santo: tres Personas, un solo Dios.",
+    title: "Dios",
+  },
+  {
+    body: "Creemos que Jesucristo es el unigénito Hijo de Dios, verdadero Dios y verdadero hombre, nacido de una virgen y sin pecado.",
+    title: "Jesucristo",
+  },
+  {
+    body: "Creemos que el Espíritu Santo es Dios, igual al Padre y al Hijo, y obra en la vida de todo creyente.",
+    title: "El Espíritu Santo",
+  },
+  {
+    body: "Creemos que el ser humano cayó por el pecado y necesita redención por medio de Jesucristo.",
+    title: "El pecado",
+  },
+  {
+    body: "Creemos que Cristo murió en nuestro lugar, resucitó corporalmente de entre los muertos y ascendió al cielo.",
+    title: "El sacrificio de Cristo",
+  },
+  {
+    body: "Creemos que la salvación es el don de la gracia de Dios, recibido por fe personal en el Señor Jesucristo.",
+    title: "La salvación",
+  },
+  {
+    body: "Creemos que todos los que son verdaderamente salvos son guardados por el poder de Dios y seguros en Cristo para siempre.",
+    title: "La seguridad eterna",
+  },
+  {
+    body: "Creemos que la iglesia local existe para la edificación, la exhortación y la evangelización conforme al mandato de Cristo.",
+    title: "El servicio",
+  },
+  {
+    body: "Creemos en una interpretación literal de las Escrituras, en el regreso de Cristo y en el cumplimiento del plan profético de Dios.",
+    title: "Los últimos días",
+  },
+] as const;
+---
+
+<BaseLayout
+  description="Conoce a Iglesia Bautista Victory en Fresno: nuestra misión, creencias y compromiso con el evangelio de Jesucristo."
+  title="Nosotros | Iglesia Bautista Victory"
+>
+  <PageHero eyebrow="Nosotros" title="Quiénes somos">
+    <p
+      class="max-w-3xl text-pretty text-lg text-muted-foreground leading-relaxed sm:text-xl"
+    >
+      Somos una iglesia bautista independiente en el sureste de Fresno, con el
+      deseo de alcanzar a nuestra comunidad y al mundo con el evangelio de
+      Jesucristo. Estamos comprometidos con la enseñanza y la predicación sana
+      de la Biblia, para que las vidas sean transformadas y enriquecidas por
+      medio de Él.
+    </p>
+  </PageHero>
+
+  <section class="site-gutter border-t border-border py-16 sm:py-20">
+    <SiteContainer class="grid gap-10 md:grid-cols-3 md:gap-8">
+      {pillars.map((pillar) => (
+          <div class="grid gap-3">
+            <h2 class="font-semibold text-2xl text-foreground tracking-tight">
+              {pillar.title}
+            </h2>
+            <p class="text-muted-foreground leading-relaxed">{pillar.body}</p>
+          </div>
+        ))}
+    </SiteContainer>
+  </section>
+
+  <section class="site-gutter border-t border-border bg-card py-16 sm:py-20">
+    <SiteContainer class="grid gap-10">
+      <h2
+        class="font-semibold text-3xl text-foreground tracking-tight sm:text-4xl"
+      >
+        Nuestras creencias
+      </h2>
+      <div class="grid gap-8 md:grid-cols-2">
+        {beliefs.map((belief) => (
+            <div class="grid gap-2">
+              <h3 class="font-semibold text-foreground text-lg">
+                {belief.title}
+              </h3>
+              <p class="text-muted-foreground text-sm leading-relaxed md:text-base">
+                {belief.body}
+              </p>
+            </div>
+          ))}
+      </div>
+    </SiteContainer>
+  </section>
+
+  <section class="site-gutter border-t border-border py-16 sm:py-20">
+    <SiteContainer class="grid gap-10 md:grid-cols-2">
+      <div class="grid gap-4">
+        <h2 class="font-semibold text-2xl text-foreground tracking-tight">
+          Horarios de servicio
+        </h2>
+        <ul class="grid gap-2 text-muted-foreground">
+          <li>
+            <strong class="text-foreground">Domingo:</strong>
+            {" "}
+            10:00 a. m. escuela dominical, 11:00 a. m. culto de la mañana, 6:00
+            p. m. culto de la tarde
+          </li>
+          <li>
+            <strong class="text-foreground">Jueves:</strong>
+            {" "}
+            7:00 p. m. estudio bíblico
+          </li>
+        </ul>
+      </div>
+      <div class="grid gap-4">
+        <h2 class="font-semibold text-2xl text-foreground tracking-tight">
+          Visítanos
+        </h2>
+        <p class="text-muted-foreground">
+          1717 N Gateway Blvd Ste. #105<br>
+          Fresno, CA 93727
+        </p>
+        <div>
+          <Button href="/visita" size="md" variant="primary">
+            Planifica tu visita
+          </Button>
+        </div>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>

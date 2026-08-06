@@ -86,116 +86,116 @@ const {
   type Vec3 = [number, number, number];
 
   const VERT = `#version 300 es
-  in vec2 a_pos;
-  out vec2 v_uv;
-  void main() {
-    v_uv = a_pos * 0.5 + 0.5;
-    gl_Position = vec4(a_pos, 0.0, 1.0);
-  }`;
+      in vec2 a_pos;
+      out vec2 v_uv;
+      void main() {
+        v_uv = a_pos * 0.5 + 0.5;
+        gl_Position = vec4(a_pos, 0.0, 1.0);
+      }`;
 
   const FRAG = `#version 300 es
-  precision highp float;
+      precision highp float;
 
-  in vec2 v_uv;
-  out vec4 fragColor;
+      in vec2 v_uv;
+      out vec4 fragColor;
 
-  uniform vec2 u_res;
-  uniform float u_time;
-  uniform float u_facet;
-  uniform float u_refract;
-  uniform float u_highlight;
-  uniform vec3 u_base;
-  uniform vec3 u_thread;
-  uniform vec3 u_glint;
+      uniform vec2 u_res;
+      uniform float u_time;
+      uniform float u_facet;
+      uniform float u_refract;
+      uniform float u_highlight;
+      uniform vec3 u_base;
+      uniform vec3 u_thread;
+      uniform vec3 u_glint;
 
-  float hash(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
-    return fract(p.x * p.y);
-  }
-
-  float noise(vec2 p) {
-    vec2 i = floor(p);
-    vec2 f = fract(p);
-    float a = hash(i);
-    float b = hash(i + vec2(1.0, 0.0));
-    float c = hash(i + vec2(0.0, 1.0));
-    float d = hash(i + vec2(1.0, 1.0));
-    vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-  }
-
-  float fbm(vec2 p) {
-    float v = 0.0;
-    float a = 0.5;
-    for (int i = 0; i < 5; i++) {
-      v += a * noise(p);
-      p = p * 2.02 + vec2(17.1, 9.7);
-      a *= 0.5;
-    }
-    return v;
-  }
-
-  vec2 voronoi(vec2 x) {
-    vec2 n = floor(x);
-    vec2 f = fract(x);
-    float md = 8.0;
-    float md2 = 8.0;
-    for (int j = -1; j <= 1; j++) {
-      for (int i = -1; i <= 1; i++) {
-        vec2 g = vec2(float(i), float(j));
-        vec2 o = vec2(hash(n + g), hash(n + g + 19.7));
-        o = 0.5 + 0.5 * sin(u_time * 0.15 + 6.2831 * o);
-        vec2 r = g + o - f;
-        float d = dot(r, r);
-        if (d < md) {
-          md2 = md;
-          md = d;
-        } else if (d < md2) {
-          md2 = d;
-        }
+      float hash(vec2 p) {
+        p = fract(p * vec2(123.34, 456.21));
+        p += dot(p, p + 45.32);
+        return fract(p.x * p.y);
       }
-    }
-    return vec2(sqrt(md), sqrt(md2));
-  }
 
-  void main() {
-    vec2 uv = v_uv;
-    float aspect = u_res.x / max(u_res.y, 1.0);
-    vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        float a = hash(i);
+        float b = hash(i + vec2(1.0, 0.0));
+        float c = hash(i + vec2(0.0, 1.0));
+        float d = hash(i + vec2(1.0, 1.0));
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
 
-    float t = u_time * 0.12;
-    vec2 flow = vec2(
-      fbm(p * 1.4 + vec2(t, -t * 0.7)),
-      fbm(p * 1.4 + vec2(-t * 0.6, t * 0.9))
-    );
-    vec2 warped = p + (flow - 0.5) * u_refract * 1.8;
+      float fbm(vec2 p) {
+        float v = 0.0;
+        float a = 0.5;
+        for (int i = 0; i < 5; i++) {
+          v += a * noise(p);
+          p = p * 2.02 + vec2(17.1, 9.7);
+          a *= 0.5;
+        }
+        return v;
+      }
 
-    float scale = mix(2.2, 8.5, clamp((u_facet - 2.4) / 6.6, 0.0, 1.0));
-    vec2 cells = voronoi(warped * scale + vec2(t * 0.35, -t * 0.22));
-    float edge = smoothstep(0.0, 0.12, cells.y - cells.x);
-    float facet = 1.0 - smoothstep(0.02, 0.28, cells.x);
+      vec2 voronoi(vec2 x) {
+        vec2 n = floor(x);
+        vec2 f = fract(x);
+        float md = 8.0;
+        float md2 = 8.0;
+        for (int j = -1; j <= 1; j++) {
+          for (int i = -1; i <= 1; i++) {
+            vec2 g = vec2(float(i), float(j));
+            vec2 o = vec2(hash(n + g), hash(n + g + 19.7));
+            o = 0.5 + 0.5 * sin(u_time * 0.15 + 6.2831 * o);
+            vec2 r = g + o - f;
+            float d = dot(r, r);
+            if (d < md) {
+              md2 = md;
+              md = d;
+            } else if (d < md2) {
+              md2 = d;
+            }
+          }
+        }
+        return vec2(sqrt(md), sqrt(md2));
+      }
 
-    float ribbons = fbm(warped * vec2(3.2, 1.1) + vec2(0.0, t * 1.4));
-    ribbons = smoothstep(0.42, 0.72, ribbons);
-    float cross = fbm(warped * vec2(1.0, 3.4) - vec2(t * 1.1, 0.0));
-    cross = smoothstep(0.48, 0.78, cross);
-    float threads = max(ribbons * 0.85, cross * 0.55);
+      void main() {
+        vec2 uv = v_uv;
+        float aspect = u_res.x / max(u_res.y, 1.0);
+        vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
 
-    float shine = pow(facet * edge, mix(1.4, 0.55, u_highlight));
-    float glints = pow(max(0.0, 1.0 - cells.x * 4.5), 8.0) * u_highlight;
+        float t = u_time * 0.12;
+        vec2 flow = vec2(
+          fbm(p * 1.4 + vec2(t, -t * 0.7)),
+          fbm(p * 1.4 + vec2(-t * 0.6, t * 0.9))
+        );
+        vec2 warped = p + (flow - 0.5) * u_refract * 1.8;
 
-    vec3 col = u_base;
-    col += u_thread * threads * (0.35 + 0.45 * u_highlight);
-    col += u_thread * shine * 0.55;
-    col += u_glint * glints * 1.4;
-    col += u_glint * threads * shine * 0.25;
+        float scale = mix(2.2, 8.5, clamp((u_facet - 2.4) / 6.6, 0.0, 1.0));
+        vec2 cells = voronoi(warped * scale + vec2(t * 0.35, -t * 0.22));
+        float edge = smoothstep(0.0, 0.12, cells.y - cells.x);
+        float facet = 1.0 - smoothstep(0.02, 0.28, cells.x);
 
-    float vignette = smoothstep(1.15, 0.25, length(p * vec2(0.85, 1.0)));
-    col *= mix(0.72, 1.0, vignette);
+        float ribbons = fbm(warped * vec2(3.2, 1.1) + vec2(0.0, t * 1.4));
+        ribbons = smoothstep(0.42, 0.72, ribbons);
+        float cross = fbm(warped * vec2(1.0, 3.4) - vec2(t * 1.1, 0.0));
+        cross = smoothstep(0.48, 0.78, cross);
+        float threads = max(ribbons * 0.85, cross * 0.55);
 
-    fragColor = vec4(col, 1.0);
-  }`;
+        float shine = pow(facet * edge, mix(1.4, 0.55, u_highlight));
+        float glints = pow(max(0.0, 1.0 - cells.x * 4.5), 8.0) * u_highlight;
+
+        vec3 col = u_base;
+        col += u_thread * threads * (0.35 + 0.45 * u_highlight);
+        col += u_thread * shine * 0.55;
+        col += u_glint * glints * 1.4;
+        col += u_glint * threads * shine * 0.25;
+
+        float vignette = smoothstep(1.15, 0.25, length(p * vec2(0.85, 1.0)));
+        col *= mix(0.72, 1.0, vignette);
+
+        fragColor = vec4(col, 1.0);
+      }`;
 
   const parseColor = (value: string): Vec3 => {
     const hex = value.trim();

@@ -1,12 +1,13 @@
 ---
 import VerseCard from "@/components/cielo/verse-card.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
 ---
 
 <section
-  class="scroll-mt-24 border-t border-border px-4 py-16 sm:px-6 sm:py-20"
+  class="site-gutter scroll-mt-24 border-t border-border py-16 sm:py-20"
   id="oraste-sinceramente"
 >
-  <div class="mx-auto grid max-w-3xl gap-7">
+  <SiteContainer class="grid gap-7">
     <h2 class="text-balance font-semibold text-3xl tracking-tight sm:text-4xl">
       ¿Oraste sinceramente?
     </h2>
@@ -21,5 +22,5 @@ import VerseCard from "@/components/cielo/verse-card.astro";
       emphasis="monument"
       quote="Estas cosas os he escrito a vosotros que creéis en el nombre del Hijo de Dios, para que sepáis que tenéis vida eterna."
     />
-  </div>
+  </SiteContainer>
 </section>

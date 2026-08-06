@@ -5,8 +5,6 @@ const navLinks = [
   { href: "/cielo", label: "Cielo" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/equipo", label: "Equipo" },
-  { href: "/sermones", label: "Sermones" },
-  { href: "/eventos", label: "Eventos" },
   { href: "/dar", label: "Dar" },
 ] as const;
 
@@ -16,13 +14,14 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 <header class="sticky top-0 z-50" data-navbar-3>
   <nav
     aria-label="Navegación principal"
-    class="@container relative inset-x-0 px-4 py-3 transition-all duration-500"
+    class="site-gutter @container relative inset-x-0 py-3 transition-all duration-500"
   >
     <!--
       Starwind Navbar 3 layout:
       - logo (left) + CTA (right) in normal flow with z-10
       - nav links absolutely centered so logo width changes never shift them
-      - max-w-full → max-w-2xl on scroll (both lengths, so width animates)
+      - full width of the viewport gutters → max-w-2xl on scroll (width animates)
+      - intentionally not site-container: header stays edge-to-edge, content shells do not
     -->
     <div
       data-navbar-3-pill

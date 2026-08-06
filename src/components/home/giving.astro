@@ -1,16 +1,15 @@
 ---
+import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
 ---
 
 <section
-  class="scroll-mt-8 border-t border-border px-4 py-16 sm:px-6 sm:py-20 md:px-10 lg:px-14"
+  class="site-gutter scroll-mt-8 border-t border-border py-16 sm:py-20"
   id="ofrendas"
 >
-  <div
-    class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-14"
-  >
+  <SiteContainer class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
     <div class="grid gap-5">
       <p
         class="text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
@@ -23,9 +22,9 @@ import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
         Da en línea, en cualquier momento
       </h2>
       <p class="text-muted-foreground sm:text-lg">
-        Tu ofrenda fiel sostiene el ministerio de Iglesia Bautista Victory mientras
-        compartimos el evangelio, servimos a nuestra comunidad y ayudamos a
-        llevar las buenas nuevas de Jesucristo alrededor del mundo.
+        Tu ofrenda fiel sostiene el ministerio de Iglesia Bautista Victory
+        mientras compartimos el evangelio, servimos a nuestra comunidad y
+        ayudamos a llevar las buenas nuevas de Jesucristo alrededor del mundo.
       </p>
       <div>
         <Button href="/dar" size="lg" variant="primary"> Dar en línea </Button>
@@ -46,5 +45,5 @@ import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
         class="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-accent/20"
       ></div>
     </div>
-  </div>
+  </SiteContainer>
 </section>
