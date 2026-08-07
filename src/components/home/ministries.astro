@@ -8,6 +8,8 @@ import UserHeart from "@tabler/icons/outline/user-heart.svg";
 import World from "@tabler/icons/outline/world.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
+import { Image } from "@/components/starwind/image";
+import evangelismoPersonal from "@/images/evangelismo-personal.jpg";
 
 const featuredHighlights = [
   "Evangelismo de puerta en puerta",
@@ -52,10 +54,6 @@ const visionPillars = [
     title: "Santificación Personal",
   },
 ] as const;
-
-/** Unsplash: neighborhood front doors — temporary placeholder for evangelism featured image */
-const featuredImageSrc =
-  "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80";
 ---
 
 <section
@@ -102,15 +100,14 @@ const featuredImageSrc =
           <div
             class="relative aspect-square w-full @xl:aspect-auto @xl:min-h-full"
           >
-            <img
+            <Image
               alt="Puertas de casas en un vecindario residencial"
               class="absolute inset-0 size-full object-cover"
-              decoding="async"
-              height="600"
               loading="lazy"
-              src={featuredImageSrc}
-              width="600"
-            >
+              sizes="(max-width: 1280px) 100vw, 50vw"
+              src={evangelismoPersonal}
+              widths={[480, 720, 960, 1200]}
+            />
           </div>
 
           <div class="flex flex-col justify-center p-6 @xl:p-8">
