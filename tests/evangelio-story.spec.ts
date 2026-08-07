@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Guards: the /cielo linear story keeps the evangelio content intact —
+ * Guards: the /evangelio linear story keeps the gospel content intact —
  * hero question, four steps in order with their verses, prayer, assurance.
  */
 const MIN_HERO_FONT_SIZE_PX = 48;
@@ -24,14 +24,14 @@ const VERSE_CITATIONS = [
   "1 Juan 5:13",
 ] as const;
 
-test.describe("Cielo story page", () => {
+test.describe("Evangelio story page", () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ height: 900, width: 1440 });
-    await page.goto("/cielo", { waitUntil: "networkidle" });
+    await page.goto("/evangelio", { waitUntil: "networkidle" });
   });
 
   test("hero asks the driving question at display size", async ({ page }) => {
-    const h1 = page.locator("#inicio-cielo h1");
+    const h1 = page.locator("#inicio-evangelio h1");
     await expect(h1).toBeVisible();
 
     // Allow fonts/layout to settle — title must NOT collapse to body size
