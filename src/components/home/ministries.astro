@@ -9,7 +9,7 @@ import World from "@tabler/icons/outline/world.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
-import evangelismoPersonal from "@/images/evangelismo-personal.jpg";
+import evangelismoPersonal from "@/images/evangelismo-personal.webp";
 
 const featuredHighlights = [
   "Evangelismo de puerta en puerta",
@@ -125,15 +125,17 @@ const visionPillars = [
             </p>
 
             <ul class="mt-6 flex flex-col gap-2">
-              {featuredHighlights.map((item) => (
-                <li class="flex items-center gap-2 text-sm">
-                  <Check
-                    aria-hidden="true"
-                    class="size-4 shrink-0 text-primary-accent"
-                  />
-                  <span>{item}</span>
-                </li>
-              ))}
+              {
+                featuredHighlights.map((item) => (
+                  <li class="flex items-center gap-2 text-sm">
+                    <Check
+                      aria-hidden="true"
+                      class="size-4 shrink-0 text-primary-accent"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
             </ul>
 
             <div class="mt-6">
@@ -155,30 +157,32 @@ const visionPillars = [
       </div>
 
       <!-- Vision pillar cards (Evangelismo Personal is only in the featured cell) -->
-      {visionPillars.map((pillar, index) => {
-        const Icon = pillar.icon;
-        const isLast = index === visionPillars.length - 1;
+      {
+        visionPillars.map((pillar, index) => {
+          const Icon = pillar.icon;
+          const isLast = index === visionPillars.length - 1;
 
-        return (
-          <div
-            data-vision-card
-            class:list={[
-              "group rounded-2xl border bg-card @xl:p-8 p-6 transition-colors hover:border-primary-accent/50",
-              // At 2 cols, 5 cards leave one alone — span full width so it is not a stray half-row box.
-              // At 3 cols the classic 2×2 featured + 5 fills a 3×3; reset span.
-              isLast && "@2xl:col-span-2 @4xl:col-span-1",
-            ]}
-          >
-            <div class="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary-accent/10 text-primary-accent transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              <Icon aria-hidden="true" class="size-6" />
+          return (
+            <div
+              data-vision-card
+              class:list={[
+                "group rounded-2xl border bg-card @xl:p-8 p-6 transition-colors hover:border-primary-accent/50",
+                // At 2 cols, 5 cards leave one alone — span full width so it is not a stray half-row box.
+                // At 3 cols the classic 2×2 featured + 5 fills a 3×3; reset span.
+                isLast && "@2xl:col-span-2 @4xl:col-span-1",
+              ]}
+            >
+              <div class="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary-accent/10 text-primary-accent transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon aria-hidden="true" class="size-6" />
+              </div>
+              <h3 class="font-heading font-semibold text-lg">{pillar.title}</h3>
+              <p class="mt-2 text-pretty text-muted-foreground text-sm">
+                {pillar.description}
+              </p>
             </div>
-            <h3 class="font-heading font-semibold text-lg">{pillar.title}</h3>
-            <p class="mt-2 text-pretty text-muted-foreground text-sm">
-              {pillar.description}
-            </p>
-          </div>
-        );
-      })}
+          );
+        })
+      }
     </div>
   </SiteContainer>
 </section>
