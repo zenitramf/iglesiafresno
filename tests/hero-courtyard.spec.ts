@@ -97,10 +97,9 @@ test.describe("Hero courtyard SVG", () => {
     await expect(courtyard).toBeHidden();
   });
 
-  test("hero stays within site content width (not full viewport)", async ({
+  test("hero is full-bleed (near viewport width with side gutters)", async ({
     page,
   }) => {
-    // site-container = --container-site 90rem ≈ 1440px
     await page.setViewportSize({ height: 900, width: 1920 });
     await page.goto("/");
 
@@ -112,11 +111,10 @@ test.describe("Hero courtyard SVG", () => {
       return;
     }
 
-    // Capped by site shell; site-gutter keeps it under the viewport
-    expect(box.width).toBeLessThanOrEqual(1440);
-    expect(box.width).toBeLessThan(1920 * 0.85);
-    // Centered with gutters on both sides
-    expect(box.x).toBeGreaterThan(80);
+    // Full-bleed frame: only small side padding (px-3 → lg:px-6), not site-container
+    expect(box.width).toBeGreaterThan(1920 * 0.9);
+    expect(box.width).toBeLessThan(1920);
+    expect(box.x).toBeLessThan(40);
   });
 
   test("shape right edge is bound to the title shell with a gap", async ({
@@ -142,8 +140,12 @@ test.describe("Hero courtyard SVG", () => {
       return;
     }
 
-    // Shell / content left-aligned to the frame
-    expect(Math.abs(shellBox.x - frameBox.x)).toBeLessThanOrEqual(2);
+    // Shell sits in the site content column (left-aligned within it).
+    // On wide viewports the column is centered, so shell may be inset from the frame.
+    expect(shellBox.x).toBeGreaterThanOrEqual(frameBox.x - 1);
+    expect(shellBox.x + shellBox.width).toBeLessThanOrEqual(
+      frameBox.x + frameBox.width + 1
+    );
 
     // Top/bottom of shape match the courtyard
     expect(Math.abs(shapeBox.y - frameBox.y)).toBeLessThanOrEqual(2);

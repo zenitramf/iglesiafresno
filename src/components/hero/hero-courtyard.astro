@@ -4,7 +4,7 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import CourtyardShape from "@/images/hero-courtyard-shape.svg";
-import heroImage from "@/images/home-page_fvbc_hero.webp";
+import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
 
 /**
  * SVG viewBox 2522×937 — long-X artboard for height-locked horizontal slide.
@@ -29,50 +29,55 @@ const SHAPE_WIDTH =
 ---
 
 <section
-  class="site-gutter bg-background py-4 text-foreground sm:py-5 lg:py-6"
+  class="bg-background px-3 py-4 text-foreground sm:px-4 lg:px-6 lg:py-6"
   id="inicio"
 >
   <!--
-    Standard site shell (SiteContainer). Desktop (xl+): photo + SVG glass
-    whose right edge is bound to the title box. Mobile/tablet: title over
-    image; CTAs below.
+    Desktop (xl+): full-bleed photo; copy lives in the site content shell so
+    type aligns with the rest of the page. SVG glass right edge is bound to
+    the title box (plus padding gap). Mobile/tablet: title over image; CTAs below.
   -->
-  <SiteContainer>
-    <!-- Desktop: image + title-bound courtyard shape -->
-    <div
-      class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
-      data-hero-courtyard
-      style={`
-        height: ${HERO_HEIGHT};
-        --hero-shape-w: ${SHAPE_WIDTH};
-      `}
-    >
-      <div
-        class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
-        data-hero-frame
-      >
-        <Image
-          alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
-          class="absolute inset-0 size-full object-cover object-center"
-          fetchpriority="high"
-          loading="eager"
-          sizes="(max-width: 1440px) 100vw, 1440px"
-          src={heroImage}
-          widths={[960, 1280, 1440, 1920]}
-        />
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute inset-0 bg-linear-to-br from-background/40 via-background/5 to-background/20"
-        ></div>
-      </div>
 
+  <!-- Desktop: full-bleed image + title-bound courtyard shape -->
+  <div
+    class="relative hidden overflow-hidden rounded-4xl bg-background xl:block"
+    data-hero-courtyard
+    style={`
+      height: ${HERO_HEIGHT};
+      --hero-shape-w: ${SHAPE_WIDTH};
+    `}
+  >
+    <div
+      class="absolute inset-0 overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
+      data-hero-frame
+    >
+      <Image
+        alt="Horizonte del centro de Fresno bajo un cielo despejado"
+        class="absolute inset-0 size-full object-cover object-center"
+        fetchpriority="high"
+        loading="eager"
+        sizes="100vw"
+        src={heroImage}
+        widths={[960, 1440, 1920, 2560]}
+      />
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-linear-to-br from-background/40 via-background/5 to-background/20"
+      ></div>
+    </div>
+
+    <!--
+      Text column = site content width (max --container-site). Photo stays
+      full-bleed behind; copy shell is title-sized within this column.
+    -->
+    <SiteContainer class="relative z-[2] h-full">
       <!--
         Sizing container: width = title max-content + horizontal padding (gap).
         Shape is full height; `right` offsets so the content-step face (not the
         outer ledge) lands on the shell’s right edge — keeps letters inside glass.
       -->
       <div
-        class="relative z-[2] flex h-full w-max flex-col"
+        class="relative flex h-full w-max max-w-full flex-col"
         data-hero-copy-shell
       >
         <div
@@ -146,82 +151,82 @@ const SHAPE_WIDTH =
           </div>
         </div>
       </div>
-    </div>
+    </SiteContainer>
+  </div>
 
-    <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
-    <div class="grid gap-9 xl:hidden">
+  <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
+  <div class="grid gap-9 xl:hidden">
+    <div
+      class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
+    >
+      <Image
+        alt="Horizonte del centro de Fresno bajo un cielo despejado"
+        class="absolute inset-0 size-full object-cover object-center"
+        fetchpriority="high"
+        loading="eager"
+        sizes="100vw"
+        src={heroImage}
+        widths={[480, 768, 960, 1440]}
+      />
+
+      <!-- Scrim so the hero title stays readable on the photo -->
       <div
-        class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl border border-primary/40 bg-muted ring-1 ring-primary/40"
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-black/45"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
+      ></div>
+
+      <div
+        class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
       >
-        <Image
-          alt="Mural de Fresno y el horizonte de la ciudad entre la niebla"
-          class="absolute inset-0 size-full object-cover object-center"
-          fetchpriority="high"
-          loading="eager"
-          sizes="(max-width: 1440px) 100vw, 1440px"
-          src={heroImage}
-          widths={[480, 768, 960, 1440]}
-        />
-
-        <!-- Scrim so the hero title stays readable on the photo -->
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute inset-0 bg-black/45"
-        ></div>
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
-        ></div>
-
-        <div
-          class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
-        >
-          <p
-            class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
-          >
-            Iglesia Bautista Victory
-          </p>
-
-          <h1
-            class="mt-4 font-heading font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
-          >
-            Crece en la fe.<br>
-            Comparte el evangelio.<br>
-            Alcanza a los perdidos.
-          </h1>
-        </div>
-      </div>
-
-      <div class="grid gap-5 px-2">
         <p
-          class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
+          class="font-medium text-primary-accent text-xs tracking-[0.28em] uppercase"
         >
-          Arraigados en las Escrituras, creciendo en Cristo y llevando el
-          evangelio por todo Fresno. Ven y crece con nosotros.
+          Iglesia Bautista Victory
         </p>
 
-        <div class="grid gap-3 pt-3">
-          <Button
-            class="group w-full"
-            href="/visita"
-            size="lg"
-            variant="primary"
-          >
-            Planifica tu visita
-            <ArrowRight
-              aria-hidden="true"
-              class="transition-transform group-hover:translate-x-1"
-            />
-          </Button>
-          <Button class="group w-full" href="/evangelio" size="lg" variant="ghost">
-            Cómo ir al cielo
-            <ArrowRight
-              aria-hidden="true"
-              class="transition-transform group-hover:translate-x-1"
-            />
-          </Button>
-        </div>
+        <h1
+          class="mt-4 font-heading font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
+        >
+          Crece en la fe.<br>
+          Comparte el evangelio.<br>
+          Alcanza a los perdidos.
+        </h1>
       </div>
     </div>
-  </SiteContainer>
+
+    <div class="grid gap-5 px-2">
+      <p
+        class="text-pretty text-[0.95rem] text-muted-foreground leading-normal"
+      >
+        Arraigados en las Escrituras, creciendo en Cristo y llevando el
+        evangelio por todo Fresno. Ven y crece con nosotros.
+      </p>
+
+      <div class="grid gap-3 pt-3">
+        <Button
+          class="group w-full"
+          href="/visita"
+          size="lg"
+          variant="primary"
+        >
+          Planifica tu visita
+          <ArrowRight
+            aria-hidden="true"
+            class="transition-transform group-hover:translate-x-1"
+          />
+        </Button>
+        <Button class="group w-full" href="/evangelio" size="lg" variant="ghost">
+          Cómo ir al cielo
+          <ArrowRight
+            aria-hidden="true"
+            class="transition-transform group-hover:translate-x-1"
+          />
+        </Button>
+      </div>
+    </div>
+  </div>
 </section>
