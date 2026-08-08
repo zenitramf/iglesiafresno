@@ -15,6 +15,11 @@ import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
  * viewBox right (100%), but the title sits in the content-step band whose
  * right face is ~93.4% of the artboard. Align that face to the shell right
  * (not the ledge) so the step does not cut through the letters.
+ *
+ * Left coverage: the SVG is finite and right-anchored. On wide / zoomed-out
+ * viewports the height-capped shape may not reach the frame’s left edge. A
+ * solid glass extension (`data-hero-shape-fill`) continues left from the SVG
+ * box; the courtyard’s overflow-hidden clips it to the hero.
  */
 const SHAPE_VB_W = 2522;
 const SHAPE_VB_H = 937;
@@ -86,6 +91,16 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
             right: calc((${SHAPE_STEP_RIGHT_FRAC} - 1) * var(--hero-shape-w));
           `}
         >
+          <!--
+            Solid glass left of the SVG. Height-locked artboard can stop short
+            of the frame left on wide/zoomed-out viewports; this fills the gap
+            with the same currentColor as the path (clipped by courtyard overflow).
+          -->
+          <div
+            class="absolute inset-y-0 right-full w-screen bg-current"
+            data-hero-shape-fill
+          >
+          </div>
           <CourtyardShape
             class="size-full"
             preserveAspectRatio="xMinYMid meet"

@@ -403,4 +403,47 @@ test.describe("Hero courtyard SVG", () => {
     expect(colorDistance(glass, pastShape)).toBeGreaterThan(12);
     expect(luminance(glass)).toBeLessThan(luminance(pastShape) + 5);
   });
+
+  test("left glass extension covers frame when SVG is short of left edge", async ({
+    page,
+  }) => {
+    // Wide + height-capped hero: height-locked SVG often ends short of frame left
+    // when the site column is centered; fill strip must still paint glass.
+    await page.setViewportSize({ height: 900, width: 3840 });
+    await page.goto("/");
+
+    const frame = page.locator("[data-hero-frame]");
+    const shape = page.locator("[data-hero-shape]");
+    const fill = page.locator("[data-hero-shape-fill]");
+    const shell = page.locator("[data-hero-copy-shell]");
+
+    await expect(fill).toBeVisible();
+
+    const frameBox = await frame.boundingBox();
+    const shapeBox = await shape.boundingBox();
+    const shellBox = await shell.boundingBox();
+    expect(frameBox && shapeBox && shellBox).toBeTruthy();
+    if (!(frameBox && shapeBox && shellBox)) {
+      return;
+    }
+
+    // Shape may start to the right of the frame; fill extends left of it
+    expect(shapeBox.x).toBeGreaterThan(frameBox.x);
+
+    // Near frame left, mid height — glass, not photo
+    const leftGlass = await samplePixel(page, frameBox, 0.02, 0.45);
+    // Under title — same glass family
+    const midGlass = await samplePixel(
+      page,
+      frameBox,
+      (shellBox.x - frameBox.x + shellBox.width * 0.35) / frameBox.width,
+      0.45
+    );
+    // Far right of frame — photo
+    const photo = await samplePixel(page, frameBox, 0.96, 0.45);
+
+    expect(colorDistance(leftGlass, midGlass)).toBeLessThan(20);
+    expect(colorDistance(leftGlass, photo)).toBeGreaterThan(12);
+    expect(luminance(leftGlass)).toBeLessThan(120);
+  });
 });
