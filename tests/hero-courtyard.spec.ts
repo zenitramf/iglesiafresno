@@ -235,9 +235,7 @@ test.describe("Hero courtyard SVG", () => {
     });
   }
 
-  test("left edge is masked by the courtyard radius (not square)", async ({
-    page,
-  }) => {
+  test("only the right edge is rounded (left is square)", async ({ page }) => {
     const courtyard = page.locator("[data-hero-courtyard]");
     const frame = page.locator("[data-hero-frame]");
     const shell = page.locator("[data-hero-copy-shell]");
@@ -248,13 +246,17 @@ test.describe("Hero courtyard SVG", () => {
       return;
     }
 
-    const radius = await courtyard.evaluate((el) => {
-      const value = getComputedStyle(el).borderTopLeftRadius;
-      return Number.parseFloat(value);
+    const radii = await courtyard.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return {
+        topLeft: Number.parseFloat(style.borderTopLeftRadius),
+        topRight: Number.parseFloat(style.borderTopRightRadius),
+      };
     });
-    expect(radius).toBeGreaterThanOrEqual(24);
+    expect(radii.topLeft).toBe(0);
+    expect(radii.topRight).toBeGreaterThanOrEqual(24);
 
-    // Inside the glass under the title (not the gold border ring)
+    // Inside the glass under the title
     const glassSample = await samplePixel(
       page,
       frameBox,
@@ -272,9 +274,9 @@ test.describe("Hero courtyard SVG", () => {
 
     expect(colorDistance(glassSample, photoSample)).toBeGreaterThan(12);
 
-    // Just inside the rounded frame corner — should not match solid mid-glass
-    // (clipped to radius; may be border or photo, not the glass wash)
-    const cornerSample = await samplePixel(page, frameBox, 0.004, 0.004);
+    // Just inside the rounded top-right frame corner — outside the photo fill
+    // (clipped to radius; page background shows through, not mid-glass)
+    const cornerSample = await samplePixel(page, frameBox, 0.996, 0.004);
     expect(colorDistance(cornerSample, glassSample)).toBeGreaterThan(8);
   });
 
