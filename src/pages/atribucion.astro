@@ -1,0 +1,50 @@
+---
+import PageHero from "@/components/layout/page-hero.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
+---
+
+<BaseLayout
+  description="Créditos y atribuciones de fotografías e imágenes utilizadas en el sitio de Iglesia Bautista Victory."
+  title="Atribución | Iglesia Bautista Victory"
+>
+  <PageHero
+    description="Reconocemos a los fotógrafos y plataformas cuyos trabajos enriquecen este sitio."
+    eyebrow="Créditos"
+    title="Atribución"
+  />
+
+  <section class="site-gutter border-t border-border py-16 sm:py-20">
+    <SiteContainer>
+      <div class="max-w-2xl">
+        <h2 class="mb-4 font-semibold text-2xl text-foreground tracking-tight">
+          Fotografías
+        </h2>
+        <ul
+          class="flex flex-col gap-4 text-base text-muted-foreground leading-relaxed"
+        >
+          <li>
+            Photo by{" "}
+            <a
+              class="text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              href="https://unsplash.com/@ghpvisuals?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Grant Porter
+            </a>{" "}
+            on{" "}
+            <a
+              class="text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              href="https://unsplash.com/photos/birds-eye-view-of-skyscrapers-Mx71xeQOev8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Unsplash
+            </a>
+          </li>
+        </ul>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>

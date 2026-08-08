@@ -23,7 +23,8 @@ const SHAPE_VB_H = 937;
 const SHAPE_STEP_RIGHT_X = 2355.4;
 /** Fraction of shape width where the title-band glass edge sits. */
 const SHAPE_STEP_RIGHT_FRAC = SHAPE_STEP_RIGHT_X / SHAPE_VB_W;
-const HERO_HEIGHT = "min(48rem, calc(75svh - 3rem))" as const;
+const HERO_HEIGHT =
+  "clamp(700px, calc(75svh - 3rem), 48rem)" as const;
 const SHAPE_WIDTH =
   `calc((${HERO_HEIGHT}) * ${SHAPE_VB_W} / ${SHAPE_VB_H})` as const;
 ---
