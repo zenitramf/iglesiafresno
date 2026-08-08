@@ -116,7 +116,7 @@
    * Hero courtyard glass steps — change opacity in one place.
    * 100% = solid page background; lower = more photo show-through.
    */
-  --hero-courtyard-step-opacity: 60%;
+  --hero-courtyard-step-opacity: 100%;
   --hero-courtyard-step: color-mix(
     in oklab,
     var(--background) var(--hero-courtyard-step-opacity),
