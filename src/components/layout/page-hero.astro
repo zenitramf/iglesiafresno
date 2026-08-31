@@ -2,14 +2,14 @@
 import type { ImageMetadata } from "astro";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Image } from "@/components/starwind/image";
-import heroImage from "@/images/home-page_fvbc_hero.webp";
+import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
 
 interface Props {
   class?: string;
   description?: string;
   eyebrow: string;
   id?: string;
-  /** Background photo — defaults to the homepage hero image. */
+  /** Background photo — defaults to the homepage courtyard image. */
   image?: ImageMetadata;
   imageAlt?: string;
   title: string;
@@ -21,66 +21,72 @@ const {
   eyebrow,
   id,
   image = heroImage,
-  imageAlt = "Mural de Fresno y el horizonte de la ciudad entre la niebla",
+  imageAlt = "Horizonte del centro de Fresno bajo un cielo despejado",
   title,
 } = Astro.props;
 ---
 
 <section
   id={id}
-  class:list={[
-    "relative min-h-[min(36rem,70svh)] w-full overflow-hidden sm:min-h-[min(40rem,72svh)]",
-    className,
-  ]}
+  class:list={["hero-gutter bg-background py-4 text-foreground lg:py-6", className]}
 >
-  <!-- Full-bleed photo; object-bottom keeps the lower edge of the crop anchored -->
-  <Image
-    alt={imageAlt}
-    class="absolute inset-0 size-full object-cover object-bottom"
-    fetchpriority="high"
-    loading="eager"
-    sizes="100vw"
-    src={image}
-    widths={[960, 1280, 1600, 1920]}
-  />
-
-  <!-- Scrim so hero type stays readable over the photo -->
+  <!--
+    Courtyard frame matching the homepage hero: near-bleed gutter and rounded
+    photo well. Title stays a simple centered overlay — no glass SVG shape.
+  -->
   <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 bg-linear-to-t from-background from-10% via-background/75 via-50% to-background/25"
-  ></div>
-
-  <div
-    class="site-gutter relative z-10 flex min-h-[min(36rem,70svh)] flex-col justify-end pt-28 pb-12 sm:min-h-[min(40rem,72svh)] sm:pt-32 sm:pb-16 lg:pb-20"
+    class="relative min-h-[min(28rem,60svh)] overflow-hidden rounded-4xl bg-muted sm:min-h-[min(32rem,62svh)]"
   >
-    <SiteContainer class="flex w-full flex-col items-center gap-8 text-center">
-      <div class="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
-        <p
-          class="mb-3 font-medium text-primary-accent/90 text-xs tracking-[0.2em] uppercase sm:text-sm"
-        >
-          {eyebrow}
-        </p>
+    <Image
+      alt={imageAlt}
+      class="absolute inset-0 size-full object-cover object-center"
+      fetchpriority="high"
+      loading="eager"
+      sizes="100vw"
+      src={image}
+      widths={[960, 1280, 1600, 1920]}
+    />
 
-        <h1
-          class="text-balance font-light text-4xl text-foreground leading-tight tracking-tight sm:text-5xl xl:text-6xl 2xl:text-7xl"
-        >
-          {title}
-        </h1>
+    <!-- Scrim so hero type stays readable over the photo -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-linear-to-t from-background from-10% via-background/75 via-50% to-background/25"
+    ></div>
 
-        {description ? (
+    <div
+      class="relative z-10 flex min-h-[min(28rem,60svh)] flex-col justify-end pt-28 pb-12 sm:min-h-[min(32rem,62svh)] sm:pt-32 sm:pb-16 lg:pb-20"
+    >
+      <SiteContainer
+        class="flex w-full flex-col items-center gap-8 text-center"
+      >
+        <div class="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
           <p
-            class="mx-auto mt-5 max-w-2xl text-pretty text-lg text-foreground/70 leading-relaxed sm:text-xl xl:max-w-3xl"
+            class="mb-3 font-medium text-primary-accent/90 text-xs tracking-[0.2em] uppercase sm:text-sm"
           >
-            {description}
+            {eyebrow}
           </p>
-        ) : null}
-      </div>
 
-      {Astro.slots.has("default") ? (
+          <h1
+            class="text-balance font-light text-4xl text-foreground leading-tight tracking-tight sm:text-5xl xl:text-6xl 2xl:text-7xl"
+          >
+            {title}
+          </h1>
+
+          {description ? (
+            <p
+              class="mx-auto mt-5 max-w-2xl text-pretty text-foreground/70 text-lg leading-relaxed sm:text-xl xl:max-w-3xl"
+            >
+              {description}
+            </p>
+          ) : null}
+        </div>
+
+        {Astro.slots.has("default") ? (
           <div class="flex shrink-0 flex-col items-center gap-3">
             <slot />
           </div>
         ) : null}
-    </SiteContainer>
+      </SiteContainer>
+    </div>
   </div>
 </section>

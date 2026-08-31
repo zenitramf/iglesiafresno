@@ -116,9 +116,12 @@ const steps = [
 ] as const satisfies readonly Step[];
 ---
 
-{steps.map((step) => (
+{steps.map((step, index) => (
     <section
-      class="site-gutter scroll-mt-24 border-border border-t py-16 sm:py-20"
+      class:list={[
+        "site-gutter scroll-mt-24 py-16 sm:py-20",
+        index > 0 && "border-t border-border",
+      ]}
       id={step.id}
     >
       <SiteContainer class="grid gap-7">
