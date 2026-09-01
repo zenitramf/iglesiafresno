@@ -1,11 +1,16 @@
 ---
 import { Button } from "@/components/starwind/button";
+import { giveHref } from "@/lib/church-data";
 
 const navLinks = [
   { href: "/evangelio", label: "Evangelio" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/equipo", label: "Equipo" },
-  { href: "/dar", label: "Dar" },
+  {
+    external: true,
+    href: giveHref,
+    label: "Dar",
+  },
 ] as const;
 
 const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
@@ -86,6 +91,9 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
               <a
                 class="rounded-md px-3 py-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
+                {...("external" in link && link.external
+                  ? { rel: "noopener noreferrer", target: "_blank" }
+                  : {})}
               >
                 {link.label}
               </a>
@@ -146,6 +154,9 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
                 class="rounded-lg px-3 py-3 text-lg text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 data-navbar-3-link
                 href={link.href}
+                {...("external" in link && link.external
+                  ? { rel: "noopener noreferrer", target: "_blank" }
+                  : {})}
               >
                 {link.label}
               </a>
@@ -153,7 +164,7 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
         </div>
         <hr class="h-px w-full shrink-0 border-0 bg-border">
         <div class="flex flex-col gap-2 p-3">
-          <Button class="w-full" href="/visita" size="md" variant="default">
+          <Button class="w-full" href="/visitanos" size="md" variant="default">
             Visítanos
           </Button>
         </div>

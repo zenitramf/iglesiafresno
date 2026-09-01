@@ -1,0 +1,160 @@
+---
+import PageHero from "@/components/layout/page-hero.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
+import { Button } from "@/components/starwind/button";
+import BaseLayout from "@/layouts/base-layout.astro";
+import { churchInfo } from "@/lib/church-data";
+import { getSpanishServiceTimes } from "@/lib/service-times";
+
+const serviceTimes = await getSpanishServiceTimes();
+
+const faqs = [
+  {
+    answer:
+      "Ofrecemos clases para niños y adolescentes. Creemos que la adoración en familia es importante, y nos enfocamos en esto durante el culto.",
+    question: "¿Tienen programas para mis hijos o adolescentes?",
+  },
+  {
+    answer:
+      "Se ofrece cuidado de niños durante todos los servicios, desde recién nacidos hasta los tres años de edad.",
+    question: "¿Tienen guardería?",
+  },
+  {
+    answer:
+      "¡No te preocupes! Nuestro equipo de hospitalidad te estará esperando. Ellos te orientarán y tendrán una bolsa de bienvenida preparada para cada visitante por primera vez.",
+    question: "¿A dónde voy cuando llegue?",
+  },
+  {
+    answer:
+      "No tenemos restricciones ni requisitos de vestimenta, pero te pedimos que recuerdes que la iglesia es un ambiente familiar enfocado en adorar a Dios. Con eso en mente, ¡estarás bien!",
+    question: "¿Qué debo vestir?",
+  },
+  {
+    answer:
+      "¡No! Si nos visitas, queremos que el servicio sea un regalo para ti. Eres bienvenido a dar si así lo deseas, pero nunca te presionaremos para que lo hagas.",
+    question: "¿Se espera que dé en la ofrenda?",
+  },
+] as const;
+---
+
+<BaseLayout
+  description="Planifica tu visita a Iglesia Bautista Victory en Fresno: horarios de servicio, dirección y qué esperar."
+  title="Visítanos | Iglesia Bautista Victory"
+>
+  <PageHero
+    description="Ven como eres. Encuentra un asiento, conoce rostros amables y escucha el evangelio predicado con claridad desde las Escrituras."
+    eyebrow="Bienvenido"
+    title="Planifica tu visita"
+  />
+
+  <section class="site-gutter py-16 sm:py-20">
+    <SiteContainer class="grid gap-12 md:grid-cols-2 md:gap-10">
+      <div class="grid gap-6">
+        <h2 class="font-semibold text-2xl text-foreground tracking-tight">
+          Horarios de servicio
+        </h2>
+        {serviceTimes.length > 0 ? (
+          <ul class="grid gap-3">
+            {serviceTimes.map((item) => (
+              <li class="rounded-xl border border-border bg-card px-5 py-4">
+                <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
+                  {item.label}
+                </p>
+                <p class="mt-1 font-medium text-foreground text-lg">
+                  {item.time}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-muted-foreground leading-relaxed">
+            Los horarios de servicio no están disponibles en este momento.
+            Contáctanos y con gusto te ayudamos.
+          </p>
+        )}
+      </div>
+
+      <div class="grid gap-5">
+        <h2 class="font-semibold text-2xl text-foreground tracking-tight">
+          Ubicación
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          {churchInfo.addressLine1}<br>
+          {churchInfo.addressLine2}
+        </p>
+        <p class="text-muted-foreground text-sm">
+          Ubicados en el Gateway Business Complex
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <Button
+            href={churchInfo.mapsUrl}
+            rel="noopener noreferrer"
+            size="lg"
+            target="_blank"
+            variant="primary"
+          >
+            Abrir en Google Maps
+          </Button>
+          <Button
+            href={`mailto:${churchInfo.email}`}
+            size="lg"
+            variant="secondary"
+          >
+            Contáctanos
+          </Button>
+        </div>
+      </div>
+    </SiteContainer>
+  </section>
+
+  <section class="site-gutter border-t border-border bg-card py-16 sm:py-20">
+    <SiteContainer class="mx-auto max-w-3xl grid gap-10">
+      <h2
+        class="font-semibold text-3xl text-foreground tracking-tight sm:text-4xl"
+      >
+        Qué esperar
+      </h2>
+      <div class="grid gap-8">
+        {faqs.map((faq) => (
+          <div class="grid gap-2">
+            <h3 class="font-semibold text-foreground text-lg">{faq.question}</h3>
+            <p class="text-muted-foreground leading-relaxed">{faq.answer}</p>
+          </div>
+        ))}
+
+        <div class="grid gap-3">
+          <h3 class="font-semibold text-foreground text-lg">
+            ¿Qué creen ustedes?
+          </h3>
+          <p class="text-muted-foreground leading-relaxed">
+            Conoce más sobre nuestro propósito y nuestras creencias.
+          </p>
+          <div>
+            <Button href="/nosotros" size="md" variant="secondary">
+              Saber más
+            </Button>
+          </div>
+        </div>
+
+        <div class="grid gap-3">
+          <h3 class="font-semibold text-foreground text-lg">
+            Todavía tengo preguntas.
+          </h3>
+          <p class="text-muted-foreground leading-relaxed">
+            Con gusto te ayudamos a responder cualquier otra pregunta que
+            tengas.
+          </p>
+          <div>
+            <Button
+              href={`mailto:${churchInfo.email}`}
+              size="lg"
+              variant="primary"
+            >
+              Contáctanos
+            </Button>
+          </div>
+        </div>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>

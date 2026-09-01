@@ -1,12 +1,12 @@
 ---
 import SiteContainer from "@/components/layout/site-container.astro";
-import { churchInfo } from "@/lib/church-data";
+import { churchInfo, giveHref } from "@/lib/church-data";
 
 const exploreLinks = [
-  { href: "/visita", label: "Planifica tu visita" },
+  { href: "/visitanos", label: "Planifica tu visita" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/equipo", label: "Equipo" },
-  { href: "/dar", label: "Dar" },
+  { external: true, href: giveHref, label: "Dar" },
 ] as const;
 
 const connectLinks = [
@@ -23,7 +23,7 @@ const resourceLinks = [
   { href: "/atribucion", label: "Atribución" },
   { href: "/privacidad", label: "Privacidad" },
   { href: "/terminos", label: "Términos de uso" },
-  { href: "mailto:contacto@ejemplo.com", label: "contacto@ejemplo.com" },
+  { href: "mailto:contacto@iglesiafresno.com", label: "contacto@iglesiafresno.com" },
 ] as const;
 ---
 
@@ -87,6 +87,9 @@ const resourceLinks = [
               <a
                 class="text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
+                {...("external" in link && link.external
+                  ? { rel: "noopener noreferrer", target: "_blank" }
+                  : {})}
               >
                 {link.label}
               </a>

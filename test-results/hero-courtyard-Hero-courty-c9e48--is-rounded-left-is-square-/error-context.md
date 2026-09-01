@@ -53,7 +53,7 @@ Received:   0
           - paragraph [ref=e30]: Arraigados en las Escrituras, creciendo en Cristo y llevando el evangelio por todo Fresno. Ven y crece con nosotros.
           - generic [ref=e31]:
             - link "Planifica tu visita" [ref=e32] [cursor=pointer]:
-              - /url: /visita
+              - /url: /visitanos
             - link "Cómo ir al cielo" [ref=e33] [cursor=pointer]:
               - /url: /evangelio
     - region "Horarios de servicio" [ref=e34]:
@@ -120,7 +120,7 @@ Received:   0
         - paragraph [ref=e140]: Ven a visitarnos. Encuentra un asiento, conoce rostros amables y escucha el evangelio predicado con claridad desde las Escrituras.
         - generic [ref=e141]:
           - link "Planifica tu visita" [ref=e142] [cursor=pointer]:
-            - /url: /visita
+            - /url: /visitanos
           - link "Abrir en Google Maps" [ref=e143] [cursor=pointer]:
             - /url: /ubicacion
       - list [ref=e144]:
@@ -154,7 +154,7 @@ Received:   0
           - paragraph [ref=e171]: El evangelio es claro y para todos. Descubre lo que la Biblia enseña sobre la salvación y la vida eterna.
           - generic [ref=e172]: Leer más →
       - link "Planifica tu visita" [ref=e174] [cursor=pointer]:
-        - /url: /visita
+        - /url: /visitanos
     - generic [ref=e176]:
       - generic [ref=e177]:
         - paragraph [ref=e178]: Ofrendas
@@ -182,7 +182,7 @@ Received:   0
           - heading "Explorar" [level=2] [ref=e198]
           - navigation "Enlaces para explorar" [ref=e199]:
             - link "Planifica tu visita" [ref=e200] [cursor=pointer]:
-              - /url: /visita
+              - /url: /visitanos
             - link "Nosotros" [ref=e201] [cursor=pointer]:
               - /url: /nosotros
             - link "Equipo" [ref=e202] [cursor=pointer]:
@@ -215,8 +215,8 @@ Received:   0
               - /url: /privacidad
             - link "Términos de uso" [ref=e219] [cursor=pointer]:
               - /url: /terminos
-            - link "contacto@ejemplo.com" [ref=e220] [cursor=pointer]:
-              - /url: mailto:contacto@ejemplo.com
+            - link "contacto@iglesiafresno.com" [ref=e220] [cursor=pointer]:
+              - /url: mailto:contacto@iglesiafresno.com
       - paragraph [ref=e221]: © 2026 Iglesia Bautista Victory. Todos los derechos reservados.
 ```
 

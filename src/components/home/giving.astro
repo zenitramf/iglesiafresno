@@ -3,6 +3,7 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
+import { giveHref } from "@/lib/church-data";
 ---
 
 <section
@@ -27,7 +28,15 @@ import givingPhoto from "@/images/GivingPhoto_Redesigned.webp";
         ayudamos a llevar las buenas nuevas de Jesucristo alrededor del mundo.
       </p>
       <div>
-        <Button href="/dar" size="lg" variant="primary"> Dar en línea </Button>
+        <Button
+          href={giveHref}
+          rel="noopener noreferrer"
+          size="lg"
+          target="_blank"
+          variant="primary"
+        >
+          Dar en línea
+        </Button>
       </div>
     </div>
 
