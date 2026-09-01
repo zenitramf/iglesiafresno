@@ -1,0 +1,29 @@
+---
+import PageHero from "@/components/layout/page-hero.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
+---
+
+<BaseLayout
+  description="Lea cómo Iglesia Bautista Victory maneja la información del sitio web, los servicios externos y las preguntas relacionadas con la privacidad."
+  title="Política de privacidad | Iglesia Bautista Victory"
+>
+  <PageHero
+    description="Cómo tratamos la información que usted comparte con nosotros."
+    eyebrow="Legal"
+    title="Política de privacidad"
+  />
+
+  <section class="site-gutter py-16 sm:py-20">
+    <SiteContainer>
+      <div class="max-w-2xl">
+        <p class="text-base text-muted-foreground leading-relaxed">
+          Iglesia Bautista Victory respeta su privacidad. La información que
+          comparte a través de formularios de contacto o al planificar una
+          visita se usa únicamente para responder a su solicitud y para servir a
+          nuestra familia de la iglesia. No vendemos información personal.
+        </p>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>

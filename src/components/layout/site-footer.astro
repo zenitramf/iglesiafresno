@@ -10,15 +10,21 @@ const exploreLinks = [
 ] as const;
 
 const connectLinks = [
-  { href: "#vision", label: "Visión" },
-  { href: "/redes/facebook", label: "Facebook" },
-  { href: "/redes/youtube", label: "YouTube" },
+  {
+    external: true,
+    href: "https://www.facebook.com/fresnovictory/",
+    label: "Facebook",
+  },
+  {
+    external: true,
+    href: "https://www.youtube.com/@fresnovictory",
+    label: "YouTube",
+  },
   { external: true, href: giveHref, label: "Dar" },
 ] as const;
 
 const resourceLinks = [
   { href: "/evangelio", label: "Evangelio" },
-  { href: "/conferencia-misionera", label: "Conferencia misionera" },
   { href: "/atribucion", label: "Atribución" },
   { href: "/privacidad", label: "Privacidad" },
   { href: "/terminos", label: "Términos de uso" },
@@ -61,7 +67,12 @@ const resourceLinks = [
         <address
           class="text-muted-foreground text-sm leading-relaxed not-italic"
         >
-          <a class="transition-colors hover:text-foreground" href="/ubicacion">
+          <a
+            class="transition-colors hover:text-foreground"
+            href={churchInfo.mapsUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             {churchInfo.addressLine1}<br>
             {churchInfo.addressLine2}
           </a>

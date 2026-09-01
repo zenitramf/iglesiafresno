@@ -41,7 +41,13 @@ const details = [
         <Button href="/visitanos" size="md" variant="primary">
           Planifica tu visita
         </Button>
-        <Button href="/ubicacion" size="md" variant="outline">
+        <Button
+          href={churchInfo.mapsUrl}
+          rel="noopener noreferrer"
+          size="md"
+          target="_blank"
+          variant="outline"
+        >
           Abrir en Google Maps
         </Button>
       </div>
