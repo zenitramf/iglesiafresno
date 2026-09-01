@@ -13,8 +13,7 @@ const connectLinks = [
   { href: "#vision", label: "Visión" },
   { href: "/redes/facebook", label: "Facebook" },
   { href: "/redes/youtube", label: "YouTube" },
-  { href: "#ofrendas", label: "Dar" },
-  { href: "/portal", label: "Portal" },
+  { external: true, href: giveHref, label: "Dar" },
 ] as const;
 
 const resourceLinks = [
@@ -108,6 +107,9 @@ const resourceLinks = [
               <a
                 class="text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
+                {...("external" in link && link.external
+                  ? { rel: "noopener noreferrer", target: "_blank" }
+                  : {})}
               >
                 {link.label}
               </a>

@@ -1,48 +1,82 @@
 ---
+import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
-import { Image } from "@/components/starwind/image";
 import churchFrontage from "@/images/church_frontage.webp";
+
+const mission = [
+  { action: "Exaltar", object: "al Salvador" },
+  { action: "Edificar", object: "a los santos" },
+  { action: "Evangelizar", object: "al pecador" },
+] as const;
+
+const sectionBg = `background-image: url(${churchFrontage.src})`;
 ---
 
 <section
-  class="site-gutter scroll-mt-8 border-t border-border py-16 sm:py-20"
+  class="relative scroll-mt-24 overflow-hidden border-t border-border"
+  data-who-we-are
   id="nosotros"
 >
-  <SiteContainer class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-    <div class="grid gap-5">
-      <p
-        class="text-sm font-medium tracking-[0.18em] text-primary-accent uppercase"
-      >
-        Quiénes somos
-      </p>
-      <h2
-        class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-      >
-        Una familia de fe arraigada en las Escrituras
-      </h2>
-      <p class="text-muted-foreground sm:text-lg">
-        Iglesia Bautista Victory es una congregación que cree en la Biblia. Nos
-        reunimos cada domingo para adorar, crecer en la Palabra de Dios y servir
-        juntos a nuestra ciudad — ya sea que camines con Jesús desde hace
-        décadas o aún estés haciendo preguntas.
-      </p>
-      <div>
-        <Button href="/nosotros" size="md" variant="primary">
-          Conoce más sobre nosotros
-        </Button>
-      </div>
-    </div>
+  <div
+    aria-label="Familia de la congregación de Iglesia Bautista Victory"
+    class="absolute inset-0 bg-muted bg-cover bg-no-repeat bg-[center_62%]"
+    role="img"
+    style={sectionBg}
+  ></div>
 
-    <div class="relative overflow-hidden rounded-xl border border-border">
-      <Image
-        alt="Fachada del edificio de Iglesia Bautista Victory"
-        class="aspect-4/3 size-full object-cover"
-        loading="lazy"
-        sizes="(max-width: 1024px) 100vw, 50vw"
-        src={churchFrontage}
-        widths={[640, 960, 1280]}
-      />
-    </div>
-  </SiteContainer>
+  <!-- Feathered scrims — keep the church visible under the type. -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-linear-to-t from-background/80 via-background/45 via-40% to-background/20"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-linear-to-r from-background/55 via-background/20 via-45% to-transparent"
+  ></div>
+
+  <div
+    class="site-gutter relative z-10 flex min-h-[min(38rem,88svh)] flex-col justify-center py-12 sm:min-h-[min(44rem,86svh)] sm:py-16 lg:min-h-[min(54rem,90svh)]"
+  >
+    <SiteContainer>
+      <div class="grid max-w-2xl gap-5 xl:max-w-3xl lg:gap-6">
+        <div class="grid gap-4">
+          <span aria-hidden="true" class="block h-0.5 w-12 bg-primary"></span>
+          <p
+            class="font-medium text-primary-accent text-sm tracking-[0.18em] uppercase"
+          >
+            Quiénes somos
+          </p>
+          <h2
+            class="text-balance font-semibold text-4xl text-foreground leading-tight tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)] sm:text-5xl lg:text-6xl xl:text-7xl"
+          >
+            Una familia de fe arraigada en las Escrituras
+          </h2>
+        </div>
+
+        <p
+          class="max-w-xl text-pretty text-foreground/90 leading-relaxed drop-shadow-sm sm:text-lg"
+        >
+          Somos una congregación que cree en la Biblia.
+          Nos reunimos cada domingo para adorar, crecer en la Palabra de Dios y
+          servir juntos a nuestra ciudad.
+        </p>
+
+        <div class="pt-1">
+          <Button
+            class="group/btn"
+            href="/nosotros"
+            size="lg"
+            variant="primary"
+          >
+            Conoce más sobre nosotros
+            <ArrowRight
+              aria-hidden="true"
+              class="size-4 transition-transform group-hover/btn:translate-x-1"
+            />
+          </Button>
+        </div>
+      </div>
+    </SiteContainer>
+  </div>
 </section>

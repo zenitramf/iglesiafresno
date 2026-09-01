@@ -200,8 +200,6 @@ Received:   0
               - /url: /redes/youtube
             - link "Dar" [ref=e210] [cursor=pointer]:
               - /url: "#ofrendas"
-            - link "Portal" [ref=e211] [cursor=pointer]:
-              - /url: /portal
         - generic [ref=e212]:
           - heading "Recursos" [level=2] [ref=e213]
           - navigation "Enlaces de recursos" [ref=e214]:
