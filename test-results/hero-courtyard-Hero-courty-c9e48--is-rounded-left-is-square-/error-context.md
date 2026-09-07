@@ -52,7 +52,7 @@ Received:   0
         - generic [ref=e29]:
           - paragraph [ref=e30]: Arraigados en las Escrituras, creciendo en Cristo y llevando el evangelio por todo Fresno. Ven y crece con nosotros.
           - generic [ref=e31]:
-            - link "Planifica tu visita" [ref=e32] [cursor=pointer]:
+            - link "Planea Tu Visita" [ref=e32] [cursor=pointer]:
               - /url: /visitanos
             - link "Cómo ir al cielo" [ref=e33] [cursor=pointer]:
               - /url: /evangelio
@@ -115,11 +115,11 @@ Received:   0
       - img "Fachada del edificio de Iglesia Bautista Victory" [ref=e134]
     - generic [ref=e136]:
       - generic [ref=e137]:
-        - paragraph [ref=e138]: Planifica tu visita
+        - paragraph [ref=e138]: Planea Tu Visita
         - heading "Nos encantaría conocerte esta semana" [level=2] [ref=e139]
         - paragraph [ref=e140]: Ven a visitarnos. Encuentra un asiento, conoce rostros amables y escucha el evangelio predicado con claridad desde las Escrituras.
         - generic [ref=e141]:
-          - link "Planifica tu visita" [ref=e142] [cursor=pointer]:
+          - link "Planea Tu Visita" [ref=e142] [cursor=pointer]:
             - /url: /visitanos
           - link "Abrir en Google Maps" [ref=e143] [cursor=pointer]:
             - /url: /ubicacion
@@ -153,7 +153,7 @@ Received:   0
           - heading "Cómo ir al cielo" [level=3] [ref=e170]
           - paragraph [ref=e171]: El evangelio es claro y para todos. Descubre lo que la Biblia enseña sobre la salvación y la vida eterna.
           - generic [ref=e172]: Leer más →
-      - link "Planifica tu visita" [ref=e174] [cursor=pointer]:
+      - link "Planea Tu Visita" [ref=e174] [cursor=pointer]:
         - /url: /visitanos
     - generic [ref=e176]:
       - generic [ref=e177]:
@@ -181,7 +181,7 @@ Received:   0
         - generic [ref=e197]:
           - heading "Explorar" [level=2] [ref=e198]
           - navigation "Enlaces para explorar" [ref=e199]:
-            - link "Planifica tu visita" [ref=e200] [cursor=pointer]:
+            - link "Planea Tu Visita" [ref=e200] [cursor=pointer]:
               - /url: /visitanos
             - link "Nosotros" [ref=e201] [cursor=pointer]:
               - /url: /nosotros
@@ -205,8 +205,6 @@ Received:   0
           - navigation "Enlaces de recursos" [ref=e214]:
             - link "Evangelio" [ref=e215] [cursor=pointer]:
               - /url: /evangelio
-            - link "Conferencia misionera" [ref=e216] [cursor=pointer]:
-              - /url: /conferencia-misionera
             - link "Atribución" [ref=e217] [cursor=pointer]:
               - /url: /atribucion
             - link "Privacidad" [ref=e218] [cursor=pointer]:
