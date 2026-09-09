@@ -3,7 +3,7 @@ import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
-import churchFrontage from "@/images/church_frontage.webp";
+import whoWeAre from "@/images/who-we-are.webp";
 ---
 
 <section
@@ -14,15 +14,15 @@ import churchFrontage from "@/images/church_frontage.webp";
   <div class="absolute inset-0 bg-muted">
     <Image
       alt="Familia de la congregación de Iglesia Bautista Victory"
-      class="absolute inset-0 size-full object-cover object-[center_62%]"
-      height={1200}
+      class="absolute inset-0 size-full object-cover object-top"
+      height={778}
       inferSize={false}
       loading="lazy"
       quality={70}
       sizes="100vw"
-      src={churchFrontage}
-      width={1600}
-      widths={[640, 960, 1280, 1600]}
+      src={whoWeAre}
+      width={1920}
+      widths={[640, 960, 1280, 1600, 1920, 2560]}
     />
   </div>
 
@@ -37,7 +37,7 @@ import churchFrontage from "@/images/church_frontage.webp";
   ></div>
 
   <div
-    class="site-gutter relative z-10 flex min-h-[min(38rem,88svh)] flex-col justify-center py-12 sm:min-h-[min(44rem,86svh)] sm:py-16 lg:min-h-[min(54rem,90svh)]"
+    class="site-gutter relative z-10 flex min-h-[min(38rem,88svh)] flex-col justify-center py-12 sm:min-h-[min(44rem,86svh)] sm:py-16 lg:min-h-[min(60rem,90svh)]"
   >
     <SiteContainer>
       <div class="grid max-w-2xl gap-5 xl:max-w-3xl lg:gap-6">
