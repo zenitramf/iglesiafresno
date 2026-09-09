@@ -20,7 +20,7 @@ import { churchInfo } from "@/lib/church-data";
 
     <div class="flex flex-wrap items-center justify-center gap-3">
       <Button
-        href="mailto:contacto@iglesiafresno.com?subject=Tengo%20una%20pregunta%20sobre%20la%20salvaci%C3%B3n"
+        href={`mailto:${churchInfo.email}?subject=Tengo%20una%20pregunta%20sobre%20la%20salvaci%C3%B3n`}
         size="lg"
         variant="primary"
       >
@@ -36,10 +36,10 @@ import { churchInfo } from "@/lib/church-data";
     >
       <a
         class="inline-flex items-center gap-2 transition-colors hover:text-foreground"
-        href="mailto:contacto@iglesiafresno.com"
+        href={`mailto:${churchInfo.email}`}
       >
         <Mail aria-hidden="true" class="size-4 text-primary-accent" />
-        contacto@iglesiafresno.com
+        {churchInfo.email}
       </a>
       <a
         class="inline-flex items-center gap-2 transition-colors hover:text-foreground"
