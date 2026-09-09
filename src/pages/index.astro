@@ -6,11 +6,24 @@ import Ministries from "@/components/home/ministries.astro";
 import PlanVisit from "@/components/home/plan-visit.astro";
 import ServiceTimes from "@/components/home/service-times.astro";
 import WhoWeAre from "@/components/home/who-we-are.astro";
+import evangelismoPersonal from "@/images/evangelismo-personal.webp";
 import BaseLayout from "@/layouts/base-layout.astro";
+import {
+  EVANGELISMO_IMAGE_SIZES,
+  EVANGELISMO_IMAGE_WIDTHS,
+  getCriticalImagePreload,
+} from "@/lib/critical-images";
+
+const evangelismoPreload = await getCriticalImagePreload(
+  evangelismoPersonal,
+  EVANGELISMO_IMAGE_WIDTHS,
+  EVANGELISMO_IMAGE_SIZES
+);
 ---
 
 <BaseLayout
   description="Iglesia Bautista Victory: crece en la fe, comparte el evangelio y dar gloria a Dios. Domingos 10:30 a. m. y 5:00 p. m., jueves 7:00 p. m."
+  extraCriticalPreloads={[evangelismoPreload]}
   title="Iglesia Bautista Victory"
 >
   <HeroCourtyard />

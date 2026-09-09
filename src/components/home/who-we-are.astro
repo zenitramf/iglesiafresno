@@ -2,15 +2,8 @@
 import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
+import { Image } from "@/components/starwind/image";
 import churchFrontage from "@/images/church_frontage.webp";
-
-const mission = [
-  { action: "Exaltar", object: "al Salvador" },
-  { action: "Edificar", object: "a los santos" },
-  { action: "Evangelizar", object: "al pecador" },
-] as const;
-
-const sectionBg = `background-image: url(${churchFrontage.src})`;
 ---
 
 <section
@@ -18,12 +11,20 @@ const sectionBg = `background-image: url(${churchFrontage.src})`;
   data-who-we-are
   id="nosotros"
 >
-  <div
-    aria-label="Familia de la congregación de Iglesia Bautista Victory"
-    class="absolute inset-0 bg-muted bg-cover bg-no-repeat bg-[center_62%]"
-    role="img"
-    style={sectionBg}
-  ></div>
+  <div class="absolute inset-0 bg-muted">
+    <Image
+      alt="Familia de la congregación de Iglesia Bautista Victory"
+      class="absolute inset-0 size-full object-cover object-[center_62%]"
+      height={1200}
+      inferSize={false}
+      loading="lazy"
+      quality={70}
+      sizes="100vw"
+      src={churchFrontage}
+      width={1600}
+      widths={[640, 960, 1280, 1600]}
+    />
+  </div>
 
   <!-- Feathered scrims — keep the church visible under the type. -->
   <div
@@ -57,9 +58,9 @@ const sectionBg = `background-image: url(${churchFrontage.src})`;
         <p
           class="max-w-xl text-pretty text-foreground/90 leading-relaxed drop-shadow-sm sm:text-lg"
         >
-          Somos una congregación que cree en la Biblia.
-          Nos reunimos cada domingo para adorar, crecer en la Palabra de Dios y
-          servir juntos a nuestra ciudad.
+          Somos una congregación que cree en la Biblia. Nos reunimos cada
+          domingo para adorar, crecer en la Palabra de Dios y servir juntos a
+          nuestra ciudad.
         </p>
 
         <div class="pt-1">

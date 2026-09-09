@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { gotoReady } from "./ready";
 
 /**
  * Container query breakpoints on the vision section (@container):
@@ -50,7 +51,7 @@ test.describe("Vision bento layout", () => {
       page,
     }) => {
       await page.setViewportSize({ height: vp.height, width: vp.width });
-      await page.goto("/");
+      await gotoReady(page);
 
       const section = page.locator("[data-vision-bento]");
       await expect(section).toBeVisible();
@@ -141,7 +142,7 @@ test.describe("Vision bento layout", () => {
     page,
   }) => {
     await page.setViewportSize({ height: 800, width: 1280 });
-    await page.goto("/");
+    await gotoReady(page);
 
     const section = page.locator("#vision");
     await expect(section).toBeVisible();

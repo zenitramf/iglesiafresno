@@ -10,6 +10,10 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import evangelismoPersonal from "@/images/evangelismo-personal.webp";
+import {
+  EVANGELISMO_IMAGE_SIZES,
+  EVANGELISMO_IMAGE_WIDTHS,
+} from "@/lib/critical-images";
 
 const featuredHighlights = [
   "Evangelismo de puerta en puerta",
@@ -103,10 +107,10 @@ const visionPillars = [
             <Image
               alt="Puertas de casas en un vecindario residencial"
               class="absolute inset-0 size-full object-cover"
-              loading="lazy"
-              sizes="(max-width: 1280px) 100vw, 50vw"
+              critical
+              sizes={EVANGELISMO_IMAGE_SIZES}
               src={evangelismoPersonal}
-              widths={[480, 720, 960, 1200]}
+              widths={EVANGELISMO_IMAGE_WIDTHS}
             />
           </div>
 
@@ -125,8 +129,7 @@ const visionPillars = [
             </p>
 
             <ul class="mt-6 flex flex-col gap-2">
-              {
-                featuredHighlights.map((item) => (
+              {featuredHighlights.map((item) => (
                   <li class="flex items-center gap-2 text-sm">
                     <Check
                       aria-hidden="true"
@@ -134,8 +137,7 @@ const visionPillars = [
                     />
                     <span>{item}</span>
                   </li>
-                ))
-              }
+                ))}
             </ul>
 
             <div class="mt-6">
@@ -157,8 +159,7 @@ const visionPillars = [
       </div>
 
       <!-- Vision pillar cards (Evangelismo Personal is only in the featured cell) -->
-      {
-        visionPillars.map((pillar, index) => {
+      {visionPillars.map((pillar, index) => {
           const Icon = pillar.icon;
           const isLast = index === visionPillars.length - 1;
 
@@ -181,8 +182,7 @@ const visionPillars = [
               </p>
             </div>
           );
-        })
-      }
+        })}
     </div>
   </SiteContainer>
 </section>

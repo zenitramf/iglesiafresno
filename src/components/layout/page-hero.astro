@@ -3,6 +3,7 @@ import type { ImageMetadata } from "astro";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Image } from "@/components/starwind/image";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
+import { HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from "@/lib/critical-images";
 
 interface Props {
   class?: string;
@@ -40,11 +41,10 @@ const {
     <Image
       alt={imageAlt}
       class="absolute inset-0 size-full object-cover object-center"
-      fetchpriority="high"
-      loading="eager"
-      sizes="100vw"
+      critical
+      sizes={HERO_IMAGE_SIZES}
       src={image}
-      widths={[960, 1280, 1600, 1920]}
+      widths={HERO_IMAGE_WIDTHS}
     />
 
     <!-- Scrim so hero type stays readable over the photo -->

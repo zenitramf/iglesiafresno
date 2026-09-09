@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { gotoReady } from "./ready";
 
 /**
  * Guards: the /evangelio linear story keeps the gospel content intact —
@@ -27,7 +28,7 @@ const VERSE_CITATIONS = [
 test.describe("Evangelio story page", () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ height: 900, width: 1440 });
-    await page.goto("/evangelio", { waitUntil: "networkidle" });
+    await gotoReady(page, "/evangelio");
   });
 
   test("hero asks the driving question at display size", async ({ page }) => {

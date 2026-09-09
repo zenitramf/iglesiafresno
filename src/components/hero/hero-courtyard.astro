@@ -2,8 +2,10 @@
 import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
+import { Image } from "@/components/starwind/image";
 import CourtyardShape from "@/images/hero-courtyard-shape.svg";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
+import { HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from "@/lib/critical-images";
 
 /**
  * SVG viewBox 2522×937 — long-X artboard for height-locked horizontal slide.
@@ -32,7 +34,6 @@ const SHAPE_WIDTH =
   `calc((${HERO_HEIGHT}) * ${SHAPE_VB_W} / ${SHAPE_VB_H})` as const;
 const HERO_IMAGE_ALT =
   "Horizonte del centro de Fresno bajo un cielo despejado" as const;
-const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
 ---
 
 <section
@@ -55,17 +56,21 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
     `}
   >
     <div
-      aria-label={HERO_IMAGE_ALT}
-      class="absolute inset-0 overflow-hidden rounded-r-4xl bg-muted bg-cover bg-center bg-no-repeat"
+      class="absolute inset-0 overflow-hidden rounded-r-4xl bg-muted"
       data-hero-frame
-      role="img"
-      style={HERO_BG_STYLE}
     >
+      <Image
+        alt={HERO_IMAGE_ALT}
+        class="absolute inset-0 size-full object-cover object-center"
+        critical
+        sizes={HERO_IMAGE_SIZES}
+        src={heroImage}
+        widths={HERO_IMAGE_WIDTHS}
+      />
       <div
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 bg-linear-to-br from-background/40 via-background/5 to-background/20"
-      >
-      </div>
+      ></div>
     </div>
 
     <!--
@@ -99,8 +104,7 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
           <div
             class="absolute inset-y-0 right-full w-screen bg-current"
             data-hero-shape-fill
-          >
-          </div>
+          ></div>
           <CourtyardShape
             class="size-full"
             preserveAspectRatio="xMinYMid meet"
@@ -125,8 +129,8 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
             class="mt-3 font-heading font-light text-5xl leading-[1.1] tracking-tight [@media(min-height:900px)]:mt-4 [@media(min-height:900px)]:text-6xl [@media(min-height:900px)]:leading-none [@media(min-width:1536px)_and_(min-height:1000px)]:text-7xl [@media(min-height:1000px)]:mt-5"
             data-hero-title
           >
-            Crece en la fe.<br />
-            Comparte el evangelio.<br />
+            Crece en la fe.<br>
+            Comparte el evangelio.<br>
             Glorifica a Dios.
           </h1>
 
@@ -145,7 +149,12 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
             <div
               class="mt-5 flex flex-wrap items-center gap-3 [@media(min-height:900px)]:mt-7 [@media(min-height:900px)]:gap-4 [@media(min-height:1000px)]:mt-8"
             >
-              <Button class="group" href="/visitanos" size="md" variant="primary">
+              <Button
+                class="group"
+                href="/visitanos"
+                size="md"
+                variant="primary"
+              >
                 Planea Tu Visita
                 <ArrowRight
                   aria-hidden="true"
@@ -169,20 +178,25 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
   <!-- Mobile + tablet: centered title over image, subtitle + CTAs below -->
   <div class="grid gap-9 xl:hidden">
     <div
-      class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl bg-muted bg-cover bg-center bg-no-repeat"
-      style={HERO_BG_STYLE}
+      class="relative min-h-[min(32rem,75svh)] max-h-[75svh] overflow-hidden rounded-4xl bg-muted"
     >
+      <Image
+        alt={HERO_IMAGE_ALT}
+        class="absolute inset-0 size-full object-cover object-center"
+        critical
+        sizes={HERO_IMAGE_SIZES}
+        src={heroImage}
+        widths={HERO_IMAGE_WIDTHS}
+      />
       <!-- Scrim so the hero title stays readable on the photo -->
       <div
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 bg-black/45"
-      >
-      </div>
+      ></div>
       <div
         aria-hidden="true"
         class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/35"
-      >
-      </div>
+      ></div>
 
       <div
         class="relative z-10 flex min-h-[min(32rem,75svh)] max-h-[75svh] flex-col items-center justify-center px-6 py-10 text-center"
@@ -196,8 +210,8 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
         <h1
           class="mt-4 font-heading font-light text-[2.15rem] text-white leading-[1.1] tracking-tight drop-shadow-sm sm:text-5xl"
         >
-          Crece en la fe.<br />
-          Comparte el evangelio.<br />
+          Crece en la fe.<br>
+          Comparte el evangelio.<br>
           Glorifica a Dios.
         </h1>
       </div>
@@ -212,7 +226,12 @@ const HERO_BG_STYLE = `background-image: url(${heroImage.src})` as const;
       </p>
 
       <div class="grid gap-3 pt-3">
-        <Button class="group w-full" href="/visitanos" size="lg" variant="primary">
+        <Button
+          class="group w-full"
+          href="/visitanos"
+          size="lg"
+          variant="primary"
+        >
           Planea Tu Visita
           <ArrowRight
             aria-hidden="true"

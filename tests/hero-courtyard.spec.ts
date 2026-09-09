@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { gotoReady } from "./ready";
 
 /**
  * Desktop hero courtyard — long-X SVG bound to the title box (plus padding gap).
@@ -80,7 +81,7 @@ function colorDistance(
 test.describe("Hero courtyard SVG", () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto("/");
+    await gotoReady(page);
   });
 
   test("desktop shows long-X SVG shape; mobile hides it", async ({ page }) => {
@@ -101,7 +102,7 @@ test.describe("Hero courtyard SVG", () => {
     page,
   }) => {
     await page.setViewportSize({ height: 900, width: 1920 });
-    await page.goto("/");
+    await gotoReady(page);
 
     const courtyard = page.locator("[data-hero-courtyard]");
     await expect(courtyard).toBeVisible();
@@ -194,7 +195,7 @@ test.describe("Hero courtyard SVG", () => {
       page,
     }) => {
       await page.setViewportSize(vp);
-      await page.goto("/");
+      await gotoReady(page);
 
       const frame = page.locator("[data-hero-frame]");
       const shape = page.locator("[data-hero-shape]");
@@ -274,10 +275,10 @@ test.describe("Hero courtyard SVG", () => {
 
     expect(colorDistance(glassSample, photoSample)).toBeGreaterThan(12);
 
-    // Just inside the rounded top-right frame corner — outside the photo fill
-    // (clipped to radius; page background shows through, not mid-glass)
+    // Just inside the rounded top-right frame corner — overflow clips the
+    // photo, so this pixel is page background, not sky.
     const cornerSample = await samplePixel(page, frameBox, 0.996, 0.004);
-    expect(colorDistance(cornerSample, glassSample)).toBeGreaterThan(8);
+    expect(colorDistance(cornerSample, photoSample)).toBeGreaterThan(8);
   });
 
   test("glass fill uses hero-courtyard-step color token", async ({ page }) => {
@@ -410,7 +411,7 @@ test.describe("Hero courtyard SVG", () => {
     // Wide + height-capped hero: height-locked SVG often ends short of frame left
     // when the site column is centered; fill strip must still paint glass.
     await page.setViewportSize({ height: 900, width: 3840 });
-    await page.goto("/");
+    await gotoReady(page);
 
     const frame = page.locator("[data-hero-frame]");
     const shape = page.locator("[data-hero-shape]");

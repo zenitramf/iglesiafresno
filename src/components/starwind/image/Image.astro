@@ -5,6 +5,8 @@ import type { ComponentProps } from "astro/types";
 import { image } from "./variants";
 
 type Props = Partial<ComponentProps<typeof AstroImage>> & {
+  /** Eager + high priority; page reveal waits for this image to decode. */
+  critical?: boolean;
   inferSize?: boolean;
 };
 
@@ -13,17 +15,23 @@ const {
   src,
   alt = "",
   inferSize = true,
+  critical = false,
+  priority = false,
   ...rest
 } = Astro.props;
+
+const isPriority = critical || priority;
 ---
 
 {src && (
     <AstroImage
-      class={image({ class: className })}
-      src={src}
       alt={alt}
+      class={image({ class: className })}
       inferSize={inferSize}
-      {...(rest as any)}
+      src={src}
+      {...rest}
+      data-critical={critical ? "true" : undefined}
       data-slot="image"
+      priority={isPriority}
     />
   )}

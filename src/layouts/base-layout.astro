@@ -1,21 +1,38 @@
 ---
 import SiteFooter from "@/components/layout/site-footer.astro";
 import SiteHeader from "@/components/layout/site-header.astro";
+import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
+import {
+  type CriticalPreload,
+  getCriticalImagePreload,
+  HERO_IMAGE_SIZES,
+  HERO_IMAGE_WIDTHS,
+} from "@/lib/critical-images";
 import "@/styles/starwind.css";
 
 interface Props {
   description?: string;
+  /** Extra `<link rel="preload">` images (e.g. homepage evangelismo). */
+  extraCriticalPreloads?: CriticalPreload[];
   title?: string;
 }
 
 const {
+  extraCriticalPreloads = [],
   title = "Iglesia Bautista Victory",
   description = "Iglesia Bautista Victory: una familia de fe en el corazón de Fresno. Te invitamos a visitarnos.",
 } = Astro.props;
+
+const heroPreload = await getCriticalImagePreload(
+  heroImage,
+  HERO_IMAGE_WIDTHS,
+  HERO_IMAGE_SIZES
+);
+const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
 ---
 
 <!doctype html>
-<html class="dark" lang="es">
+<html class="critical-pending dark" lang="es">
   <head>
     <meta charset="utf-8">
     <link href="/favicon.svg" rel="icon" type="image/svg+xml">
@@ -25,14 +42,121 @@ const {
     <meta content="dark" name="color-scheme">
     <title>{title}</title>
     <meta content={description} name="description">
+    <style is:inline>
+      #critical-boot {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        visibility: visible;
+        pointer-events: none;
+        background: oklch(0.147 0.004 49.25);
+        opacity: 1;
+        transition:
+          opacity 0.35s ease,
+          visibility 0.35s ease;
+      }
+      html:not(.critical-pending) #critical-boot {
+        visibility: hidden;
+        opacity: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #critical-boot {
+          transition: none;
+        }
+      }
+    </style>
+    {criticalPreloads.map((image) => (
+        <link
+          as="image"
+          fetchpriority="high"
+          href={image.src}
+          imagesizes={image.sizes}
+          imagesrcset={image.srcSet}
+          rel="preload"
+        />
+      ))}
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200;300;400;500;600;700&display=swap"
       rel="stylesheet"
     >
+    <script is:inline>
+      (() => {
+        const html = document.documentElement;
+        const maxWait = 2500;
+        let revealed = false;
+        function reveal() {
+          if (revealed) {
+            return;
+          }
+          revealed = true;
+          html.classList.remove("critical-pending");
+          document.body.removeAttribute("aria-busy");
+        }
+        function waitFor(img) {
+          if (img.complete && img.naturalWidth > 0) {
+            return img.decode
+              ? img.decode().catch(() => undefined)
+              : Promise.resolve();
+          }
+          return new Promise((resolve) => {
+            img.addEventListener(
+              "load",
+              () => {
+                if (img.decode) {
+                  img.decode().then(resolve, resolve);
+                } else {
+                  resolve();
+                }
+              },
+              { once: true }
+            );
+            img.addEventListener("error", resolve, { once: true });
+          });
+        }
+        function isShown(img) {
+          if (img.checkVisibility) {
+            return img.checkVisibility();
+          }
+          return img.getClientRects().length > 0;
+        }
+        function start() {
+          const imgs = Array.from(
+            document.querySelectorAll("img[data-critical]")
+          ).filter(isShown);
+          if (!imgs.length) {
+            reveal();
+            return;
+          }
+          Promise.race([
+            Promise.all(imgs.map(waitFor)),
+            new Promise((resolve) => {
+              setTimeout(resolve, maxWait);
+            }),
+          ]).then(reveal);
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", start);
+        } else {
+          start();
+        }
+        setTimeout(reveal, maxWait + 200);
+      })();
+    </script>
   </head>
-  <body class="min-h-svh bg-background font-sans text-foreground antialiased">
+  <body
+    aria-busy="true"
+    class="min-h-svh bg-background font-sans text-foreground antialiased"
+  >
+    <div aria-hidden="true" id="critical-boot"></div>
+    <noscript>
+      <style>
+        #critical-boot {
+          display: none !important;
+        }
+      </style>
+    </noscript>
     <a
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
       href="#contenido-principal"
