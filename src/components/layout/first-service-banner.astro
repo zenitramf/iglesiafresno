@@ -1,0 +1,52 @@
+---
+import {
+  FIRST_SERVICE_BANNER,
+  isFirstServiceBannerVisible,
+} from "@/lib/first-service-banner";
+
+if (!isFirstServiceBannerVisible()) {
+  return;
+}
+
+const { href, lastVisibleDate, timeZone } = FIRST_SERVICE_BANNER;
+---
+
+<div
+  class="bg-primary px-4 py-2.5 text-center text-primary-foreground text-sm leading-snug sm:text-[0.9375rem]"
+  data-first-service-banner
+  data-last-visible={lastVisibleDate}
+  data-tz={timeZone}
+>
+  <p>
+    <span class="font-semibold">Primer servicio:</span>{" "}
+    <span class="whitespace-nowrap">domingo 4 de octubre</span>
+    {" "}a las <span class="whitespace-nowrap">5:00 p. m.</span>{" "}
+    <span aria-hidden="true" class="hidden sm:inline">·</span>{" "}
+    <a
+      class="inline-block font-medium underline decoration-primary-foreground/70 underline-offset-2 hover:decoration-primary-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/80"
+      href={href}
+    >
+      Planea tu visita
+    </a>
+  </p>
+</div>
+
+<script define:vars={{ lastVisibleDate, timeZone }} is:inline>
+  (() => {
+    const root = document.querySelector("[data-first-service-banner]");
+    if (!root) {
+      return;
+    }
+
+    const today = new Intl.DateTimeFormat("en-CA", {
+      day: "2-digit",
+      month: "2-digit",
+      timeZone,
+      year: "numeric",
+    }).format(new Date());
+
+    if (today > lastVisibleDate) {
+      root.remove();
+    }
+  })();
+</script>
