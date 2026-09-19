@@ -6,65 +6,63 @@ import BaseLayout from "@/layouts/base-layout.astro";
 import { churchInfo } from "@/lib/church-data";
 import { getSpanishServiceTimes } from "@/lib/service-times";
 
-const serviceTimes = await getSpanishServiceTimes();
-
-const pillars = [
-  {
-    body: "Centramos cada servicio en el Señor Jesucristo y le adoramos en espíritu y en verdad.",
-    title: "Exaltar al Salvador",
-  },
-  {
-    body: "Enseñamos y aplicamos las Escrituras para que los creyentes crezcan firmes en la fe, la doctrina y la obediencia diaria.",
-    title: "Edificar a los santos",
-  },
-  {
-    body: "Compartimos con alegría las buenas nuevas de la salvación por medio de Cristo en Fresno y más allá.",
-    title: "Evangelizar al pecador",
-  },
-] as const;
-
-const beliefs = [
-  {
-    body: "Creemos que la Biblia es la Palabra de Dios inspirada e inerrante, y nuestra autoridad final en fe y práctica.",
-    title: "La Biblia",
-  },
-  {
-    body: "Creemos que Dios existe eternamente como Padre, Hijo y Espíritu Santo: tres Personas, un solo Dios.",
-    title: "Dios",
-  },
-  {
-    body: "Creemos que Jesucristo es el unigénito Hijo de Dios, verdadero Dios y verdadero hombre, nacido de una virgen y sin pecado.",
-    title: "Jesucristo",
-  },
-  {
-    body: "Creemos que el Espíritu Santo es Dios, igual al Padre y al Hijo, y obra en la vida de todo creyente.",
-    title: "El Espíritu Santo",
-  },
-  {
-    body: "Creemos que el ser humano cayó por el pecado y necesita redención por medio de Jesucristo.",
-    title: "El pecado",
-  },
-  {
-    body: "Creemos que Cristo murió en nuestro lugar, resucitó corporalmente de entre los muertos y ascendió al cielo.",
-    title: "El sacrificio de Cristo",
-  },
-  {
-    body: "Creemos que la salvación es el don de la gracia de Dios, recibido por fe personal en el Señor Jesucristo.",
-    title: "La salvación",
-  },
-  {
-    body: "Creemos que todos los que son verdaderamente salvos son guardados por el poder de Dios y seguros en Cristo para siempre.",
-    title: "La seguridad eterna",
-  },
-  {
-    body: "Creemos que la iglesia local existe para la edificación, la exhortación y la evangelización conforme al mandato de Cristo.",
-    title: "El servicio",
-  },
-  {
-    body: "Creemos en una interpretación literal de las Escrituras, en el regreso de Cristo y en el cumplimiento del plan profético de Dios.",
-    title: "Los últimos días",
-  },
-] as const;
+const serviceTimes = await getSpanishServiceTimes(),
+  pillars = [
+    {
+      body: "Centramos cada servicio en el Señor Jesucristo y le adoramos en espíritu y en verdad.",
+      title: "Exaltar al Salvador",
+    },
+    {
+      body: "Enseñamos y aplicamos las Escrituras para que los creyentes crezcan firmes en la fe, la doctrina y la obediencia diaria.",
+      title: "Edificar a los santos",
+    },
+    {
+      body: "Compartimos con alegría las buenas nuevas de la salvación por medio de Cristo en Fresno y más allá.",
+      title: "Evangelizar al pecador",
+    },
+  ] as const,
+  beliefs = [
+    {
+      body: "Creemos que la Biblia es la Palabra de Dios inspirada e inerrante, y nuestra autoridad final en fe y práctica.",
+      title: "La Biblia",
+    },
+    {
+      body: "Creemos que Dios existe eternamente como Padre, Hijo y Espíritu Santo: tres Personas, un solo Dios.",
+      title: "Dios",
+    },
+    {
+      body: "Creemos que Jesucristo es el unigénito Hijo de Dios, verdadero Dios y verdadero hombre, nacido de una virgen y sin pecado.",
+      title: "Jesucristo",
+    },
+    {
+      body: "Creemos que el Espíritu Santo es Dios, igual al Padre y al Hijo, y obra en la vida de todo creyente.",
+      title: "El Espíritu Santo",
+    },
+    {
+      body: "Creemos que el ser humano cayó por el pecado y necesita redención por medio de Jesucristo.",
+      title: "El pecado",
+    },
+    {
+      body: "Creemos que Cristo murió en nuestro lugar, resucitó corporalmente de entre los muertos y ascendió al cielo.",
+      title: "El sacrificio de Cristo",
+    },
+    {
+      body: "Creemos que la salvación es el don de la gracia de Dios, recibido por fe personal en el Señor Jesucristo.",
+      title: "La salvación",
+    },
+    {
+      body: "Creemos que todos los que son verdaderamente salvos son guardados por el poder de Dios y seguros en Cristo para siempre.",
+      title: "La seguridad eterna",
+    },
+    {
+      body: "Creemos que la iglesia local existe para la edificación, la exhortación y la evangelización conforme al mandato de Cristo.",
+      title: "El servicio",
+    },
+    {
+      body: "Creemos en una interpretación literal de las Escrituras, en el regreso de Cristo y en el cumplimiento del plan profético de Dios.",
+      title: "Los últimos días",
+    },
+  ] as const;
 ---
 
 <BaseLayout
@@ -79,14 +77,16 @@ const beliefs = [
 
   <section class="site-gutter py-16 sm:py-20">
     <SiteContainer class="grid gap-10 md:grid-cols-3 md:gap-8">
-      {pillars.map((pillar) => (
+      {
+        pillars.map((pillar) => (
           <div class="grid gap-3">
             <h2 class="font-semibold text-2xl text-foreground tracking-tight">
               {pillar.title}
             </h2>
             <p class="text-muted-foreground leading-relaxed">{pillar.body}</p>
           </div>
-        ))}
+        ))
+      }
     </SiteContainer>
   </section>
 
@@ -98,7 +98,8 @@ const beliefs = [
         Nuestras creencias
       </h2>
       <div class="grid gap-8 md:grid-cols-2">
-        {beliefs.map((belief) => (
+        {
+          beliefs.map((belief) => (
             <div class="grid gap-2">
               <h3 class="font-semibold text-foreground text-lg">
                 {belief.title}
@@ -107,7 +108,8 @@ const beliefs = [
                 {belief.body}
               </p>
             </div>
-          ))}
+          ))
+        }
       </div>
     </SiteContainer>
   </section>
@@ -118,32 +120,34 @@ const beliefs = [
         <h2 class="font-semibold text-2xl text-foreground tracking-tight">
           Horarios de servicio
         </h2>
-        {serviceTimes.length > 0 ? (
-          <ul class="grid gap-3">
-            {serviceTimes.map((item) => (
-              <li class="rounded-xl border border-border bg-card px-5 py-4">
-                <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
-                  {item.label}
-                </p>
-                <p class="mt-1 font-medium text-foreground text-lg">
-                  {item.time}
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-muted-foreground leading-relaxed">
-            Los horarios de servicio no están disponibles en este momento.
-            Contáctanos y con gusto te ayudamos.
-          </p>
-        )}
+        {
+          serviceTimes.length > 0 ? (
+            <ul class="grid gap-3">
+              {serviceTimes.map((item) => (
+                <li class="rounded-xl border border-border bg-card px-5 py-4">
+                  <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
+                    {item.label}
+                  </p>
+                  <p class="mt-1 font-medium text-foreground text-lg">
+                    {item.time}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-muted-foreground leading-relaxed">
+              Los horarios de servicio no están disponibles en este momento.
+              Contáctanos y con gusto te ayudamos.
+            </p>
+          )
+        }
       </div>
       <div class="grid gap-4">
         <h2 class="font-semibold text-2xl text-foreground tracking-tight">
           Visítanos
         </h2>
         <p class="text-muted-foreground">
-          {churchInfo.addressLine1}<br>
+          {churchInfo.addressLine1}<br />
           {churchInfo.addressLine2}
         </p>
         <div>

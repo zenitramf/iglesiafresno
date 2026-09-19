@@ -9,79 +9,81 @@ interface Props extends SEO {
 }
 
 const {
-  title,
-  description,
-  canonical,
-  image,
-  imageAlt,
-  type,
-  noindex,
-  jsonLd,
-  currentUrl,
-} = Astro.props;
-
-const getCanonicalUrl = (): string => {
-  if (canonical) {
-    return absoluteUrl(canonical);
-  }
-  if (currentUrl) {
-    const canonicalPath =
-      currentUrl.pathname === "/" || currentUrl.pathname.endsWith("/")
-        ? currentUrl.pathname
-        : `${currentUrl.pathname}/`;
-    return new URL(canonicalPath, churchInfo.url).href;
-  }
-  return churchInfo.url;
-};
-
-const canonicalUrl = getCanonicalUrl();
-const ogImageUrl = absoluteUrl(image);
-const siteName = churchInfo.name;
+    title,
+    description,
+    canonical,
+    image,
+    imageAlt,
+    type,
+    noindex,
+    jsonLd,
+    currentUrl,
+  } = Astro.props,
+  getCanonicalUrl = (): string => {
+    if (canonical) {
+      return absoluteUrl(canonical);
+    }
+    if (currentUrl) {
+      const canonicalPath =
+        currentUrl.pathname === "/" || currentUrl.pathname.endsWith("/")
+          ? currentUrl.pathname
+          : `${currentUrl.pathname}/`;
+      return new URL(canonicalPath, churchInfo.url).href;
+    }
+    return churchInfo.url;
+  },
+  canonicalUrl = getCanonicalUrl(),
+  ogImageUrl = absoluteUrl(image),
+  siteName = churchInfo.name;
 ---
 
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1" name="viewport">
-<meta content={Astro.generator} name="generator">
-<meta content="dark" name="color-scheme">
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<meta content={Astro.generator} name="generator" />
+<meta content="dark" name="color-scheme" />
 <title>{title}</title>
-<meta content={description} name="description">
+<meta content={description} name="description" />
 
-{noindex ? (
+{
+  noindex ? (
     <meta content="noindex, follow" name="robots" />
   ) : (
     <meta content="index, follow" name="robots" />
-  )}
-<link href={canonicalUrl} rel="canonical">
+  )
+}
+<link href={canonicalUrl} rel="canonical" />
 
-<link href="/favicon.ico" rel="icon" sizes="any">
-<link href={churchInfo.logo} rel="icon" type="image/svg+xml">
-<link href="/apple-touch-icon.png" rel="apple-touch-icon">
-<meta content={churchInfo.themeColor} name="theme-color">
+<link href="/favicon.ico" rel="icon" sizes="any" />
+<link href={churchInfo.logo} rel="icon" type="image/svg+xml" />
+<link href="/apple-touch-icon.png" rel="apple-touch-icon" />
+<meta content={churchInfo.themeColor} name="theme-color" />
 
-<meta content={type} property="og:type">
-<meta content="es_US" property="og:locale">
-<meta content={siteName} property="og:site_name">
-<meta content={title} property="og:title">
-<meta content={description} property="og:description">
-<meta content={canonicalUrl} property="og:url">
-<meta content={ogImageUrl} property="og:image">
-<meta content={imageAlt} property="og:image:alt">
-<meta content="1200" property="og:image:width">
-<meta content="630" property="og:image:height">
+<meta content={type} property="og:type" />
+<meta content="es_US" property="og:locale" />
+<meta content={siteName} property="og:site_name" />
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content={canonicalUrl} property="og:url" />
+<meta content={ogImageUrl} property="og:image" />
+<meta content={imageAlt} property="og:image:alt" />
+<meta content="1200" property="og:image:width" />
+<meta content="630" property="og:image:height" />
 
-<meta content="summary_large_image" name="twitter:card">
-<meta content={title} name="twitter:title">
-<meta content={description} name="twitter:description">
-<meta content={ogImageUrl} name="twitter:image">
-<meta content={imageAlt} name="twitter:image:alt">
+<meta content="summary_large_image" name="twitter:card" />
+<meta content={title} name="twitter:title" />
+<meta content={description} name="twitter:description" />
+<meta content={ogImageUrl} name="twitter:image" />
+<meta content={imageAlt} name="twitter:image:alt" />
 
-<link href="https://fonts.googleapis.com" rel="preconnect">
-<link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com" rel="preconnect" />
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
 <link
   href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200;300;400;500;600;700&display=swap"
   rel="stylesheet"
->
+/>
 
-{jsonLd && (
+{
+  jsonLd && (
     <script set:html={JSON.stringify(jsonLd)} type="application/ld+json" />
-  )}
+  )
+}

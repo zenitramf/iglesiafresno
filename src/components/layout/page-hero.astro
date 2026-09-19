@@ -29,7 +29,10 @@ const {
 
 <section
   id={id}
-  class:list={["hero-gutter bg-background py-4 text-foreground lg:py-6", className]}
+  class:list={[
+    "hero-gutter bg-background py-4 text-foreground lg:py-6",
+    className,
+  ]}
 >
   <!--
     Courtyard frame matching the homepage hero: near-bleed gutter and rounded
@@ -51,7 +54,8 @@ const {
     <div
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 bg-linear-to-t from-background from-10% via-background/75 via-50% to-background/25"
-    ></div>
+    >
+    </div>
 
     <div
       class="relative z-10 flex min-h-[min(28rem,60svh)] flex-col justify-end pt-28 pb-12 sm:min-h-[min(32rem,62svh)] sm:pt-32 sm:pb-16 lg:pb-20"
@@ -72,20 +76,22 @@ const {
             {title}
           </h1>
 
-          {description ? (
-            <p
-              class="mx-auto mt-5 max-w-2xl text-pretty text-foreground/70 text-lg leading-relaxed sm:text-xl xl:max-w-3xl"
-            >
-              {description}
-            </p>
-          ) : null}
+          {
+            description ? (
+              <p class="mx-auto mt-5 max-w-2xl text-pretty text-foreground/70 text-lg leading-relaxed sm:text-xl xl:max-w-3xl">
+                {description}
+              </p>
+            ) : null
+          }
         </div>
 
-        {Astro.slots.has("default") ? (
-          <div class="flex shrink-0 flex-col items-center gap-3">
-            <slot />
-          </div>
-        ) : null}
+        {
+          Astro.slots.has("default") ? (
+            <div class="flex shrink-0 flex-col items-center gap-3">
+              <slot />
+            </div>
+          ) : null
+        }
       </SiteContainer>
     </div>
   </div>

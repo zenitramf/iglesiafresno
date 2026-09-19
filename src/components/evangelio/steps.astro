@@ -116,7 +116,8 @@ const steps = [
 ] as const satisfies readonly Step[];
 ---
 
-{steps.map((step, index) => (
+{
+  steps.map((step, index) => (
     <section
       class:list={[
         "site-gutter scroll-mt-24 py-16 sm:py-20",
@@ -136,8 +137,9 @@ const steps = [
             <p class="text-pretty text-lg text-muted-foreground leading-relaxed">
               {block.text}
             </p>
-          )
+          ),
         )}
       </SiteContainer>
     </section>
-  ))}
+  ))
+}

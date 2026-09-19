@@ -9,27 +9,25 @@ import BaseLayout from "@/layouts/base-layout.astro";
 import { churchInfo } from "@/lib/church-data";
 
 const pastorWillisBio = [
-  "El pastor Willis comenzó a servir en Victory Baptist Church mientras aún estudiaba en la universidad, en 2011. Al graduarse en 2012, se mudó a Fresno y sirvió como pastor asistente.",
-  "Durante ese tiempo ha participado en varios ministerios de la iglesia, entre ellos el de niños, jóvenes, alcance, discipulado, predicación, enseñanza y consejería.",
-  "En 2021 el pastor Willis se convirtió en el pastor principal de Victory Baptist Church. Sirve junto a su esposa Kali y sus cinco hijos.",
-  "El pastor Willis está comprometido a servir fiel y bíblicamente a Victory Baptist Church y a la comunidad de Fresno.",
-] as const;
-
-const franciscoMartinezBio = [
-  "Francisco y su familia se unieron a la Iglesia Bautista Victory en 2015. Desde entonces, él y su esposa, Vanessa, han servido fielmente en varios ministerios, entre ellos el Ministerio de Niños Kings Kids, el ministerio de música y el ministerio en español.",
-  "En 2026, Dios llamó a Francisco a predicar Su Palabra a la comunidad hispana de Fresno, California. Francisco sirve como el líder del Ministerio en Español de la Iglesia Bautista Victory.",
-] as const;
-
-const pastorWillisThumb = await getImage({
-  format: "webp",
-  src: pastorWillisPhoto,
-  width: 224,
-});
-const franciscoMartinezThumb = await getImage({
-  format: "webp",
-  src: franciscoMartinezPhoto,
-  width: 224,
-});
+    "El pastor Willis comenzó a servir en Victory Baptist Church mientras aún estudiaba en la universidad, en 2011. Al graduarse en 2012, se mudó a Fresno y sirvió como pastor asistente.",
+    "Durante ese tiempo ha participado en varios ministerios de la iglesia, entre ellos el de niños, jóvenes, alcance, discipulado, predicación, enseñanza y consejería.",
+    "En 2021 el pastor Willis se convirtió en el pastor principal de Victory Baptist Church. Sirve junto a su esposa Kali y sus cinco hijos.",
+    "El pastor Willis está comprometido a servir fiel y bíblicamente a Victory Baptist Church y a la comunidad de Fresno.",
+  ] as const,
+  franciscoMartinezBio = [
+    "Francisco y su familia se unieron a la Iglesia Bautista Victory en 2015. Desde entonces, él y su esposa, Vanessa, han servido fielmente en varios ministerios, entre ellos el Ministerio de Niños Kings Kids, el ministerio de música y el ministerio en español.",
+    "En 2026, Dios llamó a Francisco a predicar Su Palabra a la comunidad hispana de Fresno, California. Francisco sirve como el líder del Ministerio en Español de la Iglesia Bautista Victory.",
+  ] as const,
+  pastorWillisThumb = await getImage({
+    format: "webp",
+    src: pastorWillisPhoto,
+    width: 224,
+  }),
+  franciscoMartinezThumb = await getImage({
+    format: "webp",
+    src: franciscoMartinezPhoto,
+    width: 224,
+  });
 ---
 
 <BaseLayout
@@ -57,7 +55,7 @@ const franciscoMartinezThumb = await getImage({
               loading="lazy"
               src={pastorWillisThumb.src}
               width="112"
-            >
+            />
           </div>
           <div>
             <p
@@ -87,7 +85,7 @@ const franciscoMartinezThumb = await getImage({
             loading="lazy"
             src={franciscoMartinezThumb.src}
             width="112"
-          >
+          />
           <div>
             <p
               class="mb-1 font-semibold text-primary text-sm tracking-widest uppercase"

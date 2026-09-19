@@ -4,17 +4,17 @@ import { Button } from "@/components/starwind/button";
 import { churchInfo } from "@/lib/church-data";
 import { getSpanishServiceTimes } from "@/lib/service-times";
 
-const serviceTimes = await getSpanishServiceTimes();
-const details = [
-  ...serviceTimes.map((item) => ({
-    label: item.label,
-    value: item.time,
-  })),
-  {
-    label: "Ubicación",
-    value: `${churchInfo.addressLine1}, ${churchInfo.addressLine2}`,
-  },
-];
+const serviceTimes = await getSpanishServiceTimes(),
+  details = [
+    ...serviceTimes.map((item) => ({
+      label: item.label,
+      value: item.time,
+    })),
+    {
+      label: "Ubicación",
+      value: `${churchInfo.addressLine1}, ${churchInfo.addressLine2}`,
+    },
+  ];
 ---
 
 <section
@@ -54,14 +54,18 @@ const details = [
     </div>
 
     <ul class="grid gap-3">
-      {details.map((item) => (
+      {
+        details.map((item) => (
           <li class="rounded-xl border border-border bg-background px-5 py-4">
             <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
               {item.label}
             </p>
-            <p class="mt-1 font-medium text-base text-foreground">{item.value}</p>
+            <p class="mt-1 font-medium text-base text-foreground">
+              {item.value}
+            </p>
           </li>
-        ))}
+        ))
+      }
     </ul>
   </SiteContainer>
 </section>

@@ -11,19 +11,19 @@ type Props = Partial<ComponentProps<typeof AstroImage>> & {
 };
 
 const {
-  class: className,
-  src,
-  alt = "",
-  inferSize = true,
-  critical = false,
-  priority = false,
-  ...rest
-} = Astro.props;
-
-const isPriority = critical || priority;
+    class: className,
+    src,
+    alt = "",
+    inferSize = true,
+    critical = false,
+    priority = false,
+    ...rest
+  } = Astro.props,
+  isPriority = critical || priority;
 ---
 
-{src && (
+{
+  src && (
     <AstroImage
       alt={alt}
       class={image({ class: className })}
@@ -34,4 +34,5 @@ const isPriority = critical || priority;
       data-slot="image"
       priority={isPriority}
     />
-  )}
+  )
+}

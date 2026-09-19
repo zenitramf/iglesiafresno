@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
-const port = 4173;
-const baseURL = `http://127.0.0.1:${port}`;
+const port = 4173,
+  baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   forbidOnly: Boolean(process.env.CI),

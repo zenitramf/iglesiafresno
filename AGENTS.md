@@ -24,13 +24,13 @@ This is a **Spanish-language website** (primary locale: `es`).
 
 All pages share one content shell:
 
-| Primitive | Where | Role |
-|-----------|--------|------|
-| `--container-site` (90rem / 1440px) | `src/styles/starwind.css` | Token |
-| `site-gutter` | section / footer / nav outer | Horizontal padding |
-| `site-container` or `<SiteContainer />` | inner content | Max-width + center |
+| Primitive                               | Where                        | Role               |
+| --------------------------------------- | ---------------------------- | ------------------ |
+| `--container-site` (90rem / 1440px)     | `src/styles/starwind.css`    | Token              |
+| `site-gutter`                           | section / footer / nav outer | Horizontal padding |
+| `site-container` or `<SiteContainer />` | inner content                | Max-width + center |
 
-**Do not** invent alternate page shells with `max-w-7xl`, ad-hoc `max-w-[…]`, or one-off gutters. Content fills the site shell unless a *local* element needs a tighter measure (e.g. a short intro block).
+**Do not** invent alternate page shells with `max-w-7xl`, ad-hoc `max-w-[…]`, or one-off gutters. Content fills the site shell unless a _local_ element needs a tighter measure (e.g. a short intro block).
 
 ```astro
 <section class="site-gutter …">
@@ -61,10 +61,10 @@ This project uses **Starwind UI** (Astro + Tailwind CSS v4). When creating, comp
 
 ### Required ctx7 sources
 
-| Source | Library ID | Use for |
-|--------|------------|---------|
-| Starwind docs | `/websites/starwind_dev` | Component APIs, install/CLI, theming, dark mode, examples |
-| Starwind skills | `/starwind-ui/skills` | Agent workflows for install, compose, theme, and Pro usage |
+| Source          | Library ID               | Use for                                                    |
+| --------------- | ------------------------ | ---------------------------------------------------------- |
+| Starwind docs   | `/websites/starwind_dev` | Component APIs, install/CLI, theming, dark mode, examples  |
+| Starwind skills | `/starwind-ui/skills`    | Agent workflows for install, compose, theme, and Pro usage |
 
 ```bash
 # Docs and examples (prefer specific component/topic queries)
@@ -80,18 +80,29 @@ Also load the local **starwind-ui** skill (if installed) and follow its critical
 
 Project anchors: `starwind.config.json`, `src/styles/starwind.css`, and installed components under `src/components/starwind` (local source is the final authority for already-installed components).
 
+# Code Standards
 
-# Ultracite Code Standards
+This project uses **oxlint** for linting and **oxfmt** for formatting (the [Oxc](https://oxc.rs) toolchain). **Prettier** (with `prettier-plugin-astro`) formats `.astro` files only, since oxlint and oxfmt do not support Astro's file format yet.
 
-This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
+Tooling split:
+
+| Tool     | Files                                                         | Config                            |
+| -------- | ------------------------------------------------------------- | --------------------------------- |
+| oxlint   | `.ts`, `.tsx`, `.js`, `.mjs`                                  | `.oxlintrc.json`                  |
+| oxfmt    | `.ts`, `.tsx`, `.js`, `.mjs`, `.json`, `.css`, `.yaml`, `.md` | `.oxfmtrc.json`                   |
+| Prettier | `.astro` only                                                 | `.prettierrc` + `.prettierignore` |
 
 ## Quick Reference
 
-- **Format code**: `pnpm dlx ultracite fix`
-- **Check for issues**: `pnpm dlx ultracite check`
-- **Diagnose setup**: `pnpm dlx ultracite doctor`
+- **Format everything**: `pnpm format` (oxfmt for code, Prettier for `.astro`)
+- **Check formatting**: `pnpm format:check`
+- **Lint**: `pnpm lint` — auto-fix with `pnpm lint:fix`
+- **Full check (lint + format)**: `pnpm check`
+- **Fix (lint + format)**: `pnpm fix`
 
-Biome (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
+Note: oxfmt reads `.prettierignore` by default, which here scopes Prettier to `.astro`. The `pnpm` scripts pass `--ignore-path .gitignore` to oxfmt so it formats code files instead of inheriting Prettier's astro-only ignore list. Keep this flag when invoking oxfmt directly.
+
+oxlint ships 690+ rules (ESLint core, TypeScript, unicorn, oxc, import, jsx-a11y) and runs far faster than ESLint. oxfmt is Prettier-compatible with built-in import sorting and Tailwind class sorting. Most issues are auto-fixable.
 
 ---
 
@@ -171,14 +182,17 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 ### Framework-Specific Guidance
 
 **Next.js:**
+
 - Use Next.js `<Image>` component for images
 - Use `next/head` or App Router metadata API for head elements
 - Use Server Components for async data fetching instead of async Client Components
 
 **React 19+:**
+
 - Use ref as a prop instead of `React.forwardRef`
 
 **Solid/Svelte/Vue/Qwik:**
+
 - Use `class` and `for` attributes (not `className` or `htmlFor`)
 
 ---
@@ -190,11 +204,11 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Don't use `.only` or `.skip` in committed code
 - Keep test suites reasonably flat - avoid excessive `describe` nesting
 
-## When Biome Can't Help
+## When the linter Can't Help
 
-Biome's linter will catch most issues automatically. Focus your attention on:
+oxlint will catch most issues automatically. Focus your attention on:
 
-1. **Business logic correctness** - Biome can't validate your algorithms
+1. **Business logic correctness** - the linter can't validate your algorithms
 2. **Meaningful naming** - Use descriptive names for functions, variables, and types
 3. **Architecture decisions** - Component structure, data flow, and API design
 4. **Edge cases** - Handle boundary conditions and error states
@@ -203,4 +217,4 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
-Most formatting and common issues are automatically fixed by Biome. Run `pnpm dlx ultracite fix` before committing to ensure compliance.
+Most formatting and common issues are automatically fixed by oxlint and oxfmt. Run `pnpm fix` before committing to ensure compliance.

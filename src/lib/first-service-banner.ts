@@ -12,15 +12,14 @@ export const FIRST_SERVICE_BANNER = {
 /** `YYYY-MM-DD` for `date` in `timeZone`. */
 export function calendarDateInTimeZone(date: Date, timeZone: string): string {
   const parts = new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "2-digit",
-    timeZone,
-    year: "numeric",
-  }).formatToParts(date);
-
-  const year = parts.find((part) => part.type === "year")?.value;
-  const month = parts.find((part) => part.type === "month")?.value;
-  const day = parts.find((part) => part.type === "day")?.value;
+      day: "2-digit",
+      month: "2-digit",
+      timeZone,
+      year: "numeric",
+    }).formatToParts(date),
+    year = parts.find((part) => part.type === "year")?.value,
+    month = parts.find((part) => part.type === "month")?.value,
+    day = parts.find((part) => part.type === "day")?.value;
 
   if (!(year && month && day)) {
     throw new Error("Could not format calendar date in timezone");

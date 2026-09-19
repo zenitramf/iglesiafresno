@@ -19,12 +19,9 @@ export const button = tv({
       sm: "h-9 px-4 text-sm has-[>svg]:px-3 [&_svg:not([class*='size-'])]:size-3.5",
     },
     variant: {
-      default:
-        "bg-foreground text-background hover:bg-foreground/90 focus-visible:ring-outline/50",
-      error:
-        "bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50",
-      ghost:
-        "hover:bg-muted hover:text-foreground focus-visible:ring-outline/50",
+      default: "bg-foreground text-background hover:bg-foreground/90 focus-visible:ring-outline/50",
+      error: "bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50",
+      ghost: "hover:bg-muted hover:text-foreground focus-visible:ring-outline/50",
       info: "bg-info text-info-foreground hover:bg-info/90 focus-visible:ring-info/50",
       outline:
         "border bg-background shadow-xs hover:bg-muted hover:text-foreground focus-visible:border-outline focus-visible:ring-outline/50 dark:border-input dark:bg-input/30 dark:hover:bg-input/50",

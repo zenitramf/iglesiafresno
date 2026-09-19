@@ -4,17 +4,16 @@ import { Button } from "@/components/starwind/button";
 import { churchInfo, giveHref } from "@/lib/church-data";
 
 const navLinks = [
-  { href: "/evangelio", label: "Evangelio" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/equipo", label: "Equipo" },
-  {
-    external: true,
-    href: giveHref,
-    label: "Dar",
-  },
-] as const;
-
-const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
+    { href: "/evangelio", label: "Evangelio" },
+    { href: "/nosotros", label: "Nosotros" },
+    { href: "/equipo", label: "Equipo" },
+    {
+      external: true,
+      href: giveHref,
+      label: "Dar",
+    },
+  ] as const,
+  ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 ---
 
 <header class="sticky top-0 z-50" data-navbar-3>
@@ -58,7 +57,7 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
             height="44"
             src="/vbc_logo.svg"
             width="44"
-          >
+          />
           <span
             aria-hidden="true"
             class:list={[
@@ -89,7 +88,8 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
         class="pointer-events-none absolute inset-x-0 hidden justify-center @2xl:flex"
       >
         <div class="pointer-events-auto flex items-center gap-1">
-          {navLinks.map((link) => (
+          {
+            navLinks.map((link) => (
               <a
                 class="rounded-md px-3 py-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
@@ -99,7 +99,8 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
               >
                 {link.label}
               </a>
-            ))}
+            ))
+          }
         </div>
       </div>
 
@@ -151,7 +152,8 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
         data-slot="card"
       >
         <div class="flex flex-col p-2">
-          {navLinks.map((link) => (
+          {
+            navLinks.map((link) => (
               <a
                 class="rounded-lg px-3 py-3 text-lg text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 data-navbar-3-link
@@ -162,9 +164,10 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
               >
                 {link.label}
               </a>
-            ))}
+            ))
+          }
         </div>
-        <hr class="h-px w-full shrink-0 border-0 bg-border">
+        <hr class="h-px w-full shrink-0 border-0 bg-border" />
         <div class="flex flex-col gap-2 p-3">
           <Button class="w-full" href="/visitanos" size="md" variant="default">
             Visítanos
@@ -176,9 +179,9 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 </header>
 
 <script>
-  const EASE = "cubic-bezier(0.33, 1, 0.68, 1)";
-  const CLOSED_CLIP = "inset(0 0 100% 0 round 0.75rem)";
-  const OPEN_CLIP = "inset(0 0 0% 0 round 0.75rem)";
+  const EASE = "cubic-bezier(0.33, 1, 0.68, 1)",
+    CLOSED_CLIP = "inset(0 0 100% 0 round 0.75rem)",
+    OPEN_CLIP = "inset(0 0 0% 0 round 0.75rem)";
 
   function prefersReducedMotion() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -187,7 +190,7 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
   function animateMenu(
     element: HTMLElement,
     keyframes: Keyframe[],
-    duration: number
+    duration: number,
   ) {
     for (const running of element.getAnimations()) {
       running.cancel();
@@ -220,94 +223,88 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
     }
     root.dataset.navbarReady = "true";
 
-    const pill = root.querySelector<HTMLElement>("[data-navbar-3-pill]");
-    const toggle = root.querySelector<HTMLButtonElement>(
-      "[data-navbar-3-toggle]"
-    );
-    const menu = root.querySelector<HTMLElement>("[data-navbar-3-menu]");
-    const links = root.querySelectorAll<HTMLAnchorElement>(
-      "[data-navbar-3-link]"
-    );
+    const pill = root.querySelector<HTMLElement>("[data-navbar-3-pill]"),
+      toggle = root.querySelector<HTMLButtonElement>("[data-navbar-3-toggle]"),
+      menu = root.querySelector<HTMLElement>("[data-navbar-3-menu]"),
+      links = root.querySelectorAll<HTMLAnchorElement>("[data-navbar-3-link]");
 
     if (!(pill && toggle && menu)) {
       return;
     }
 
-    let isAnimating = false;
-    let isOpen = false;
+    let isAnimating = false,
+      isOpen = false;
 
     menu.style.clipPath = CLOSED_CLIP;
     menu.style.opacity = "0";
     menu.style.transform = "translateY(-8px)";
 
     const setExpanded = (open: boolean) => {
-      isOpen = open;
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
-    };
+        isOpen = open;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      },
+      closeMenu = async () => {
+        if (isAnimating || !isOpen) {
+          return;
+        }
 
-    const closeMenu = async () => {
-      if (isAnimating || !isOpen) {
-        return;
-      }
+        isAnimating = true;
+        setExpanded(false);
 
-      isAnimating = true;
-      setExpanded(false);
+        await animateMenu(
+          menu,
+          [
+            {
+              clipPath: OPEN_CLIP,
+              opacity: 1,
+              transform: "translateY(0px)",
+            },
+            {
+              clipPath: CLOSED_CLIP,
+              opacity: 0,
+              transform: "translateY(-8px)",
+            },
+          ],
+          250,
+        );
 
-      await animateMenu(
-        menu,
-        [
-          {
-            clipPath: OPEN_CLIP,
-            opacity: 1,
-            transform: "translateY(0px)",
-          },
-          {
-            clipPath: CLOSED_CLIP,
-            opacity: 0,
-            transform: "translateY(-8px)",
-          },
-        ],
-        250
-      );
+        menu.classList.add("hidden");
+        isAnimating = false;
+      },
+      openMenu = async () => {
+        if (isAnimating || isOpen) {
+          return;
+        }
 
-      menu.classList.add("hidden");
-      isAnimating = false;
-    };
+        isAnimating = true;
+        menu.classList.remove("hidden");
+        setExpanded(true);
 
-    const openMenu = async () => {
-      if (isAnimating || isOpen) {
-        return;
-      }
+        menu.style.clipPath = CLOSED_CLIP;
+        menu.style.opacity = "0";
+        menu.style.transform = "translateY(-8px)";
+        menu.getBoundingClientRect();
 
-      isAnimating = true;
-      menu.classList.remove("hidden");
-      setExpanded(true);
+        await animateMenu(
+          menu,
+          [
+            {
+              clipPath: CLOSED_CLIP,
+              opacity: 0,
+              transform: "translateY(-8px)",
+            },
+            {
+              clipPath: OPEN_CLIP,
+              opacity: 1,
+              transform: "translateY(0px)",
+            },
+          ],
+          300,
+        );
 
-      menu.style.clipPath = CLOSED_CLIP;
-      menu.style.opacity = "0";
-      menu.style.transform = "translateY(-8px)";
-      menu.getBoundingClientRect();
-
-      await animateMenu(
-        menu,
-        [
-          {
-            clipPath: CLOSED_CLIP,
-            opacity: 0,
-            transform: "translateY(-8px)",
-          },
-          {
-            clipPath: OPEN_CLIP,
-            opacity: 1,
-            transform: "translateY(0px)",
-          },
-        ],
-        300
-      );
-
-      isAnimating = false;
-    };
+        isAnimating = false;
+      };
 
     toggle.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -339,20 +336,19 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
 
     // Match Starwind: scroll root can be a nested overflow container or window.
     const scrollRoot =
-      root.closest(".overflow-y-auto, .overflow-y-scroll") ?? window;
+        root.closest(".overflow-y-auto, .overflow-y-scroll") ?? window,
+      updateScrolled = () => {
+        const scrollY =
+          scrollRoot === window
+            ? window.scrollY
+            : (scrollRoot as HTMLElement).scrollTop;
 
-    const updateScrolled = () => {
-      const scrollY =
-        scrollRoot === window
-          ? window.scrollY
-          : (scrollRoot as HTMLElement).scrollTop;
-
-      if (scrollY > 10) {
-        pill.setAttribute("data-scrolled", "");
-      } else {
-        pill.removeAttribute("data-scrolled");
-      }
-    };
+        if (scrollY > 10) {
+          pill.setAttribute("data-scrolled", "");
+        } else {
+          pill.removeAttribute("data-scrolled");
+        }
+      };
 
     updateScrolled();
     scrollRoot.addEventListener("scroll", updateScrolled, { passive: true });

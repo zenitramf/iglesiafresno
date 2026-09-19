@@ -30,10 +30,8 @@ export const defaultSEO = {
     "Iglesia Bautista Victory en Fresno, California: una iglesia bautista independiente que proclama el evangelio de Jesucristo por medio del evangelismo personal, la enseñanza de la Biblia y la adoración. Domingos 10:30 a. m. y 5:00 p. m., jueves 7:00 p. m.",
   /** 1200×630 social share image, served from `public/`. */
   ogImage: "/og-default.jpg",
-  ogImageAlt:
-    "Familia de la congregación de Iglesia Bautista Victory frente al edificio en Fresno",
+  ogImageAlt: "Familia de la congregación de Iglesia Bautista Victory frente al edificio en Fresno",
 } as const;
 
 /** Online giving (Tithely) — same link as fresnovictory.com / vbc-website. */
-export const giveHref =
-  "https://tithe.ly/give_new/www/#/tithely/give-one-time/1285261";
+export const giveHref = "https://tithe.ly/give_new/www/#/tithely/give-one-time/1285261";

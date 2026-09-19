@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+
 import { gotoReady } from "./ready";
 
 /**
@@ -9,32 +10,31 @@ import { gotoReady } from "./ready";
  * Viewport widths are chosen so the container crosses those thresholds.
  */
 const viewports = [
-  { expectedCols: 1, height: 844, name: "mobile-1col", width: 390 },
-  { expectedCols: 2, height: 1024, name: "tablet-2col", width: 900 },
-  { expectedCols: 3, height: 800, name: "desktop-3col", width: 1280 },
-  { expectedCols: 3, height: 900, name: "wide-3col", width: 1536 },
-] as const;
-
-/** Small vision cards only — Evangelismo Personal is the featured cell. */
-const PILLAR_TITLES = [
-  "Predicación y Enseñanza Bíblica",
-  "Discipulado Personal",
-  "Ministerio Familiar",
-  "Mentalidad Misionera",
-  "Santificación Personal",
-] as const;
+    { expectedCols: 1, height: 844, name: "mobile-1col", width: 390 },
+    { expectedCols: 2, height: 1024, name: "tablet-2col", width: 900 },
+    { expectedCols: 3, height: 800, name: "desktop-3col", width: 1280 },
+    { expectedCols: 3, height: 900, name: "wide-3col", width: 1536 },
+  ] as const,
+  /** Small vision cards only — Evangelismo Personal is the featured cell. */
+  PILLAR_TITLES = [
+    "Predicación y Enseñanza Bíblica",
+    "Discipulado Personal",
+    "Ministerio Familiar",
+    "Mentalidad Misionera",
+    "Santificación Personal",
+  ] as const;
 
 function roundTop(y: number): number {
   return Math.round(y);
 }
 
 function rowsFromCards(boxes: { x: number; y: number; width: number }[]) {
-  const sorted = [...boxes].sort((a, b) => a.y - b.y || a.x - b.x);
-  const rows: (typeof boxes)[] = [];
+  const sorted = [...boxes].sort((a, b) => a.y - b.y || a.x - b.x),
+    rows: (typeof boxes)[] = [];
 
   for (const box of sorted) {
-    const top = roundTop(box.y);
-    const row = rows.find((r) => Math.abs(roundTop(r[0].y) - top) <= 2);
+    const top = roundTop(box.y),
+      row = rows.find((r) => Math.abs(roundTop(r[0].y) - top) <= 2);
     if (row) {
       row.push(box);
     } else {
@@ -47,9 +47,7 @@ function rowsFromCards(boxes: { x: number; y: number; width: number }[]) {
 
 test.describe("Vision bento layout", () => {
   for (const vp of viewports) {
-    test(`layout holds at ${vp.name} (${vp.width}×${vp.height})`, async ({
-      page,
-    }) => {
+    test(`layout holds at ${vp.name} (${vp.width}×${vp.height})`, async ({ page }) => {
       await page.setViewportSize({ height: vp.height, width: vp.width });
       await gotoReady(page);
 
@@ -58,13 +56,11 @@ test.describe("Vision bento layout", () => {
 
       const featured = page.locator("[data-featured-evangelism]");
       await expect(featured).toBeVisible();
-      await expect(
-        featured.getByRole("heading", { name: "Evangelismo Personal" })
-      ).toBeVisible();
+      await expect(featured.getByRole("heading", { name: "Evangelismo Personal" })).toBeVisible();
       await expect(
         featured.getByText(
-          "Alcanzar a nuestra comunidad con el mensaje del evangelio mediante visitas regulares y ministerios de alcance."
-        )
+          "Alcanzar a nuestra comunidad con el mensaje del evangelio mediante visitas regulares y ministerios de alcance.",
+        ),
       ).toBeVisible();
 
       // Featured only — must not also appear as a small vision card
@@ -78,18 +74,17 @@ test.describe("Vision bento layout", () => {
 
       await Promise.all(
         PILLAR_TITLES.map((title) =>
-          expect(section.getByRole("heading", { name: title })).toBeVisible()
-        )
+          expect(section.getByRole("heading", { name: title })).toBeVisible(),
+        ),
       );
 
       const boxes = await cards.evaluateAll((els) =>
-        els.map((el) => {
-          const r = el.getBoundingClientRect();
-          return { height: r.height, width: r.width, x: r.x, y: r.y };
-        })
-      );
-
-      const rows = rowsFromCards(boxes);
+          els.map((el) => {
+            const r = el.getBoundingClientRect();
+            return { height: r.height, width: r.width, x: r.x, y: r.y };
+          }),
+        ),
+        rows = rowsFromCards(boxes);
 
       if (vp.expectedCols === 1) {
         expect(rows.length).toBe(5);
@@ -103,16 +98,16 @@ test.describe("Vision bento layout", () => {
         // Classic bento: featured 2×2 + 5 cards → complete 3×3, no orphan row
         // Small cards form rows of 1+1 beside featured, then a full row of 3
         // (or various tops depending on featured height). Assert no last-row
-        // singleton when there are enough cards to fill.
+        // Singleton when there are enough cards to fill.
         const lastRow = rows.at(-1);
         expect(lastRow, "expected at least one pillar row").toBeTruthy();
         if (lastRow && rows.length > 1) {
           // Last row of small cards in the 3-col bento should be full (3)
-          // when it is the bottom row of the 3×3 (cards 3–5).
+          // When it is the bottom row of the 3×3 (cards 3–5).
           const bottomFullRows = rows.filter((r) => r.length === 3);
           expect(
             bottomFullRows.length,
-            `3-col bento should include a full row of 3 at ${vp.name}`
+            `3-col bento should include a full row of 3 at ${vp.name}`,
           ).toBeGreaterThanOrEqual(1);
         }
         expect(boxes.length).toBe(5);
@@ -120,27 +115,25 @@ test.describe("Vision bento layout", () => {
       }
 
       // 2-col: featured full width, then pairs of cards; last card spans full
-      // width so there is no half-row orphan.
+      // Width so there is no half-row orphan.
       expect(boxes.length).toBe(5);
       const pairRows = rows.filter((r) => r.length === 2);
       expect(pairRows.length).toBe(2);
       const lastRow = rows.at(-1);
       expect(lastRow?.length).toBe(1);
-      const grid = page.locator("[data-vision-grid]");
-      const gridBox = await grid.boundingBox();
+      const grid = page.locator("[data-vision-grid]"),
+        gridBox = await grid.boundingBox();
       expect(gridBox).not.toBeNull();
       if (gridBox && lastRow?.[0]) {
         expect(
           Math.abs(lastRow[0].width - gridBox.width),
-          `last card should span full grid width at ${vp.name}`
+          `last card should span full grid width at ${vp.name}`,
         ).toBeLessThan(8);
       }
     });
   }
 
-  test("section is vision-oriented with featured evangelismo personal", async ({
-    page,
-  }) => {
+  test("section is vision-oriented with featured evangelismo personal", async ({ page }) => {
     await page.setViewportSize({ height: 800, width: 1280 });
     await gotoReady(page);
 
@@ -153,19 +146,17 @@ test.describe("Vision bento layout", () => {
 
     // Exact pillar copy present once each
     await expect(
-      page.getByText(
-        "Exposición fiel de las Escrituras, enseñando precepto por precepto."
-      )
+      page.getByText("Exposición fiel de las Escrituras, enseñando precepto por precepto."),
     ).toBeVisible();
     await expect(
       page.getByText(
-        "Equipar a los nuevos creyentes para que crezcan en su fe y sirvan dentro de la iglesia local."
-      )
+        "Equipar a los nuevos creyentes para que crezcan en su fe y sirvan dentro de la iglesia local.",
+      ),
     ).toBeVisible();
     await expect(
       page.getByText(
-        "Vivir una vida cristiana apartada de la cultura secular, conforme a la imagen de Cristo."
-      )
+        "Vivir una vida cristiana apartada de la cultura secular, conforme a la imagen de Cristo.",
+      ),
     ).toBeVisible();
   });
 });
