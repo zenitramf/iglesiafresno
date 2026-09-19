@@ -13,6 +13,7 @@ import {
   EVANGELISMO_IMAGE_WIDTHS,
   getCriticalImagePreload,
 } from "@/lib/critical-images";
+import { churchOrganizationLd } from "@/lib/seo";
 
 const evangelismoPreload = await getCriticalImagePreload(
   evangelismoPersonal,
@@ -22,9 +23,10 @@ const evangelismoPreload = await getCriticalImagePreload(
 ---
 
 <BaseLayout
-  description="Iglesia Bautista Victory: crece en la fe, comparte el evangelio y dar gloria a Dios. Domingos 10:30 a. m. y 5:00 p. m., jueves 7:00 p. m."
   extraCriticalPreloads={[evangelismoPreload]}
-  title="Iglesia Bautista Victory"
+  jsonLd={churchOrganizationLd()}
+  title="Iglesia Bautista Victory en Fresno"
+  titleTemplate={false}
 >
   <HeroCourtyard />
   <ServiceTimes />

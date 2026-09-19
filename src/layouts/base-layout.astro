@@ -1,4 +1,5 @@
 ---
+import BaseHead from "@/components/layout/base-head.astro";
 import SiteFooter from "@/components/layout/site-footer.astro";
 import SiteHeader from "@/components/layout/site-header.astro";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
@@ -8,20 +9,17 @@ import {
   HERO_IMAGE_SIZES,
   HERO_IMAGE_WIDTHS,
 } from "@/lib/critical-images";
+import type { SEOInput } from "@/lib/seo";
+import { buildSEO } from "@/lib/seo";
 import "@/styles/starwind.css";
 
-interface Props {
-  description?: string;
+interface Props extends SEOInput {
   /** Extra `<link rel="preload">` images (e.g. homepage evangelismo). */
   extraCriticalPreloads?: CriticalPreload[];
-  title?: string;
 }
 
-const {
-  extraCriticalPreloads = [],
-  title = "Iglesia Bautista Victory",
-  description = "Iglesia Bautista Victory: una familia de fe en el corazón de Fresno. Te invitamos a visitarnos.",
-} = Astro.props;
+const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props;
+const seo = buildSEO(seoInput);
 
 const heroPreload = await getCriticalImagePreload(
   heroImage,
@@ -34,14 +32,7 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
 <!doctype html>
 <html class="critical-pending dark" lang="es">
   <head>
-    <meta charset="utf-8">
-    <link href="/favicon.svg" rel="icon" type="image/svg+xml">
-    <link href="/favicon.ico" rel="icon">
-    <meta content="width=device-width" name="viewport">
-    <meta content={Astro.generator} name="generator">
-    <meta content="dark" name="color-scheme">
-    <title>{title}</title>
-    <meta content={description} name="description">
+    <BaseHead {...seo} currentUrl={Astro.url} />
     <style is:inline>
       #critical-boot {
         position: fixed;
@@ -75,12 +66,6 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
           rel="preload"
         />
       ))}
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200;300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    >
     <script is:inline>
       (() => {
         const html = document.documentElement;

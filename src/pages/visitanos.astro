@@ -4,6 +4,7 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { Button } from "@/components/starwind/button";
 import BaseLayout from "@/layouts/base-layout.astro";
 import { churchInfo } from "@/lib/church-data";
+import { faqPageLd } from "@/lib/seo";
 import { getSpanishServiceTimes } from "@/lib/service-times";
 
 const serviceTimes = await getSpanishServiceTimes();
@@ -38,8 +39,9 @@ const faqs = [
 ---
 
 <BaseLayout
-  description="Planea Tu Visita a Iglesia Bautista Victory en Fresno: horarios de servicio, dirección y qué esperar."
-  title="Visítanos | Iglesia Bautista Victory"
+  description="Planea tu visita a Iglesia Bautista Victory en Fresno: horarios de servicio, dirección y qué esperar."
+  jsonLd={faqPageLd(faqs)}
+  title="Visítanos"
 >
   <PageHero
     description="Ven como eres. Encuentra un asiento, conoce rostros amables y escucha el evangelio predicado con claridad desde las Escrituras."

@@ -1,6 +1,6 @@
 ---
 import { Button } from "@/components/starwind/button";
-import { giveHref } from "@/lib/church-data";
+import { churchInfo, giveHref } from "@/lib/church-data";
 
 const navLinks = [
   { href: "/evangelio", label: "Evangelio" },
@@ -40,7 +40,7 @@ const ease = "ease-[cubic-bezier(0.33,1,0.68,1)]";
       <!-- Brand (left) — name collapses without affecting centered links -->
       <div class="relative z-10 flex shrink-0 items-center">
         <a
-          aria-label="Iglesia Bautista Victory — inicio"
+          aria-label={`${churchInfo.name} — inicio`}
           href="/"
           class:list={[
             "flex items-center gap-3",

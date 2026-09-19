@@ -12,12 +12,12 @@ const exploreLinks = [
 const connectLinks = [
   {
     external: true,
-    href: "https://www.facebook.com/fresnovictory/",
+    href: churchInfo.facebook,
     label: "Facebook",
   },
   {
     external: true,
-    href: "https://www.youtube.com/@fresnovictory",
+    href: churchInfo.youtube,
     label: "YouTube",
   },
   { external: true, href: giveHref, label: "Dar" },
@@ -39,7 +39,7 @@ const resourceLinks = [
     <div class="mb-12 grid grid-cols-1 gap-12 md:grid-cols-4">
       <div class="flex flex-col gap-4 md:col-span-1">
         <a
-          aria-label="Iglesia Bautista Victory — inicio"
+          aria-label={`${churchInfo.name} — inicio`}
           class="flex items-center gap-3"
           href="/"
         >
@@ -148,7 +148,7 @@ const resourceLinks = [
     </div>
 
     <p class="text-center text-muted-foreground text-sm">
-      © {new Date().getFullYear()} Iglesia Bautista Victory. Todos los derechos
+      © {new Date().getFullYear()} {churchInfo.name}. Todos los derechos
       reservados.
     </p>
   </SiteContainer>
