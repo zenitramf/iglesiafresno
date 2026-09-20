@@ -39,15 +39,11 @@ export interface SEO {
  * site-name title template when requested.
  */
 export const buildSEO = (input: SEOInput = {}): SEO => {
-  const pageTitle = input.title ?? churchInfo.name;
-  const alreadyIncludesSiteName = pageTitle.endsWith(` | ${churchInfo.name}`);
-  const shouldApplyTemplate =
-    Boolean(input.title) &&
-    (input.titleTemplate ?? true) &&
-    !alreadyIncludesSiteName;
-  const title = shouldApplyTemplate
-    ? `${pageTitle} | ${churchInfo.name}`
-    : pageTitle;
+  const pageTitle = input.title ?? churchInfo.name,
+    alreadyIncludesSiteName = pageTitle.endsWith(` | ${churchInfo.name}`),
+    shouldApplyTemplate =
+      Boolean(input.title) && (input.titleTemplate ?? true) && !alreadyIncludesSiteName,
+    title = shouldApplyTemplate ? `${pageTitle} | ${churchInfo.name}` : pageTitle;
 
   return {
     canonical: input.canonical,
@@ -101,9 +97,7 @@ export interface FaqItem {
 }
 
 /** JSON-LD `FAQPage` for pages that already render a question-and-answer list. */
-export const faqPageLd = (
-  faqs: readonly FaqItem[]
-): Record<string, unknown> => ({
+export const faqPageLd = (faqs: readonly FaqItem[]): Record<string, unknown> => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: faqs.map((faq) => ({

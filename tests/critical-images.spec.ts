@@ -1,10 +1,9 @@
 import { expect, test } from "@playwright/test";
+
 import { gotoReady } from "./ready";
 
 test.describe("Critical image loading", () => {
-  test("homepage preloads hero and evangelismo, then reveals", async ({
-    page,
-  }) => {
+  test("homepage preloads hero and evangelismo, then reveals", async ({ page }) => {
     await page.setViewportSize({ height: 900, width: 1440 });
     await gotoReady(page);
 

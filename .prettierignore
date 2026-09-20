@@ -1,0 +1,12 @@
+# Prettier only formats .astro files in this project.
+# Everything else is handled by oxfmt (see .oxfmtrc.json).
+# Ignore all files, then re-include .astro via negation.
+*
+!*/
+!*.astro
+
+# Never format build output, deps, or generated types.
+dist/
+.astro/
+node_modules/
+public/

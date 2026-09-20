@@ -3,33 +3,31 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { churchInfo, giveHref } from "@/lib/church-data";
 
 const exploreLinks = [
-  { href: "/visitanos", label: "Planea Tu Visita" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/equipo", label: "Equipo" },
-  { external: true, href: giveHref, label: "Dar" },
-] as const;
-
-const connectLinks = [
-  {
-    external: true,
-    href: churchInfo.facebook,
-    label: "Facebook",
-  },
-  {
-    external: true,
-    href: churchInfo.youtube,
-    label: "YouTube",
-  },
-  { external: true, href: giveHref, label: "Dar" },
-] as const;
-
-const resourceLinks = [
-  { href: "/evangelio", label: "Evangelio" },
-  { href: "/atribucion", label: "Atribución" },
-  { href: "/privacidad", label: "Privacidad" },
-  { href: "/terminos", label: "Términos de uso" },
-  { href: `mailto:${churchInfo.email}`, label: churchInfo.email },
-] as const;
+    { href: "/visitanos", label: "Planea Tu Visita" },
+    { href: "/nosotros", label: "Nosotros" },
+    { href: "/equipo", label: "Equipo" },
+    { external: true, href: giveHref, label: "Dar" },
+  ] as const,
+  connectLinks = [
+    {
+      external: true,
+      href: churchInfo.facebook,
+      label: "Facebook",
+    },
+    {
+      external: true,
+      href: churchInfo.youtube,
+      label: "YouTube",
+    },
+    { external: true, href: giveHref, label: "Dar" },
+  ] as const,
+  resourceLinks = [
+    { href: "/evangelio", label: "Evangelio" },
+    { href: "/atribucion", label: "Atribución" },
+    { href: "/privacidad", label: "Privacidad" },
+    { href: "/terminos", label: "Términos de uso" },
+    { href: `mailto:${churchInfo.email}`, label: churchInfo.email },
+  ] as const;
 ---
 
 <footer
@@ -50,7 +48,7 @@ const resourceLinks = [
             height="44"
             src="/vbc_logo.svg"
             width="44"
-          >
+          />
           <span
             class="font-brand flex min-w-0 flex-col overflow-hidden leading-none uppercase whitespace-nowrap"
           >
@@ -73,10 +71,10 @@ const resourceLinks = [
             rel="noopener noreferrer"
             target="_blank"
           >
-            {churchInfo.addressLine1}<br>
+            {churchInfo.addressLine1}<br />
             {churchInfo.addressLine2}
           </a>
-          <br>
+          <br />
           <a
             class="transition-colors hover:text-foreground"
             href={`tel:${churchInfo.phoneE164}`}
@@ -93,7 +91,8 @@ const resourceLinks = [
           Explorar
         </h2>
         <nav aria-label="Enlaces para explorar" class="flex flex-col gap-2">
-          {exploreLinks.map((link) => (
+          {
+            exploreLinks.map((link) => (
               <a
                 class="text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
@@ -103,7 +102,8 @@ const resourceLinks = [
               >
                 {link.label}
               </a>
-            ))}
+            ))
+          }
         </nav>
       </div>
 
@@ -114,7 +114,8 @@ const resourceLinks = [
           Conectar
         </h2>
         <nav aria-label="Enlaces para conectar" class="flex flex-col gap-2">
-          {connectLinks.map((link) => (
+          {
+            connectLinks.map((link) => (
               <a
                 class="text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
@@ -124,7 +125,8 @@ const resourceLinks = [
               >
                 {link.label}
               </a>
-            ))}
+            ))
+          }
         </nav>
       </div>
 
@@ -135,21 +137,23 @@ const resourceLinks = [
           Recursos
         </h2>
         <nav aria-label="Enlaces de recursos" class="flex flex-col gap-2">
-          {resourceLinks.map((link) => (
+          {
+            resourceLinks.map((link) => (
               <a
                 class="text-muted-foreground text-sm transition-colors hover:text-foreground"
                 href={link.href}
               >
                 {link.label}
               </a>
-            ))}
+            ))
+          }
         </nav>
       </div>
     </div>
 
     <p class="text-center text-muted-foreground text-sm">
-      © {new Date().getFullYear()} {churchInfo.name}. Todos los derechos
-      reservados.
+      © {new Date().getFullYear()}
+      {churchInfo.name}. Todos los derechos reservados.
     </p>
   </SiteContainer>
 </footer>

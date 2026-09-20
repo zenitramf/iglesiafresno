@@ -4,11 +4,11 @@ import SiteFooter from "@/components/layout/site-footer.astro";
 import SiteHeader from "@/components/layout/site-header.astro";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
 import {
-  type CriticalPreload,
   getCriticalImagePreload,
   HERO_IMAGE_SIZES,
   HERO_IMAGE_WIDTHS,
 } from "@/lib/critical-images";
+import type { CriticalPreload } from "@/lib/critical-images";
 import type { SEOInput } from "@/lib/seo";
 import { buildSEO } from "@/lib/seo";
 import "@/styles/starwind.css";
@@ -18,15 +18,14 @@ interface Props extends SEOInput {
   extraCriticalPreloads?: CriticalPreload[];
 }
 
-const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props;
-const seo = buildSEO(seoInput);
-
-const heroPreload = await getCriticalImagePreload(
-  heroImage,
-  HERO_IMAGE_WIDTHS,
-  HERO_IMAGE_SIZES
-);
-const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
+const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props,
+  seo = buildSEO(seoInput),
+  heroPreload = await getCriticalImagePreload(
+    heroImage,
+    HERO_IMAGE_WIDTHS,
+    HERO_IMAGE_SIZES,
+  ),
+  criticalPreloads = [heroPreload, ...extraCriticalPreloads];
 ---
 
 <!doctype html>
@@ -56,7 +55,8 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
         }
       }
     </style>
-    {criticalPreloads.map((image) => (
+    {
+      criticalPreloads.map((image) => (
         <link
           as="image"
           fetchpriority="high"
@@ -65,11 +65,12 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
           imagesrcset={image.srcSet}
           rel="preload"
         />
-      ))}
+      ))
+    }
     <script is:inline>
       (() => {
-        const html = document.documentElement;
-        const maxWait = 2500;
+        const html = document.documentElement,
+          maxWait = 2500;
         let revealed = false;
         function reveal() {
           if (revealed) {
@@ -95,7 +96,7 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
                   resolve();
                 }
               },
-              { once: true }
+              { once: true },
             );
             img.addEventListener("error", resolve, { once: true });
           });
@@ -107,9 +108,9 @@ const criticalPreloads = [heroPreload, ...extraCriticalPreloads];
           return img.getClientRects().length > 0;
         }
         function start() {
-          const imgs = Array.from(
-            document.querySelectorAll("img[data-critical]")
-          ).filter(isShown);
+          const imgs = [
+            ...document.querySelectorAll("img[data-critical]"),
+          ].filter(isShown);
           if (!imgs.length) {
             reveal();
             return;

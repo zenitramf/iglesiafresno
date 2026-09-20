@@ -7,35 +7,34 @@ import { churchInfo } from "@/lib/church-data";
 import { faqPageLd } from "@/lib/seo";
 import { getSpanishServiceTimes } from "@/lib/service-times";
 
-const serviceTimes = await getSpanishServiceTimes();
-
-const faqs = [
-  {
-    answer:
-      "Ofrecemos clases para niños y adolescentes. Creemos que la adoración en familia es importante, y nos enfocamos en esto durante el culto.",
-    question: "¿Tienen programas para mis hijos o adolescentes?",
-  },
-  {
-    answer:
-      "Se ofrece cuidado de niños durante todos los servicios, desde recién nacidos hasta los tres años de edad.",
-    question: "¿Tienen guardería?",
-  },
-  {
-    answer:
-      "¡No te preocupes! Nuestro equipo de hospitalidad te estará esperando. Ellos te orientarán y tendrán una bolsa de bienvenida preparada para cada visitante por primera vez.",
-    question: "¿A dónde voy cuando llegue?",
-  },
-  {
-    answer:
-      "No tenemos restricciones ni requisitos de vestimenta, pero te pedimos que recuerdes que la iglesia es un ambiente familiar enfocado en adorar a Dios. Con eso en mente, ¡estarás bien!",
-    question: "¿Qué debo vestir?",
-  },
-  {
-    answer:
-      "¡No! Si nos visitas, queremos que el servicio sea un regalo para ti. Eres bienvenido a dar si así lo deseas, pero nunca te presionaremos para que lo hagas.",
-    question: "¿Se espera que dé en la ofrenda?",
-  },
-] as const;
+const serviceTimes = await getSpanishServiceTimes(),
+  faqs = [
+    {
+      answer:
+        "Ofrecemos clases para niños y adolescentes. Creemos que la adoración en familia es importante, y nos enfocamos en esto durante el culto.",
+      question: "¿Tienen programas para mis hijos o adolescentes?",
+    },
+    {
+      answer:
+        "Se ofrece cuidado de niños durante todos los servicios, desde recién nacidos hasta los tres años de edad.",
+      question: "¿Tienen guardería?",
+    },
+    {
+      answer:
+        "¡No te preocupes! Nuestro equipo de hospitalidad te estará esperando. Ellos te orientarán y tendrán una bolsa de bienvenida preparada para cada visitante por primera vez.",
+      question: "¿A dónde voy cuando llegue?",
+    },
+    {
+      answer:
+        "No tenemos restricciones ni requisitos de vestimenta, pero te pedimos que recuerdes que la iglesia es un ambiente familiar enfocado en adorar a Dios. Con eso en mente, ¡estarás bien!",
+      question: "¿Qué debo vestir?",
+    },
+    {
+      answer:
+        "¡No! Si nos visitas, queremos que el servicio sea un regalo para ti. Eres bienvenido a dar si así lo deseas, pero nunca te presionaremos para que lo hagas.",
+      question: "¿Se espera que dé en la ofrenda?",
+    },
+  ] as const;
 ---
 
 <BaseLayout
@@ -55,25 +54,27 @@ const faqs = [
         <h2 class="font-semibold text-2xl text-foreground tracking-tight">
           Horarios de servicio
         </h2>
-        {serviceTimes.length > 0 ? (
-          <ul class="grid gap-3">
-            {serviceTimes.map((item) => (
-              <li class="rounded-xl border border-border bg-card px-5 py-4">
-                <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
-                  {item.label}
-                </p>
-                <p class="mt-1 font-medium text-foreground text-lg">
-                  {item.time}
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-muted-foreground leading-relaxed">
-            Los horarios de servicio no están disponibles en este momento.
-            Contáctanos y con gusto te ayudamos.
-          </p>
-        )}
+        {
+          serviceTimes.length > 0 ? (
+            <ul class="grid gap-3">
+              {serviceTimes.map((item) => (
+                <li class="rounded-xl border border-border bg-card px-5 py-4">
+                  <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.14em]">
+                    {item.label}
+                  </p>
+                  <p class="mt-1 font-medium text-foreground text-lg">
+                    {item.time}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-muted-foreground leading-relaxed">
+              Los horarios de servicio no están disponibles en este momento.
+              Contáctanos y con gusto te ayudamos.
+            </p>
+          )
+        }
       </div>
 
       <div class="grid gap-5">
@@ -81,7 +82,7 @@ const faqs = [
           Ubicación
         </h2>
         <p class="text-muted-foreground leading-relaxed">
-          {churchInfo.addressLine1}<br>
+          {churchInfo.addressLine1}<br />
           {churchInfo.addressLine2}
         </p>
         <p class="text-muted-foreground text-sm">
@@ -117,12 +118,16 @@ const faqs = [
         Qué esperar
       </h2>
       <div class="grid gap-8">
-        {faqs.map((faq) => (
-          <div class="grid gap-2">
-            <h3 class="font-semibold text-foreground text-lg">{faq.question}</h3>
-            <p class="text-muted-foreground leading-relaxed">{faq.answer}</p>
-          </div>
-        ))}
+        {
+          faqs.map((faq) => (
+            <div class="grid gap-2">
+              <h3 class="font-semibold text-foreground text-lg">
+                {faq.question}
+              </h3>
+              <p class="text-muted-foreground leading-relaxed">{faq.answer}</p>
+            </div>
+          ))
+        }
 
         <div class="grid gap-3">
           <h3 class="font-semibold text-foreground text-lg">

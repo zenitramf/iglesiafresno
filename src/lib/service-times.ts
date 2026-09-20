@@ -4,9 +4,8 @@
  * @see https://fresnovictory.com/api/service-times.json
  */
 
-const SERVICE_TIMES_URL = "https://fresnovictory.com/api/service-times.json";
-
-const TIME_PATTERN = /^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i;
+const SERVICE_TIMES_URL = "https://fresnovictory.com/api/service-times.json",
+  TIME_PATTERN = /^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i;
 
 export interface ServiceTimeEntry {
   day: string;
@@ -34,23 +33,22 @@ export interface DisplayServiceTime {
 }
 
 const DAY_ES: Record<string, string> = {
-  Friday: "viernes",
-  Monday: "lunes",
-  Saturday: "sábado",
-  Sunday: "domingo",
-  Thursday: "jueves",
-  Tuesday: "martes",
-  Wednesday: "miércoles",
-};
-
-/** Spanish labels keyed by API service id. */
-const LABEL_ES: Record<string, string> = {
-  bibleStudy: "Estudio bíblico",
-  spanishService: "Servicio en español",
-  sundayMorning: "Culto de la mañana",
-  sundayNight: "Culto de la tarde",
-  sundaySchool: "Escuela Dominical",
-};
+    Friday: "viernes",
+    Monday: "lunes",
+    Saturday: "sábado",
+    Sunday: "domingo",
+    Thursday: "jueves",
+    Tuesday: "martes",
+    Wednesday: "miércoles",
+  },
+  /** Spanish labels keyed by API service id. */
+  LABEL_ES: Record<string, string> = {
+    bibleStudy: "Estudio bíblico",
+    spanishService: "Servicio en español",
+    sundayMorning: "Culto de la mañana",
+    sundayNight: "Culto de la tarde",
+    sundaySchool: "Escuela Dominical",
+  };
 
 /**
  * Format API times like "10:30am" / "5pm" for Spanish display.
@@ -62,9 +60,9 @@ export function formatTimeEs(time: string): string {
     return time;
   }
 
-  const [, hour, rawMinutes, rawPeriod] = match;
-  const minutes = rawMinutes ?? "00";
-  const period = rawPeriod.toLowerCase() === "am" ? "a. m." : "p. m.";
+  const [, hour, rawMinutes, rawPeriod] = match,
+    minutes = rawMinutes ?? "00",
+    period = rawPeriod.toLowerCase() === "am" ? "a. m." : "p. m.";
   return `${hour}:${minutes} ${period}`;
 }
 
@@ -97,9 +95,7 @@ async function fetchSpanishServiceTimes(): Promise<DisplayServiceTime[]> {
   try {
     const response = await fetch(SERVICE_TIMES_URL);
     if (!response.ok) {
-      throw new Error(
-        `Service times API returned ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Service times API returned ${response.status} ${response.statusText}`);
     }
 
     const data = (await response.json()) as ServiceTimesResponse;

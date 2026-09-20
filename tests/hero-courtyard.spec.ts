@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+
 import { gotoReady } from "./ready";
 
 /**
@@ -12,50 +13,41 @@ async function samplePixel(
   page: import("@playwright/test").Page,
   box: { x: number; y: number; width: number; height: number },
   relX: number,
-  relY: number
+  relY: number,
 ): Promise<{ r: number; g: number; b: number; a: number }> {
-  const dpr = await page.evaluate(() => window.devicePixelRatio || 1);
-  const shot = await page.screenshot({
-    clip: {
-      height: box.height,
-      width: box.width,
-      x: box.x,
-      y: box.y,
-    },
-    type: "png",
-  });
-
-  const dataUrl = `data:image/png;base64,${shot.toString("base64")}`;
+  const dpr = await page.evaluate(() => window.devicePixelRatio || 1),
+    shot = await page.screenshot({
+      clip: {
+        height: box.height,
+        width: box.width,
+        x: box.x,
+        y: box.y,
+      },
+      type: "png",
+    }),
+    dataUrl = `data:image/png;base64,${shot.toString("base64")}`;
   return page.evaluate(
     ({ dataUrl: url, relX: rx, relY: ry, dpr: ratio, cssW, cssH }) =>
-      new Promise<{ r: number; g: number; b: number; a: number }>(
-        (resolve, reject) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext("2d");
-            if (!ctx) {
-              reject(new Error("no 2d context"));
-              return;
-            }
-            ctx.drawImage(img, 0, 0);
-            const px = Math.min(
-              img.width - 1,
-              Math.max(0, Math.round(rx * cssW * ratio))
-            );
-            const py = Math.min(
-              img.height - 1,
-              Math.max(0, Math.round(ry * cssH * ratio))
-            );
-            const [r, g, b, a] = ctx.getImageData(px, py, 1, 1).data;
-            resolve({ a, b, g, r });
-          };
-          img.onerror = () => reject(new Error("png decode failed"));
-          img.src = url;
-        }
-      ),
+      new Promise<{ r: number; g: number; b: number; a: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("no 2d context"));
+            return;
+          }
+          ctx.drawImage(img, 0, 0);
+          const px = Math.min(img.width - 1, Math.max(0, Math.round(rx * cssW * ratio))),
+            py = Math.min(img.height - 1, Math.max(0, Math.round(ry * cssH * ratio))),
+            [r, g, b, a] = ctx.getImageData(px, py, 1, 1).data;
+          resolve({ a, b, g, r });
+        };
+        img.onerror = () => reject(new Error("png decode failed"));
+        img.src = url;
+      }),
     {
       cssH: box.height,
       cssW: box.width,
@@ -63,7 +55,7 @@ async function samplePixel(
       dpr,
       relX,
       relY,
-    }
+    },
   );
 }
 
@@ -73,7 +65,7 @@ function luminance({ r, g, b }: { r: number; g: number; b: number }): number {
 
 function colorDistance(
   a: { r: number; g: number; b: number },
-  b: { r: number; g: number; b: number }
+  b: { r: number; g: number; b: number },
 ): number {
   return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
 }
@@ -85,9 +77,9 @@ test.describe("Hero courtyard SVG", () => {
   });
 
   test("desktop shows long-X SVG shape; mobile hides it", async ({ page }) => {
-    const courtyard = page.locator("[data-hero-courtyard]");
-    const shape = page.locator("[data-hero-shape]");
-    const svg = shape.locator("svg");
+    const courtyard = page.locator("[data-hero-courtyard]"),
+      shape = page.locator("[data-hero-shape]"),
+      svg = shape.locator("svg");
 
     await expect(courtyard).toBeVisible();
     await expect(shape).toBeVisible();
@@ -98,9 +90,7 @@ test.describe("Hero courtyard SVG", () => {
     await expect(courtyard).toBeHidden();
   });
 
-  test("hero is full-bleed (near viewport width with side gutters)", async ({
-    page,
-  }) => {
+  test("hero is full-bleed (near viewport width with side gutters)", async ({ page }) => {
     await page.setViewportSize({ height: 900, width: 1920 });
     await gotoReady(page);
 
@@ -118,25 +108,20 @@ test.describe("Hero courtyard SVG", () => {
     expect(box.x).toBeLessThan(40);
   });
 
-  test("shape right edge is bound to the title shell with a gap", async ({
-    page,
-  }) => {
-    const frame = page.locator("[data-hero-frame]");
-    const shape = page.locator("[data-hero-shape]");
-    const shell = page.locator("[data-hero-copy-shell]");
-    const title = page.locator("[data-hero-title]");
-    const content = page.locator("[data-hero-content]");
-    const svg = shape.locator("svg");
+  test("shape right edge is bound to the title shell with a gap", async ({ page }) => {
+    const frame = page.locator("[data-hero-frame]"),
+      shape = page.locator("[data-hero-shape]"),
+      shell = page.locator("[data-hero-copy-shell]"),
+      title = page.locator("[data-hero-title]"),
+      content = page.locator("[data-hero-content]"),
+      svg = shape.locator("svg"),
+      frameBox = await frame.boundingBox(),
+      shapeBox = await shape.boundingBox(),
+      shellBox = await shell.boundingBox(),
+      titleBox = await title.boundingBox(),
+      contentBox = await content.boundingBox();
 
-    const frameBox = await frame.boundingBox();
-    const shapeBox = await shape.boundingBox();
-    const shellBox = await shell.boundingBox();
-    const titleBox = await title.boundingBox();
-    const contentBox = await content.boundingBox();
-
-    expect(
-      frameBox && shapeBox && shellBox && titleBox && contentBox
-    ).toBeTruthy();
+    expect(frameBox && shapeBox && shellBox && titleBox && contentBox).toBeTruthy();
     if (!(frameBox && shapeBox && shellBox && titleBox && contentBox)) {
       return;
     }
@@ -144,9 +129,7 @@ test.describe("Hero courtyard SVG", () => {
     // Shell sits in the site content column (left-aligned within it).
     // On wide viewports the column is centered, so shell may be inset from the frame.
     expect(shellBox.x).toBeGreaterThanOrEqual(frameBox.x - 1);
-    expect(shellBox.x + shellBox.width).toBeLessThanOrEqual(
-      frameBox.x + frameBox.width + 1
-    );
+    expect(shellBox.x + shellBox.width).toBeLessThanOrEqual(frameBox.x + frameBox.width + 1);
 
     // Top/bottom of shape match the courtyard
     expect(Math.abs(shapeBox.y - frameBox.y)).toBeLessThanOrEqual(2);
@@ -158,10 +141,10 @@ test.describe("Hero courtyard SVG", () => {
     await expect(svg).toHaveAttribute("preserveAspectRatio", "xMinYMid meet");
 
     // Content-step face of the path (~93.4% of artboard) meets shell right —
-    // not the outer ledge (viewBox 100%), so title is not cut by the step.
-    const stepRightFrac = 2355.4 / 2522;
-    const stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac;
-    const shellRight = shellBox.x + shellBox.width;
+    // Not the outer ledge (viewBox 100%), so title is not cut by the step.
+    const stepRightFrac = 2355.4 / 2522,
+      stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac,
+      shellRight = shellBox.x + shellBox.width;
     expect(Math.abs(stepFaceX - shellRight)).toBeLessThanOrEqual(3);
 
     // Outer ledge sits past the shell (step protrusion into the photo)
@@ -191,39 +174,35 @@ test.describe("Hero courtyard SVG", () => {
   ] as const;
 
   for (const vp of titleBoundViewports) {
-    test(`title-bound shape holds at ${vp.width}×${vp.height}`, async ({
-      page,
-    }) => {
+    test(`title-bound shape holds at ${vp.width}×${vp.height}`, async ({ page }) => {
       await page.setViewportSize(vp);
       await gotoReady(page);
 
-      const frame = page.locator("[data-hero-frame]");
-      const shape = page.locator("[data-hero-shape]");
-      const shell = page.locator("[data-hero-copy-shell]");
-      const title = page.locator("[data-hero-title]");
+      const frame = page.locator("[data-hero-frame]"),
+        shape = page.locator("[data-hero-shape]"),
+        shell = page.locator("[data-hero-copy-shell]"),
+        title = page.locator("[data-hero-title]");
       await expect(shape).toBeVisible();
 
-      const frameBox = await frame.boundingBox();
-      const shapeBox = await shape.boundingBox();
-      const shellBox = await shell.boundingBox();
-      const titleBox = await title.boundingBox();
+      const frameBox = await frame.boundingBox(),
+        shapeBox = await shape.boundingBox(),
+        shellBox = await shell.boundingBox(),
+        titleBox = await title.boundingBox();
       expect(frameBox && shapeBox && shellBox && titleBox).toBeTruthy();
       if (!(frameBox && shapeBox && shellBox && titleBox)) {
         return;
       }
 
-      expect(Math.abs(shapeBox.height - frameBox.height)).toBeLessThanOrEqual(
-        2
-      );
+      expect(Math.abs(shapeBox.height - frameBox.height)).toBeLessThanOrEqual(2);
       expect(Math.abs(shapeBox.y - frameBox.y)).toBeLessThanOrEqual(2);
 
       const expectedWidth = shapeBox.height * (2522 / 937);
       expect(Math.abs(shapeBox.width - expectedWidth)).toBeLessThanOrEqual(3);
 
       // Content-step face aligned to shell right
-      const stepRightFrac = 2355.4 / 2522;
-      const stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac;
-      const shellRight = shellBox.x + shellBox.width;
+      const stepRightFrac = 2355.4 / 2522,
+        stepFaceX = shapeBox.x + shapeBox.width * stepRightFrac,
+        shellRight = shellBox.x + shellBox.width;
       expect(Math.abs(stepFaceX - shellRight)).toBeLessThanOrEqual(3);
 
       // Gap: title ends before the step face
@@ -237,11 +216,11 @@ test.describe("Hero courtyard SVG", () => {
   }
 
   test("only the right edge is rounded (left is square)", async ({ page }) => {
-    const courtyard = page.locator("[data-hero-courtyard]");
-    const frame = page.locator("[data-hero-frame]");
-    const shell = page.locator("[data-hero-copy-shell]");
-    const frameBox = await frame.boundingBox();
-    const shellBox = await shell.boundingBox();
+    const courtyard = page.locator("[data-hero-courtyard]"),
+      frame = page.locator("[data-hero-frame]"),
+      shell = page.locator("[data-hero-copy-shell]"),
+      frameBox = await frame.boundingBox(),
+      shellBox = await shell.boundingBox();
     expect(frameBox && shellBox).toBeTruthy();
     if (!(frameBox && shellBox)) {
       return;
@@ -259,24 +238,23 @@ test.describe("Hero courtyard SVG", () => {
 
     // Inside the glass under the title
     const glassSample = await samplePixel(
-      page,
-      frameBox,
-      (shellBox.width * 0.35) / frameBox.width,
-      0.45
-    );
-
-    // Photo past the title shell / stepped edge
-    const photoSample = await samplePixel(
-      page,
-      frameBox,
-      Math.min(0.95, (shellBox.width + 48) / frameBox.width),
-      0.45
-    );
+        page,
+        frameBox,
+        (shellBox.width * 0.35) / frameBox.width,
+        0.45,
+      ),
+      // Photo past the title shell / stepped edge
+      photoSample = await samplePixel(
+        page,
+        frameBox,
+        Math.min(0.95, (shellBox.width + 48) / frameBox.width),
+        0.45,
+      );
 
     expect(colorDistance(glassSample, photoSample)).toBeGreaterThan(12);
 
     // Just inside the rounded top-right frame corner — overflow clips the
-    // photo, so this pixel is page background, not sky.
+    // Photo, so this pixel is page background, not sky.
     const cornerSample = await samplePixel(page, frameBox, 0.996, 0.004);
     expect(colorDistance(cornerSample, photoSample)).toBeGreaterThan(8);
   });
@@ -287,34 +265,31 @@ test.describe("Hero courtyard SVG", () => {
 
     const resolved = await shape.evaluate((el) => {
       const toRgba = (cssColor: string) => {
-        const canvas = document.createElement("canvas");
-        canvas.width = 1;
-        canvas.height = 1;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) {
-          throw new Error("no 2d context");
-        }
-        ctx.clearRect(0, 0, 1, 1);
-        ctx.fillStyle = "#000";
-        ctx.fillStyle = cssColor;
-        ctx.fillRect(0, 0, 1, 1);
-        const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-        return { a: a / 255, b, g, r };
-      };
-
-      const styles = getComputedStyle(el);
-      const colorValue = styles.color;
-      const token = getComputedStyle(document.documentElement)
-        .getPropertyValue("--hero-courtyard-step")
-        .trim();
-      const path = el.querySelector("path");
-      const pathFillRaw = path ? getComputedStyle(path).fill : "";
-      const fillCss =
-        !pathFillRaw ||
-        pathFillRaw === "none" ||
-        pathFillRaw.includes("currentColor")
-          ? colorValue
-          : pathFillRaw;
+          const canvas = document.createElement("canvas");
+          canvas.width = 1;
+          canvas.height = 1;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          if (!ctx) {
+            throw new Error("no 2d context");
+          }
+          ctx.clearRect(0, 0, 1, 1);
+          ctx.fillStyle = "#000";
+          ctx.fillStyle = cssColor;
+          ctx.fillRect(0, 0, 1, 1);
+          const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+          return { a: a / 255, b, g, r };
+        },
+        styles = getComputedStyle(el),
+        colorValue = styles.color,
+        token = getComputedStyle(document.documentElement)
+          .getPropertyValue("--hero-courtyard-step")
+          .trim(),
+        path = el.querySelector("path"),
+        pathFillRaw = path ? getComputedStyle(path).fill : "",
+        fillCss =
+          !pathFillRaw || pathFillRaw === "none" || pathFillRaw.includes("currentColor")
+            ? colorValue
+            : pathFillRaw;
 
       return {
         color: colorValue,
@@ -327,15 +302,13 @@ test.describe("Hero courtyard SVG", () => {
     });
 
     expect(resolved.token.length).toBeGreaterThan(0);
-    expect(
-      colorDistance(resolved.wrapperColor, resolved.tokenColor)
-    ).toBeLessThan(4);
+    expect(colorDistance(resolved.wrapperColor, resolved.tokenColor)).toBeLessThan(4);
     expect(colorDistance(resolved.fill, resolved.tokenColor)).toBeLessThan(4);
     expect(luminance(resolved.fill)).toBeLessThan(80);
     expect(luminance(resolved.fill)).toBeGreaterThan(5);
 
-    const shell = page.locator("[data-hero-copy-shell]");
-    const shellBox = await shell.boundingBox();
+    const shell = page.locator("[data-hero-copy-shell]"),
+      shellBox = await shell.boundingBox();
     expect(shellBox).toBeTruthy();
     if (!shellBox) {
       return;
@@ -344,20 +317,18 @@ test.describe("Hero courtyard SVG", () => {
     expect(luminance(mid)).toBeLessThan(120);
   });
 
-  test("content overlays the shape; title drives shell width", async ({
-    page,
-  }) => {
-    const shape = page.locator("[data-hero-shape]");
-    const shell = page.locator("[data-hero-copy-shell]");
-    const title = page.locator("[data-hero-title]");
-    const heading = page.getByRole("heading", { level: 1 }).first();
+  test("content overlays the shape; title drives shell width", async ({ page }) => {
+    const shape = page.locator("[data-hero-shape]"),
+      shell = page.locator("[data-hero-copy-shell]"),
+      title = page.locator("[data-hero-title]"),
+      heading = page.getByRole("heading", { level: 1 }).first();
 
     await expect(heading).toBeVisible();
 
-    const shapeBox = await shape.boundingBox();
-    const shellBox = await shell.boundingBox();
-    const titleBox = await title.boundingBox();
-    const headingBox = await heading.boundingBox();
+    const shapeBox = await shape.boundingBox(),
+      shellBox = await shell.boundingBox(),
+      titleBox = await title.boundingBox(),
+      headingBox = await heading.boundingBox();
     expect(shapeBox && shellBox && titleBox && headingBox).toBeTruthy();
     if (!(shapeBox && shellBox && titleBox && headingBox)) {
       return;
@@ -365,64 +336,56 @@ test.describe("Hero courtyard SVG", () => {
 
     // Shape spans under the shell (extends left; ledge may sit past shell right)
     expect(shapeBox.x).toBeLessThanOrEqual(shellBox.x + 1);
-    expect(shapeBox.x + shapeBox.width).toBeGreaterThanOrEqual(
-      shellBox.x + shellBox.width - 2
-    );
+    expect(shapeBox.x + shapeBox.width).toBeGreaterThanOrEqual(shellBox.x + shellBox.width - 2);
 
     // Heading sits inside the shell
     expect(headingBox.x).toBeGreaterThanOrEqual(shellBox.x - 1);
-    expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(
-      shellBox.x + shellBox.width + 1
-    );
+    expect(headingBox.x + headingBox.width).toBeLessThanOrEqual(shellBox.x + shellBox.width + 1);
 
     // Title is the width driver (within padding)
     expect(titleBox.width).toBeGreaterThan(shellBox.width * 0.5);
   });
 
-  test("right silhouette steps: glass then photo along a mid scanline", async ({
-    page,
-  }) => {
-    const shell = page.locator("[data-hero-copy-shell]");
-    const frame = page.locator("[data-hero-frame]");
-    const shellBox = await shell.boundingBox();
-    const frameBox = await frame.boundingBox();
+  test("right silhouette steps: glass then photo along a mid scanline", async ({ page }) => {
+    const shell = page.locator("[data-hero-copy-shell]"),
+      frame = page.locator("[data-hero-frame]"),
+      shellBox = await shell.boundingBox(),
+      frameBox = await frame.boundingBox();
     expect(shellBox && frameBox).toBeTruthy();
     if (!(shellBox && frameBox)) {
       return;
     }
 
     // Solid glass under the title body (path is full height on the left side)
-    const glass = await samplePixel(page, shellBox, 0.3, 0.4);
-    // Past the shell right edge — photo (stepped silhouette ends at shell)
-    const pastShape = await samplePixel(
-      page,
-      frameBox,
-      Math.min(0.98, (shellBox.width + 40) / frameBox.width),
-      (shellBox.y - frameBox.y + shellBox.height * 0.4) / frameBox.height
-    );
+    const glass = await samplePixel(page, shellBox, 0.3, 0.4),
+      // Past the shell right edge — photo (stepped silhouette ends at shell)
+      pastShape = await samplePixel(
+        page,
+        frameBox,
+        Math.min(0.98, (shellBox.width + 40) / frameBox.width),
+        (shellBox.y - frameBox.y + shellBox.height * 0.4) / frameBox.height,
+      );
 
     expect(colorDistance(glass, pastShape)).toBeGreaterThan(12);
     expect(luminance(glass)).toBeLessThan(luminance(pastShape) + 5);
   });
 
-  test("left glass extension covers frame when SVG is short of left edge", async ({
-    page,
-  }) => {
+  test("left glass extension covers frame when SVG is short of left edge", async ({ page }) => {
     // Wide + height-capped hero: height-locked SVG often ends short of frame left
-    // when the site column is centered; fill strip must still paint glass.
+    // When the site column is centered; fill strip must still paint glass.
     await page.setViewportSize({ height: 900, width: 3840 });
     await gotoReady(page);
 
-    const frame = page.locator("[data-hero-frame]");
-    const shape = page.locator("[data-hero-shape]");
-    const fill = page.locator("[data-hero-shape-fill]");
-    const shell = page.locator("[data-hero-copy-shell]");
+    const frame = page.locator("[data-hero-frame]"),
+      shape = page.locator("[data-hero-shape]"),
+      fill = page.locator("[data-hero-shape-fill]"),
+      shell = page.locator("[data-hero-copy-shell]");
 
     await expect(fill).toBeVisible();
 
-    const frameBox = await frame.boundingBox();
-    const shapeBox = await shape.boundingBox();
-    const shellBox = await shell.boundingBox();
+    const frameBox = await frame.boundingBox(),
+      shapeBox = await shape.boundingBox(),
+      shellBox = await shell.boundingBox();
     expect(frameBox && shapeBox && shellBox).toBeTruthy();
     if (!(frameBox && shapeBox && shellBox)) {
       return;
@@ -432,16 +395,16 @@ test.describe("Hero courtyard SVG", () => {
     expect(shapeBox.x).toBeGreaterThan(frameBox.x);
 
     // Near frame left, mid height — glass, not photo
-    const leftGlass = await samplePixel(page, frameBox, 0.02, 0.45);
-    // Under title — same glass family
-    const midGlass = await samplePixel(
-      page,
-      frameBox,
-      (shellBox.x - frameBox.x + shellBox.width * 0.35) / frameBox.width,
-      0.45
-    );
-    // Far right of frame — photo
-    const photo = await samplePixel(page, frameBox, 0.96, 0.45);
+    const leftGlass = await samplePixel(page, frameBox, 0.02, 0.45),
+      // Under title — same glass family
+      midGlass = await samplePixel(
+        page,
+        frameBox,
+        (shellBox.x - frameBox.x + shellBox.width * 0.35) / frameBox.width,
+        0.45,
+      ),
+      // Far right of frame — photo
+      photo = await samplePixel(page, frameBox, 0.96, 0.45);
 
     expect(colorDistance(leftGlass, midGlass)).toBeLessThan(20);
     expect(colorDistance(leftGlass, photo)).toBeGreaterThan(12);

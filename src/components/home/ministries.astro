@@ -16,48 +16,47 @@ import {
 } from "@/lib/critical-images";
 
 const featuredHighlights = [
-  "Evangelismo de puerta en puerta",
-  "Eventos comunitarios",
-  "Apoyo misionero",
-  "Capacitación para compartir el evangelio",
-] as const;
-
-/**
- * Vision pillars (excluding Evangelismo Personal — that is the featured bento).
- * Five cards + featured 2×2 cell fill a 3×3 at @4xl with no orphan.
- */
-const visionPillars = [
-  {
-    description:
-      "Exposición fiel de las Escrituras, enseñando precepto por precepto.",
-    icon: Bible,
-    title: "Predicación y Enseñanza Bíblica",
-  },
-  {
-    description:
-      "Equipar a los nuevos creyentes para que crezcan en su fe y sirvan dentro de la iglesia local.",
-    icon: UserHeart,
-    title: "Discipulado Personal",
-  },
-  {
-    description:
-      "Enseñar y ministrar a cada miembro del hogar, fortaleciendo las familias cristianas.",
-    icon: Home,
-    title: "Ministerio Familiar",
-  },
-  {
-    description:
-      "Apoyar y enviar misioneros, así como plantar iglesias en otras comunidades y en el extranjero.",
-    icon: World,
-    title: "Mentalidad Misionera",
-  },
-  {
-    description:
-      "Vivir una vida cristiana apartada de la cultura secular, conforme a la imagen de Cristo.",
-    icon: Cross,
-    title: "Santificación Personal",
-  },
-] as const;
+    "Evangelismo de puerta en puerta",
+    "Eventos comunitarios",
+    "Apoyo misionero",
+    "Capacitación para compartir el evangelio",
+  ] as const,
+  /**
+   * Vision pillars (excluding Evangelismo Personal — that is the featured bento).
+   * Five cards + featured 2×2 cell fill a 3×3 at @4xl with no orphan.
+   */
+  visionPillars = [
+    {
+      description:
+        "Exposición fiel de las Escrituras, enseñando precepto por precepto.",
+      icon: Bible,
+      title: "Predicación y Enseñanza Bíblica",
+    },
+    {
+      description:
+        "Equipar a los nuevos creyentes para que crezcan en su fe y sirvan dentro de la iglesia local.",
+      icon: UserHeart,
+      title: "Discipulado Personal",
+    },
+    {
+      description:
+        "Enseñar y ministrar a cada miembro del hogar, fortaleciendo las familias cristianas.",
+      icon: Home,
+      title: "Ministerio Familiar",
+    },
+    {
+      description:
+        "Apoyar y enviar misioneros, así como plantar iglesias en otras comunidades y en el extranjero.",
+      icon: World,
+      title: "Mentalidad Misionera",
+    },
+    {
+      description:
+        "Vivir una vida cristiana apartada de la cultura secular, conforme a la imagen de Cristo.",
+      icon: Cross,
+      title: "Santificación Personal",
+    },
+  ] as const;
 ---
 
 <section
@@ -129,7 +128,8 @@ const visionPillars = [
             </p>
 
             <ul class="mt-6 flex flex-col gap-2">
-              {featuredHighlights.map((item) => (
+              {
+                featuredHighlights.map((item) => (
                   <li class="flex items-center gap-2 text-sm">
                     <Check
                       aria-hidden="true"
@@ -137,7 +137,8 @@ const visionPillars = [
                     />
                     <span>{item}</span>
                   </li>
-                ))}
+                ))
+              }
             </ul>
 
             <div class="mt-6">
@@ -159,7 +160,8 @@ const visionPillars = [
       </div>
 
       <!-- Vision pillar cards (Evangelismo Personal is only in the featured cell) -->
-      {visionPillars.map((pillar, index) => {
+      {
+        visionPillars.map((pillar, index) => {
           const Icon = pillar.icon;
           const isLast = index === visionPillars.length - 1;
 
@@ -182,7 +184,8 @@ const visionPillars = [
               </p>
             </div>
           );
-        })}
+        })
+      }
     </div>
   </SiteContainer>
 </section>

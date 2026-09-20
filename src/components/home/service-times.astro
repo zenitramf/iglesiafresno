@@ -5,7 +5,8 @@ import { getSpanishServiceTimes } from "@/lib/service-times";
 const times = await getSpanishServiceTimes();
 ---
 
-{times.length > 0 && (
+{
+  times.length > 0 && (
     <section
       aria-label="Horarios de servicio"
       class="site-gutter border-border border-y bg-card py-8"
@@ -23,4 +24,5 @@ const times = await getSpanishServiceTimes();
         ))}
       </SiteContainer>
     </section>
-  )}
+  )
+}

@@ -1,52 +1,36 @@
 import { expect, test } from "@playwright/test";
+
 import { churchInfo, defaultSEO } from "../src/lib/church-data";
 import { gotoReady } from "./ready";
 
 const origin = churchInfo.url;
 
 test.describe("SEO metadata", () => {
-  test("homepage has canonical, Open Graph, Twitter, and Church JSON-LD", async ({
-    page,
-  }) => {
+  test("homepage has canonical, Open Graph, Twitter, and Church JSON-LD", async ({ page }) => {
     await gotoReady(page);
 
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
     await expect(page).toHaveTitle("Iglesia Bautista Victory en Fresno");
 
     const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute(
-      "content",
-      defaultSEO.description
-    );
+    await expect(description).toHaveAttribute("content", defaultSEO.description);
 
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index, follow"
-    );
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `${origin}/`
-    );
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index, follow");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `${origin}/`);
 
-    await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute(
-      "content",
-      "es_US"
-    );
+    await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute("content", "es_US");
     await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
       "content",
-      churchInfo.name
+      churchInfo.name,
     );
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
-      "content",
-      `${origin}/`
-    );
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", `${origin}/`);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
       "content",
-      `${origin}${defaultSEO.ogImage}`
+      `${origin}${defaultSEO.ogImage}`,
     );
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
       "content",
-      "summary_large_image"
+      "summary_large_image",
     );
 
     const jsonLd = page.locator('script[type="application/ld+json"]');
@@ -73,11 +57,11 @@ test.describe("SEO metadata", () => {
     await expect(page).toHaveTitle(`Nosotros | ${churchInfo.name}`);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
-      `${origin}/nosotros/`
+      `${origin}/nosotros/`,
     );
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
       "content",
-      `Nosotros | ${churchInfo.name}`
+      `Nosotros | ${churchInfo.name}`,
     );
   });
 

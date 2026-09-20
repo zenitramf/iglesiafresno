@@ -1,5 +1,5 @@
-import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
 
 export interface CriticalPreload {
   sizes: string;
@@ -18,7 +18,7 @@ export const EVANGELISMO_IMAGE_SIZES = "(max-width: 1280px) 100vw, 50vw";
 export const getCriticalImagePreload = async (
   src: ImageMetadata,
   widths: number[],
-  sizes: string
+  sizes: string,
 ): Promise<CriticalPreload> => {
   const image = await getImage({
     format: "webp",
