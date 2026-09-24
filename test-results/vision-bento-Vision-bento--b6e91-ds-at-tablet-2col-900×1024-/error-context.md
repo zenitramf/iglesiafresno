@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: vision-bento.spec.ts >> Vision bento layout >> layout holds at tablet-2col (900×1024)
+- Location: tests/vision-bento.spec.ts:50:5
 
 # Error details
 

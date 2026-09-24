@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: evangelio-story.spec.ts >> Evangelio story page >> every verse from the message is cited
+- Location: tests/evangelio-story.spec.ts:55:3
 
 # Error details
 

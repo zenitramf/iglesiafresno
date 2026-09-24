@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> glass fill uses hero-courtyard-step color token
+- Location: tests/hero-courtyard.spec.ts:262:3
 
 # Error details
 

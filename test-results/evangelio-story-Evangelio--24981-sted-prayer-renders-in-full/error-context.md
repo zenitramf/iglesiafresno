@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: evangelio-story.spec.ts >> Evangelio story page >> the suggested prayer renders in full
+- Location: tests/evangelio-story.spec.ts:63:3
 
 # Error details
 

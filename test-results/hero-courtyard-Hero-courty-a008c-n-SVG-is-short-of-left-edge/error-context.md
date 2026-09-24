@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> left glass extension covers frame when SVG is short of left edge
+- Location: tests/hero-courtyard.spec.ts:373:3
 
 # Error details
 
