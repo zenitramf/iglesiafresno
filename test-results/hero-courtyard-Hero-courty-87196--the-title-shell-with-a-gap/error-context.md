@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> shape right edge is bound to the title shell with a gap
+- Location: tests/hero-courtyard.spec.ts:111:3
 
 # Error details
 

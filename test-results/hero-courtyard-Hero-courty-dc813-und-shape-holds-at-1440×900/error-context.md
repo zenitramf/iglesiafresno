@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> title-bound shape holds at 1440×900
+- Location: tests/hero-courtyard.spec.ts:177:5
 
 # Error details
 

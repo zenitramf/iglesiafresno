@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> content overlays the shape; title drives shell width
+- Location: tests/hero-courtyard.spec.ts:320:3
 
 # Error details
 

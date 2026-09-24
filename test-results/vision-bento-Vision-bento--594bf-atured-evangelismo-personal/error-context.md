@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: hero-courtyard.spec.ts >> Hero courtyard SVG >> only the right edge is rounded (left is square)
-- Location: tests/hero-courtyard.spec.ts:218:3
+- Name: vision-bento.spec.ts >> Vision bento layout >> section is vision-oriented with featured evangelismo personal
+- Location: tests/vision-bento.spec.ts:136:3
 
 # Error details
 
