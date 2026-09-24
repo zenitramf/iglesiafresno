@@ -8,7 +8,6 @@ import { HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from "@/lib/critical-images";
 interface Props {
   class?: string;
   description?: string;
-  eyebrow: string;
   id?: string;
   /** Background photo — defaults to the homepage courtyard image. */
   image?: ImageMetadata;
@@ -19,7 +18,6 @@ interface Props {
 const {
   class: className,
   description,
-  eyebrow,
   id,
   image = heroImage,
   imageAlt = "Horizonte del centro de Fresno bajo un cielo despejado",
@@ -64,12 +62,6 @@ const {
         class="flex w-full flex-col items-center gap-8 text-center"
       >
         <div class="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
-          <p
-            class="mb-3 font-medium text-primary-accent/90 text-xs tracking-[0.2em] uppercase sm:text-sm"
-          >
-            {eyebrow}
-          </p>
-
           <h1
             class="text-balance font-light text-4xl text-foreground leading-tight tracking-tight sm:text-5xl xl:text-6xl 2xl:text-7xl"
           >

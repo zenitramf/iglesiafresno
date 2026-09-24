@@ -139,7 +139,7 @@ test.describe("Vision bento layout", () => {
 
     const section = page.locator("#vision");
     await expect(section).toBeVisible();
-    await expect(section.getByText("Visión", { exact: true })).toBeVisible();
+    await expect(section.getByRole("heading", { name: "Lo que nos guía." })).toBeVisible();
     await expect(page.locator("#evangelismo")).toBeVisible();
     await expect(page.locator("#ministerios")).toHaveCount(0);
     await expect(page.getByRole("heading", { name: "Niños" })).toHaveCount(0);
