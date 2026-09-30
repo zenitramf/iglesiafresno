@@ -3,10 +3,11 @@
  *
  * Two transports are supported, first one configured wins:
  *
- * 1. Cloudflare Email Sending binding (`CONNECT_EMAIL` in wrangler.jsonc) —
+ * 1. Resend HTTP API (`RESEND_API_KEY` secret) — takes precedence the moment
+ *    the operator sets it, since a declared `CONNECT_EMAIL` binding can still
+ *    lack domain/destination verification at the Cloudflare account.
+ * 2. Cloudflare Email Sending binding (`CONNECT_EMAIL` in wrangler.jsonc) —
  *    no API key, restricted to `info@iglesiafresno.com` as destination.
- * 2. Resend HTTP API (`RESEND_API_KEY` secret) — fallback for accounts where
- *    Email Sending is not enabled.
  *
  * See the README ("Formulario de conexión") for the one-time setup.
  */
@@ -138,18 +139,6 @@ export const sendConnectEmail = async (
   const { html, subject, text } = buildConnectEmail(submission);
   const replyTo = submission.email || CONNECT_EMAIL_TO;
 
-  if (env.CONNECT_EMAIL) {
-    await env.CONNECT_EMAIL.send({
-      from: { email: CONNECT_EMAIL_FROM, name: FROM_NAME },
-      html,
-      replyTo,
-      subject,
-      text,
-      to: CONNECT_EMAIL_TO,
-    });
-    return "cloudflare";
-  }
-
   if (env.RESEND_API_KEY) {
     const response = await fetch("https://api.resend.com/emails", {
       body: JSON.stringify({
@@ -172,5 +161,17 @@ export const sendConnectEmail = async (
     return "resend";
   }
 
-  throw new Error("No email transport configured (CONNECT_EMAIL binding or RESEND_API_KEY)");
+  if (env.CONNECT_EMAIL) {
+    await env.CONNECT_EMAIL.send({
+      from: { email: CONNECT_EMAIL_FROM, name: FROM_NAME },
+      html,
+      replyTo,
+      subject,
+      text,
+      to: CONNECT_EMAIL_TO,
+    });
+    return "cloudflare";
+  }
+
+  throw new Error("No email transport configured (RESEND_API_KEY or CONNECT_EMAIL binding)");
 };

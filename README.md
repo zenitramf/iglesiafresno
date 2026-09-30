@@ -92,7 +92,17 @@ visitor data are `no-store`. The form accepts URL-encoded data only, caps the
 streamed body at 64 KiB, and rejects fields exceeding the displayed limits
 rather than truncating them.
 
-**Option A — Cloudflare Email Sending (`send_email` binding, preferred):**
+**Option A — Resend (`RESEND_API_KEY` secret, active as soon as it is set):**
+
+```sh
+npx wrangler secret put RESEND_API_KEY
+```
+
+Verify `iglesiafresno.com` in Resend first so it can send from
+`sitio-web@iglesiafresno.com`; without a verified domain Resend rejects the
+send with 403 and visitors see the delivery-error state.
+
+**Option B — Cloudflare Email Sending (`send_email` binding):**
 
 1. Verify the destination address so the restricted binding can deliver to it:
    `npx wrangler email routing addresses create info@iglesiafresno.com`, then
@@ -113,15 +123,9 @@ require a paid-plan upgrade. Sending to arbitrary recipients is the paid
 Email Sending case. Production provisioning and inbox delivery still need
 verification; the automated tests use the local email simulator.
 
-**Option B — Resend (fallback, works on any plan):**
-
-```sh
-npx wrangler secret put RESEND_API_KEY
-```
-
-Verify `iglesiafresno.com` in Resend first so it can send from
-`sitio-web@iglesiafresno.com`. If the `send_email` binding is unavailable,
-remove it from `wrangler.jsonc` and the Resend path is used automatically.
+Delete the `RESEND_API_KEY` secret (`npx wrangler secret delete
+RESEND_API_KEY`) to switch back to the binding once the domain and destination
+are verified.
 
 ### Tests
 
