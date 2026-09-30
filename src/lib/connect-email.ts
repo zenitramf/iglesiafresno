@@ -71,6 +71,10 @@ const formatList = (values: string[], other: string): string => {
   return items.length > 0 ? items.join(", ") : "—";
 };
 
+/** Highlights which site form produced the submission. */
+const htmlCallout = (origin: string): string =>
+  `<div style="border:1px solid #e7e5e4;background:#fafaf9;border-radius:8px;padding:10px 14px;margin:0 0 16px"><p style="margin:0;font-size:13px;color:#44403c"><strong>Origen:</strong> ${escapeHtml(origin)}</p></div>`;
+
 const formatSubmittedAt = (isoDate: string): string => {
   try {
     return new Intl.DateTimeFormat("es-US", {
@@ -107,6 +111,8 @@ export const buildConnectEmail = (submission: ConnectSubmission): ConnectEmailCo
   const text = [
     "Nueva tarjeta de conexión",
     "",
+    "Origen: Tarjeta de conexión (código QR)",
+    "",
     ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
     "¿Cómo podemos orar por usted?",
@@ -116,6 +122,7 @@ export const buildConnectEmail = (submission: ConnectSubmission): ConnectEmailCo
   ].join("\n");
 
   const html = [
+    htmlCallout("Tarjeta de conexión — código QR del formulario privado"),
     `<h2>Nueva tarjeta de conexión</h2>`,
     `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse">`,
     ...rows.map(
@@ -143,6 +150,8 @@ export const buildContactEmail = (submission: ContactSubmission): ConnectEmailCo
   const text = [
     "Nuevo mensaje de contacto",
     "",
+    "Origen: Formulario de contacto (página Planea Tu Visita)",
+    "",
     `Nombre: ${submission.name || "—"}`,
     `Correo electrónico: ${submission.email || "—"}`,
     `Teléfono: ${submission.phone || "—"}`,
@@ -154,6 +163,7 @@ export const buildContactEmail = (submission: ContactSubmission): ConnectEmailCo
   ].join("\n");
 
   const html = [
+    htmlCallout("Formulario de contacto — página «Planea Tu Visita» (/visitanos)"),
     `<h2>Nuevo mensaje de contacto</h2>`,
     `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse">`,
     ...(

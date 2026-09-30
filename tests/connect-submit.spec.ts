@@ -101,6 +101,7 @@ test("envía la petición completa en el límite permitido", async () => {
   expect(result.status).toBe(303);
   expect(result.errorCode).toBeNull();
   expect(sentText).toContain(prayer);
+  expect(sentText).toContain("Origen: Tarjeta de conexión (código QR)");
 });
 
 const makeContactRequest = (values: Record<string, string>): Request =>
@@ -133,6 +134,7 @@ test("contacto: envía nombre y mensaje completos al transporte", async () => {
   expect(result.errorCode).toBeNull();
   expect(sentSubject).toContain("María López");
   expect(sentText).toContain("Nuevo mensaje de contacto");
+  expect(sentText).toContain("Origen: Formulario de contacto (página Planea Tu Visita)");
   expect(sentText).toContain("maria@example.com");
   expect(sentText).toContain("559-111-2222");
   expect(sentText).toContain("Quiero saber más sobre los grupos pequeños.");
