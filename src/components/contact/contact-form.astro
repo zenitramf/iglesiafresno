@@ -1,0 +1,160 @@
+---
+import Alert from "@/components/starwind/alert/Alert.astro";
+import { Button } from "@/components/starwind/button";
+import Input from "@/components/starwind/input/Input.astro";
+import Label from "@/components/starwind/label/Label.astro";
+import Textarea from "@/components/starwind/textarea/Textarea.astro";
+import {
+  CONNECT_ERROR_MESSAGES,
+  CONNECT_FIELD_LIMITS,
+  type ConnectErrorCode,
+} from "@/lib/connect-form";
+
+interface Props {
+  /** Recovered values from a failed submission. */
+  values?: URLSearchParams;
+  errorCode?: ConnectErrorCode | null;
+}
+
+const { values = new URLSearchParams(), errorCode = null } = Astro.props;
+
+const formErrorMessage = errorCode ? CONNECT_ERROR_MESSAGES[errorCode] : null;
+const exceedsLimit = (field: keyof typeof CONNECT_FIELD_LIMITS): boolean =>
+  values
+    .getAll(field)
+    .some((value) => value.length > CONNECT_FIELD_LIMITS[field]);
+const contactError =
+  errorCode === "contacto"
+    ? CONNECT_ERROR_MESSAGES.contacto
+    : errorCode === "correo"
+      ? CONNECT_ERROR_MESSAGES.correo
+      : null;
+const nameError = errorCode === "nombre" ? CONNECT_ERROR_MESSAGES.nombre : null;
+const mensajeError =
+  errorCode === "mensaje" ? CONNECT_ERROR_MESSAGES.mensaje : null;
+const contactDescribedBy = `contacto-ayuda${contactError ? " contacto-error" : ""}`;
+---
+
+{
+  formErrorMessage && (
+    <Alert class="mb-6" id="contacto-error-alert" variant="error">
+      <p class="font-medium">No pudimos enviar el formulario</p>
+      <p class="mt-1 text-muted-foreground text-sm">{formErrorMessage}</p>
+    </Alert>
+  )
+}
+
+<form action="/contacto" class="grid gap-8" method="POST">
+  <div aria-hidden="true" class="hidden">
+    <label for="sitio_web_contacto">No completar este campo</label>
+    <input
+      autocomplete="off"
+      id="sitio_web_contacto"
+      name="sitio_web"
+      tabindex="-1"
+    />
+  </div>
+
+  <div class="grid gap-2">
+    <Label for="contacto-nombre">
+      Nombre <span aria-hidden="true" class="text-error">*</span>
+    </Label>
+    <Input
+      aria-describedby={nameError
+        ? "contacto-nombre-error"
+        : exceedsLimit("nombre")
+          ? "contacto-error-alert"
+          : undefined}
+      aria-invalid={nameError || exceedsLimit("nombre") ? "true" : undefined}
+      autocomplete="name"
+      id="contacto-nombre"
+      maxlength={CONNECT_FIELD_LIMITS.nombre}
+      name="nombre"
+      required
+      value={values.get("nombre") ?? ""}
+    />
+    {
+      nameError && (
+        <p class="text-error text-sm" id="contacto-nombre-error">
+          {nameError}
+        </p>
+      )
+    }
+  </div>
+
+  <div class="grid content-start gap-6 sm:grid-cols-2">
+    <div class="grid content-start gap-2">
+      <Label for="contacto-correo">Correo electrónico</Label>
+      <Input
+        aria-describedby={`${contactDescribedBy}${exceedsLimit("correo") ? " contacto-error-alert" : ""}`}
+        aria-invalid={contactError || exceedsLimit("correo")
+          ? "true"
+          : undefined}
+        autocomplete="email"
+        id="contacto-correo"
+        maxlength={CONNECT_FIELD_LIMITS.correo}
+        name="correo"
+        type="email"
+        value={values.get("correo") ?? ""}
+      />
+      <p class="text-muted-foreground text-sm" id="contacto-ayuda">
+        Déjanos al menos un medio de contacto.
+      </p>
+    </div>
+
+    <div class="grid content-start gap-2">
+      <Label for="contacto-telefono">Teléfono</Label>
+      <Input
+        aria-describedby={`${contactDescribedBy}${exceedsLimit("telefono") ? " contacto-error-alert" : ""}`}
+        aria-invalid={errorCode === "contacto" || exceedsLimit("telefono")
+          ? "true"
+          : undefined}
+        autocomplete="tel"
+        id="contacto-telefono"
+        maxlength={CONNECT_FIELD_LIMITS.telefono}
+        name="telefono"
+        type="tel"
+        value={values.get("telefono") ?? ""}
+      />
+    </div>
+  </div>
+  {
+    contactError && (
+      <p class="text-error text-sm" id="contacto-error">
+        {contactError}
+      </p>
+    )
+  }
+
+  <div class="grid gap-2">
+    <Label for="contacto-mensaje">
+      Mensaje <span aria-hidden="true" class="text-error">*</span>
+    </Label>
+    <Textarea
+      aria-describedby={`contacto-mensaje-ayuda${mensajeError || exceedsLimit("mensaje") ? " contacto-mensaje-error" : ""}`}
+      aria-invalid={mensajeError || exceedsLimit("mensaje")
+        ? "true"
+        : undefined}
+      id="contacto-mensaje"
+      maxlength={CONNECT_FIELD_LIMITS.mensaje}
+      name="mensaje"
+      required
+      rows={5}
+      value={values.get("mensaje") ?? ""}
+    />
+    <p class="text-muted-foreground text-sm" id="contacto-mensaje-ayuda">
+      Cuéntanos en qué podemos ayudarte. Hasta 2000 caracteres.
+    </p>
+    {
+      mensajeError && (
+        <p class="text-error text-sm" id="contacto-mensaje-error">
+          {mensajeError}
+        </p>
+      )
+    }
+  </div>
+
+  <div>
+    <Button size="lg" type="submit" variant="primary">Enviar mensaje</Button>
+  </div>
+</form>

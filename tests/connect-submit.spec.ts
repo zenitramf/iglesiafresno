@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import { CONNECT_FIELD_LIMITS, CONNECT_MAX_BODY_BYTES } from "../src/lib/connect-form";
-import { submitConnectForm } from "../src/lib/connect-submit";
+import { submitConnectForm, submitContactForm } from "../src/lib/connect-submit";
 
 const makeRequest = (values: Record<string, string>): Request =>
   new Request("https://iglesiafresno.com/api/conectar", {
@@ -101,4 +101,128 @@ test("envía la petición completa en el límite permitido", async () => {
   expect(result.status).toBe(303);
   expect(result.errorCode).toBeNull();
   expect(sentText).toContain(prayer);
+});
+
+const makeContactRequest = (values: Record<string, string>): Request =>
+  new Request("https://iglesiafresno.com/contacto", {
+    method: "POST",
+    body: new URLSearchParams(values),
+  });
+
+test("contacto: envía nombre y mensaje completos al transporte", async () => {
+  let sentText = "";
+  let sentSubject = "";
+  const result = await submitContactForm(
+    makeContactRequest({
+      nombre: "María López",
+      correo: "maria@example.com",
+      telefono: "559-111-2222",
+      mensaje: "Quiero saber más sobre los grupos pequeños.",
+    }),
+    {
+      CONNECT_EMAIL: {
+        send: async (message) => {
+          sentText = message.text ?? "";
+          sentSubject = message.subject;
+          return {};
+        },
+      },
+    },
+  );
+  expect(result.status).toBe(303);
+  expect(result.errorCode).toBeNull();
+  expect(sentSubject).toContain("María López");
+  expect(sentText).toContain("Nuevo mensaje de contacto");
+  expect(sentText).toContain("maria@example.com");
+  expect(sentText).toContain("559-111-2222");
+  expect(sentText).toContain("Quiero saber más sobre los grupos pequeños.");
+});
+
+test("contacto: falla la entrega y conserva los valores", async () => {
+  const values = {
+    nombre: "María",
+    correo: "maria@example.com",
+    mensaje: "Oren por mi familia, por favor.",
+  };
+  const result = await submitContactForm(makeContactRequest(values), {
+    CONNECT_EMAIL: {
+      send: async () => {
+        throw new Error("Delivery unavailable");
+      },
+    },
+  });
+  expect(result.status).toBe(502);
+  expect(result.errorCode).toBe("envio");
+  expect(result.values.get("mensaje")).toBe(values.mensaje);
+  expect(result.values.get("nombre")).toBe(values.nombre);
+});
+
+test("contacto: exige mensaje y respeta su límite", async () => {
+  const missing = await submitContactForm(
+    makeContactRequest({
+      nombre: "María",
+      correo: "maria@example.com",
+      mensaje: "   ",
+    }),
+    {},
+  );
+  expect(missing.status).toBe(422);
+  expect(missing.errorCode).toBe("mensaje");
+
+  const tooLong = "x".repeat(CONNECT_FIELD_LIMITS.mensaje + 1);
+  const over = await submitContactForm(
+    makeContactRequest({
+      nombre: "María",
+      correo: "maria@example.com",
+      mensaje: tooLong,
+    }),
+    {},
+  );
+  expect(over.status).toBe(422);
+  expect(over.errorCode).toBe("longitud");
+  expect(over.values.get("mensaje")).toBe(tooLong);
+});
+
+test("contacto: el honeypot finge éxito sin enviar correo", async () => {
+  let delivered = false;
+  const result = await submitContactForm(
+    makeContactRequest({
+      nombre: "Bot",
+      sitio_web: "http://spam.example",
+      mensaje: "compra ya",
+    }),
+    {
+      CONNECT_EMAIL: {
+        send: async () => {
+          delivered = true;
+          return {};
+        },
+      },
+    },
+  );
+  expect(result.status).toBe(303);
+  expect(result.errorCode).toBeNull();
+  expect(delivered).toBe(false);
+});
+
+test("conectar: el honeypot finge éxito sin enviar correo", async () => {
+  let delivered = false;
+  const result = await submitConnectForm(
+    makeRequest({
+      nombre: "Bot",
+      sitio_web: "http://spam.example",
+      oracion: "compra ya",
+    }),
+    {
+      CONNECT_EMAIL: {
+        send: async () => {
+          delivered = true;
+          return {};
+        },
+      },
+    },
+  );
+  expect(result.status).toBe(303);
+  expect(result.errorCode).toBeNull();
+  expect(delivered).toBe(false);
 });

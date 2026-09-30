@@ -55,9 +55,14 @@ it, and submissions are emailed to `info@iglesiafresno.com`.
 | `GET /conectar`         | gate cookie required    | The connection form                                                |
 | `POST /api/conectar`    | gate cookie required    | Validates, emails the submission, redirects to `/conectar/gracias` |
 | `GET /conectar/gracias` | gate cookie required    | Confirmation page                                                  |
+| `GET /visitanos`        | public                  | Plan-your-visit page; includes the public "Contáctanos" form       |
+| `POST /contacto`        | public                  | Contact handler: re-renders with values on failure, redirects to   |
+|                         |                         | `/contacto/gracias` on success                                     |
+| `GET /contacto/gracias` | public                  | Contact confirmation page                                          |
 
 Requests without a valid cookie are redirected (`302`) to `/visitanos`.
-`/conectar`, `/conectar/gracias` and `/api/conectar` render on demand; every
+`/conectar`, `/conectar/gracias`, `/api/conectar` and `/contacto` render on
+demand; every
 other page stays prerendered. All gated pages are `noindex` and excluded from
 `robots.txt`/the sitemap.
 

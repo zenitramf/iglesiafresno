@@ -174,7 +174,7 @@ test.describe("envío del formulario", () => {
     expect(response.status()).toBe(422);
     const html = await response.text();
     expect(html).toContain(prayer);
-    expect(html).toContain("la petición de oración admite hasta 2000 caracteres");
+    expect(html).toContain("los textos largos (petición de oración o mensaje) admiten hasta 2000 caracteres");
     expect(response.headers().location).toBeUndefined();
   });
 

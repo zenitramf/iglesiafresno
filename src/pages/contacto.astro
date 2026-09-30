@@ -1,0 +1,55 @@
+---
+export const prerender = false;
+
+import SiteContainer from "@/components/layout/site-container.astro";
+import ContactForm from "@/components/contact/contact-form.astro";
+import { Card, CardContent } from "@/components/starwind/card";
+import BaseLayout from "@/layouts/base-layout.astro";
+import type { ConnectErrorCode } from "@/lib/connect-form";
+import { submitContactForm } from "@/lib/connect-submit";
+
+Astro.response.headers.set("Cache-Control", "no-store");
+
+if (Astro.request.method !== "POST") {
+  // The canonical form lives on /visitanos; this page re-renders POSTs that
+  // could not be delivered so the visitor's message is never lost.
+  return Astro.redirect("/visitanos#contacto", 302);
+}
+
+const { env } = await import("cloudflare:workers");
+const result = await submitContactForm(Astro.request, env);
+if (!result.errorCode) {
+  return Astro.redirect("/contacto/gracias", 303);
+}
+const values = result.values;
+const errorCode: ConnectErrorCode | null = result.errorCode;
+
+Astro.response.status = result.status;
+---
+
+<BaseLayout
+  description="Corrige y reenvía tu mensaje a Iglesia Bautista Victory; conservamos lo que escribiste."
+  noindex
+  title="Contáctanos"
+>
+  <section class="site-gutter py-12 sm:py-16">
+    <SiteContainer class="mx-auto grid max-w-3xl gap-6">
+      <h1
+        class="font-brand text-3xl uppercase text-foreground tracking-tight sm:text-4xl"
+      >
+        Contáctanos
+      </h1>
+      <Card>
+        <CardContent>
+          <ContactForm errorCode={errorCode} values={values} />
+        </CardContent>
+      </Card>
+      <p class="text-muted-foreground text-sm">
+        ¿Prefieres el formulario completo?{" "}
+        <a class="underline" href="/visitanos#contacto"
+          >Volver a Planea Tu Visita</a
+        >
+      </p>
+    </SiteContainer>
+  </section>
+</BaseLayout>

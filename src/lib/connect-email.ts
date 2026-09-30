@@ -25,6 +25,15 @@ export interface ConnectSubmission {
   userAgent: string;
 }
 
+export interface ContactSubmission {
+  email: string;
+  message: string;
+  name: string;
+  phone: string;
+  submittedAt: string;
+  userAgent: string;
+}
+
 interface SendEmailMessage {
   from: string | { email: string; name?: string };
   html?: string;
@@ -126,18 +135,59 @@ export const buildConnectEmail = (submission: ConnectSubmission): ConnectEmailCo
   };
 };
 
+/** Plain contact inquiry from the public "Contáctanos" form. */
+export const buildContactEmail = (submission: ContactSubmission): ConnectEmailContent => {
+  const contact = [submission.email, submission.phone].filter(Boolean).join(" · ") || "—";
+  const receivedAt = formatSubmittedAt(submission.submittedAt);
+
+  const text = [
+    "Nuevo mensaje de contacto",
+    "",
+    `Nombre: ${submission.name || "—"}`,
+    `Correo electrónico: ${submission.email || "—"}`,
+    `Teléfono: ${submission.phone || "—"}`,
+    "",
+    "Mensaje:",
+    submission.message || "—",
+    "",
+    `Enviado: ${receivedAt}`,
+  ].join("\n");
+
+  const html = [
+    `<h2>Nuevo mensaje de contacto</h2>`,
+    `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse">`,
+    ...(
+      [
+        ["Nombre", submission.name],
+        ["Correo electrónico", submission.email],
+        ["Teléfono", submission.phone],
+      ] as [string, string][]
+    ).map(
+      ([label, value]) =>
+        `<tr><td style="vertical-align:top"><strong>${escapeHtml(label)}</strong></td><td>${escapeHtml(value || "—")}</td></tr>`,
+    ),
+    `</table>`,
+    `<h3>Mensaje</h3>`,
+    `<p style="white-space:pre-wrap">${escapeHtml(submission.message || "—")}</p>`,
+    `<p style="color:#666;font-size:12px">Enviado: ${escapeHtml(receivedAt)}<br />Contacto: ${escapeHtml(contact)}<br />Navegador: ${escapeHtml(submission.userAgent)}</p>`,
+  ].join("\n");
+
+  return {
+    html,
+    subject: `Nuevo mensaje de contacto: ${submission.name || "Visitante"}`,
+    text,
+  };
+};
+
 export type ConnectEmailTransport = "cloudflare" | "resend";
 
-/**
- * Sends the submission. Throws when no transport is configured or delivery
- * fails, so the caller can show the visitor a real error state.
- */
-export const sendConnectEmail = async (
+/** Resend key wins while it is configured; binding is the native fallback. */
+const deliver = async (
   env: ConnectEmailEnv,
-  submission: ConnectSubmission,
+  content: ConnectEmailContent,
+  replyTo: string,
 ): Promise<ConnectEmailTransport> => {
-  const { html, subject, text } = buildConnectEmail(submission);
-  const replyTo = submission.email || CONNECT_EMAIL_TO;
+  const { html, subject, text } = content;
 
   if (env.RESEND_API_KEY) {
     const response = await fetch("https://api.resend.com/emails", {
@@ -175,3 +225,20 @@ export const sendConnectEmail = async (
 
   throw new Error("No email transport configured (RESEND_API_KEY or CONNECT_EMAIL binding)");
 };
+
+/**
+ * Sends the connection card. Throws when no transport is configured or
+ * delivery fails, so the caller can show the visitor a real error state.
+ */
+export const sendConnectEmail = (
+  env: ConnectEmailEnv,
+  submission: ConnectSubmission,
+): Promise<ConnectEmailTransport> =>
+  deliver(env, buildConnectEmail(submission), submission.email || CONNECT_EMAIL_TO);
+
+/** Sends the public contact inquiry with the same delivery guarantees. */
+export const sendContactEmail = (
+  env: ConnectEmailEnv,
+  submission: ContactSubmission,
+): Promise<ConnectEmailTransport> =>
+  deliver(env, buildContactEmail(submission), submission.email || CONNECT_EMAIL_TO);

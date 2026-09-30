@@ -1,7 +1,9 @@
 ---
 import PageHero from "@/components/layout/page-hero.astro";
 import SiteContainer from "@/components/layout/site-container.astro";
+import ContactForm from "@/components/contact/contact-form.astro";
 import { Button } from "@/components/starwind/button";
+import { Card, CardContent } from "@/components/starwind/card";
 import BaseLayout from "@/layouts/base-layout.astro";
 import { churchInfo } from "@/lib/church-data";
 import { faqPageLd } from "@/lib/seo";
@@ -151,16 +153,36 @@ const serviceTimes = await getSpanishServiceTimes(),
             tengas.
           </p>
           <div>
-            <Button
-              href={`mailto:${churchInfo.email}`}
-              size="lg"
-              variant="primary"
-            >
+            <Button href="#contacto" size="lg" variant="primary">
               Contáctanos
             </Button>
           </div>
         </div>
       </div>
+    </SiteContainer>
+  </section>
+
+  <section
+    class="site-gutter border-t border-border py-16 sm:py-20"
+    id="contacto"
+  >
+    <SiteContainer class="mx-auto grid max-w-3xl gap-8">
+      <div class="grid gap-3">
+        <h2
+          class="font-semibold text-3xl text-foreground tracking-tight sm:text-4xl"
+        >
+          Contáctanos
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Escríbenos con tus preguntas, una petición de oración o el siguiente
+          paso que quieres dar. Alguien de nuestro equipo te responderá pronto.
+        </p>
+      </div>
+      <Card>
+        <CardContent>
+          <ContactForm />
+        </CardContent>
+      </Card>
     </SiteContainer>
   </section>
 </BaseLayout>

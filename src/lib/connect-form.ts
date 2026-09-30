@@ -16,6 +16,7 @@ export const CONNECT_FIELD_LIMITS = {
   telefono: 200,
   como_se_entero_otro: 200,
   intereses_otro: 200,
+  mensaje: 2000,
   oracion: 2000,
 } as const;
 
@@ -27,6 +28,7 @@ export type ConnectErrorCode =
   | "contacto"
   | "correo"
   | "envio"
+  | "mensaje"
   | "nombre"
   | "longitud"
   | "contenido"
@@ -36,9 +38,10 @@ export const CONNECT_ERROR_MESSAGES: Record<ConnectErrorCode, string> = {
   contacto: "Déjanos tu correo electrónico o tu teléfono para poder responder.",
   correo: "Revisa tu correo electrónico: no parece válido.",
   envio: `No pudimos enviar tu información en este momento. Intenta de nuevo en unos minutos o escríbenos a ${churchInfo.email}.`,
+  mensaje: "Escribe tu mensaje para que podamos ayudarte.",
   nombre: "Escribe tu nombre para que podamos conocerte.",
   longitud:
-    "Revisa la extensión de los campos: la petición de oración admite hasta 2000 caracteres y los demás campos, hasta 200. Conservamos tu información para que puedas corregirla.",
+    "Revisa la extensión de los campos: los textos largos (petición de oración o mensaje) admiten hasta 2000 caracteres y los demás campos, hasta 200. Conservamos tu información para que puedas corregirla.",
   contenido:
     "El formulario supera el tamaño permitido. Reduce su contenido antes de enviarlo de nuevo.",
   formato: "No pudimos leer el formulario. Envíalo desde esta página sin adjuntar archivos.",

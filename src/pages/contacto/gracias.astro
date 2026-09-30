@@ -1,0 +1,47 @@
+---
+import SiteContainer from "@/components/layout/site-container.astro";
+import { Button } from "@/components/starwind/button";
+import BaseLayout from "@/layouts/base-layout.astro";
+import { churchInfo } from "@/lib/church-data";
+---
+
+<BaseLayout
+  description="Recibimos tu mensaje. Alguien de Iglesia Bautista Victory te responderá pronto."
+  noindex
+  title="Gracias"
+>
+  <section class="site-gutter py-16 sm:py-24">
+    <SiteContainer>
+      <div class="mx-auto grid max-w-2xl gap-6 text-center">
+        <p
+          class="font-medium text-primary-accent text-sm uppercase tracking-[0.14em]"
+        >
+          Iglesia Bautista Victory
+        </p>
+        <h1
+          class="font-brand text-3xl uppercase text-foreground tracking-tight sm:text-4xl"
+        >
+          ¡Gracias! Recibimos tu mensaje
+        </h1>
+        <p class="text-muted-foreground sm:text-lg">
+          Alguien de nuestro equipo te responderá pronto. Si compartiste una
+          petición, estaremos orando por ti.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <Button href="/" size="lg" variant="primary">Volver al inicio</Button>
+          <Button href="/visitanos" size="lg" variant="outline">
+            Planea Tu Visita
+          </Button>
+        </div>
+        <p class="text-muted-foreground text-sm">
+          ¿Necesitas algo ahora? Escríbenos a <a
+            class="underline"
+            href={`mailto:${churchInfo.email}`}
+          >
+            {churchInfo.email}
+          </a>
+        </p>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>

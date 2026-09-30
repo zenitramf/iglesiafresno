@@ -21,8 +21,9 @@ export default defineConfig({
   }),
   integrations: [
     sitemap({
-      // The QR-gated connection form is private: keep it out of the sitemap.
-      filter: (page) => !new URL(page).pathname.startsWith("/conectar"),
+      // The QR-gated connection form and the contact recovery page are not
+      // landing pages: keep them out of the sitemap.
+      filter: (page) => !/\/(conectar|contacto)(\/|$)/.test(new URL(page).pathname),
     }),
   ],
   // No Astro sessions are used — cookies are signed by hand in src/middleware.ts,
