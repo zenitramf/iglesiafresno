@@ -73,7 +73,7 @@ const formatList = (values: string[], other: string): string => {
 
 /** Highlights which site form produced the submission. */
 const htmlCallout = (origin: string): string =>
-  `<div style="border:1px solid #e7e5e4;background:#fafaf9;border-radius:8px;padding:10px 14px;margin:0 0 16px"><p style="margin:0;font-size:13px;color:#44403c"><strong>Origen:</strong> ${escapeHtml(origin)}</p></div>`;
+  `<div style="background:#fbbf24;border-radius:8px;padding:14px 18px;margin:0 0 20px"><p style="margin:0;font-size:15px;color:#1c1917"><strong>ORIGEN:</strong> <strong>${escapeHtml(origin)}</strong></p></div>`;
 
 const formatSubmittedAt = (isoDate: string): string => {
   try {
