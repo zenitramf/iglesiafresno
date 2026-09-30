@@ -13,9 +13,11 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: `pnpm exec astro preview --host 127.0.0.1 --port ${port}`,
+    // The Cloudflare adapter previews the built Worker, so build first. The
+    // helper makes sure the QR gate secret exists before the build reads it.
+    command: `node tests/prepare-dev-vars.mjs && pnpm exec astro build && pnpm exec astro preview --host 127.0.0.1 --port ${port}`,
     reuseExistingServer: false,
-    timeout: 60_000,
+    timeout: 180_000,
     url: baseURL,
   },
 });

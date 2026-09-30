@@ -3,9 +3,24 @@
   "name": "iglesiafresno",
   "account_id": "a7059ab5a67b962f909c5e65af18b352",
   "compatibility_date": "2026-08-06",
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
   },
+  /*
+   * Connection form delivery. Requires Email Sending enabled for
+   * iglesiafresno.com and info@iglesiafresno.com verified as a destination
+   * address (see README). If the binding is unavailable, the form falls back
+   * to the RESEND_API_KEY secret.
+   */
+  "send_email": [
+    {
+      "allowed_sender_addresses": ["sitio-web@iglesiafresno.com"],
+      "destination_address": "info@iglesiafresno.com",
+      "name": "CONNECT_EMAIL",
+    },
+  ],
   "observability": {
     "enabled": true,
   },

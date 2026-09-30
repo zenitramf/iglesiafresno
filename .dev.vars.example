@@ -1,0 +1,12 @@
+# Copy this file to `.dev.vars` for local development with `astro dev`,
+# `astro preview` or `wrangler dev`.
+#
+# Production secrets are stored in Cloudflare, not in this repo:
+#   npx wrangler secret put QR_CONNECT_SECRET
+#   npx wrangler secret put RESEND_API_KEY   # only for the fallback transport
+
+# Signs the QR entry token and the gate cookie (32+ random characters).
+QR_CONNECT_SECRET=dev-only-change-me
+
+# Optional fallback when Cloudflare Email Sending is unavailable.
+# RESEND_API_KEY=re_xxxxxxxx

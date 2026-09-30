@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+# Private connection form — reachable only through the printed QR code.
+Disallow: /qr/
+Disallow: /conectar
+Disallow: /api/
+
 Sitemap: https://iglesiafresno.com/sitemap-index.xml

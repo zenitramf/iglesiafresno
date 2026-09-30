@@ -16,9 +16,14 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+# local Cloudflare Worker secrets (see .dev.vars.example)
+.dev.vars
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# wrangler local state (dev server, captured dev emails)
+.wrangler/

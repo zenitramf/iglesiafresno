@@ -1,0 +1,304 @@
+---
+export const prerender = false;
+
+import Alert from "@/components/starwind/alert/Alert.astro";
+import { Button } from "@/components/starwind/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/starwind/card";
+import Checkbox from "@/components/starwind/checkbox/Checkbox.astro";
+import Input from "@/components/starwind/input/Input.astro";
+import Label from "@/components/starwind/label/Label.astro";
+import Textarea from "@/components/starwind/textarea/Textarea.astro";
+import SiteContainer from "@/components/layout/site-container.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
+import {
+  CONNECT_ERROR_MESSAGES,
+  CONNECT_FIELD_LIMITS,
+  connectOptionId,
+  HOW_HEARD_OPTIONS,
+  INTEREST_OPTIONS,
+} from "@/lib/connect-form";
+
+import { CONNECT_THANKS_PATH } from "@/lib/connect-gate";
+import { submitConnectForm } from "@/lib/connect-submit";
+
+Astro.response.headers.set("Cache-Control", "no-store");
+let values = new URLSearchParams();
+let errorCode: keyof typeof CONNECT_ERROR_MESSAGES | null = null;
+if (Astro.request.method === "POST") {
+  const { env } = await import("cloudflare:workers");
+  const result = await submitConnectForm(Astro.request, env);
+  if (!result.errorCode) {
+    return Astro.redirect(CONNECT_THANKS_PATH, 303);
+  }
+  values = result.values;
+  errorCode = result.errorCode;
+  Astro.response.status = result.status;
+}
+const formErrorMessage = errorCode ? CONNECT_ERROR_MESSAGES[errorCode] : null;
+const exceedsLimit = (field: keyof typeof CONNECT_FIELD_LIMITS): boolean =>
+  values
+    .getAll(field)
+    .some((value) => value.length > CONNECT_FIELD_LIMITS[field]);
+const contactError =
+  errorCode === "contacto"
+    ? CONNECT_ERROR_MESSAGES.contacto
+    : errorCode === "correo"
+      ? CONNECT_ERROR_MESSAGES.correo
+      : null;
+const nameError = errorCode === "nombre" ? CONNECT_ERROR_MESSAGES.nombre : null;
+const contactDescribedBy = `contacto-ayuda${contactError ? " contacto-error" : ""}`;
+---
+
+<BaseLayout
+  description="Comparte tus datos con Iglesia Bautista Victory y alguien de nuestro equipo se pondrá en contacto contigo."
+  noindex
+  title="Conéctate"
+>
+  <section class="site-gutter py-12 sm:py-16">
+    <SiteContainer
+      class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16"
+    >
+      <div class="grid gap-5 lg:sticky lg:top-28">
+        <h1
+          class="font-brand text-3xl uppercase leading-tight text-foreground tracking-tight sm:text-4xl"
+        >
+          Conéctate con nosotros
+        </h1>
+        <p class="text-muted-foreground sm:text-lg">
+          Nos encantaría conocerte. Cuéntanos un poco sobre ti y alguien de
+          nuestro equipo te contactará con gusto.
+        </p>
+        <ul class="grid gap-3 text-muted-foreground">
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-primary-accent">→</span>
+            Oramos por cada petición que compartes.
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-primary-accent">→</span>
+            Respondemos tus preguntas sobre la iglesia y la fe.
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-primary-accent">→</span>
+            Te ayudamos a dar el siguiente paso: salvación, bautismo, grupos pequeños
+            o servicio.
+          </li>
+        </ul>
+        <p class="text-muted-foreground text-sm">
+          Usamos tu información únicamente para contactarte y orar por ti.
+        </p>
+      </div>
+
+      <div class="grid gap-6">
+        {
+          formErrorMessage && (
+            <Alert id="formulario-error" variant="error">
+              <p class="font-medium">No pudimos enviar el formulario</p>
+              <p class="mt-1 text-muted-foreground text-sm">
+                {formErrorMessage}
+              </p>
+            </Alert>
+          )
+        }
+
+        <Card>
+          <CardHeader>
+            <h2 class="font-semibold text-foreground text-2xl tracking-tight">
+              Tarjeta de conexión
+            </h2>
+            <CardDescription>
+              Toma menos de dos minutos. Los campos marcados con{" "}
+              <span aria-hidden="true" class="text-error">*</span> son obligatorios.
+              Los campos de texto admiten hasta 200 caracteres y la petición de oración,
+              hasta 2000.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <form action="/api/conectar" class="grid gap-8" method="POST">
+              <div aria-hidden="true" class="hidden">
+                <label for="sitio_web">No completar este campo</label>
+                <input
+                  autocomplete="off"
+                  id="sitio_web"
+                  name="sitio_web"
+                  tabindex="-1"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <Label for="nombre">
+                  Nombre <span aria-hidden="true" class="text-error">*</span>
+                </Label>
+                <Input
+                  aria-describedby={nameError
+                    ? "nombre-error"
+                    : exceedsLimit("nombre")
+                      ? "formulario-error"
+                      : undefined}
+                  aria-invalid={nameError || exceedsLimit("nombre")
+                    ? "true"
+                    : undefined}
+                  autocomplete="name"
+                  id="nombre"
+                  name="nombre"
+                  value={values.get("nombre") ?? ""}
+                  maxlength={CONNECT_FIELD_LIMITS.nombre}
+                  required
+                />
+                {
+                  nameError && (
+                    <p class="text-error text-sm" id="nombre-error">
+                      {nameError}
+                    </p>
+                  )
+                }
+              </div>
+
+              <div class="grid gap-6 sm:grid-cols-2">
+                <div class="grid gap-2">
+                  <Label for="correo">Correo electrónico</Label>
+                  <Input
+                    aria-describedby={`${contactDescribedBy}${exceedsLimit("correo") ? " formulario-error" : ""}`}
+                    aria-invalid={contactError || exceedsLimit("correo")
+                      ? "true"
+                      : undefined}
+                    autocomplete="email"
+                    id="correo"
+                    name="correo"
+                    value={values.get("correo") ?? ""}
+                    maxlength={CONNECT_FIELD_LIMITS.correo}
+                    type="email"
+                  />
+                  <p class="text-muted-foreground text-sm" id="contacto-ayuda">
+                    Déjanos al menos un medio de contacto.
+                  </p>
+                </div>
+
+                <div class="grid gap-2">
+                  <Label for="telefono">Teléfono</Label>
+                  <Input
+                    aria-describedby={`${contactDescribedBy}${exceedsLimit("telefono") ? " formulario-error" : ""}`}
+                    aria-invalid={errorCode === "contacto" ||
+                    exceedsLimit("telefono")
+                      ? "true"
+                      : undefined}
+                    autocomplete="tel"
+                    id="telefono"
+                    name="telefono"
+                    value={values.get("telefono") ?? ""}
+                    maxlength={CONNECT_FIELD_LIMITS.telefono}
+                    type="tel"
+                  />
+                </div>
+              </div>
+              {
+                contactError && (
+                  <p class="text-error text-sm" id="contacto-error">
+                    {contactError}
+                  </p>
+                )
+              }
+
+              <fieldset class="grid gap-4">
+                <legend class="font-medium text-foreground">
+                  ¿Cómo se enteró de nosotros?
+                </legend>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  {
+                    HOW_HEARD_OPTIONS.map((label) => (
+                      <Checkbox
+                        id={connectOptionId("como-se-entero", label)}
+                        label={label}
+                        name="como_se_entero"
+                        value={label}
+                        checked={values
+                          .getAll("como_se_entero")
+                          .includes(label)}
+                      />
+                    ))
+                  }
+                </div>
+                <div class="grid gap-2">
+                  <Label for="como_se_entero_otro">Otro:</Label>
+                  <Input
+                    id="como_se_entero_otro"
+                    name="como_se_entero_otro"
+                    value={values.get("como_se_entero_otro") ?? ""}
+                    maxlength={CONNECT_FIELD_LIMITS.como_se_entero_otro}
+                    aria-invalid={exceedsLimit("como_se_entero_otro")
+                      ? "true"
+                      : undefined}
+                    aria-describedby={exceedsLimit("como_se_entero_otro")
+                      ? "formulario-error"
+                      : undefined}
+                  />
+                </div>
+              </fieldset>
+
+              <div class="grid gap-2">
+                <Label for="oracion">¿Cómo podemos orar por usted?</Label>
+                <Textarea
+                  aria-describedby={`oracion-ayuda${exceedsLimit("oracion") ? " formulario-error" : ""}`}
+                  aria-invalid={exceedsLimit("oracion") ? "true" : undefined}
+                  id="oracion"
+                  name="oracion"
+                  value={values.get("oracion") ?? ""}
+                  maxlength={CONNECT_FIELD_LIMITS.oracion}
+                  rows={4}
+                />
+                <p class="text-muted-foreground text-sm" id="oracion-ayuda">
+                  Hasta 2000 caracteres. Lo trataremos con confianza y respeto.
+                </p>
+              </div>
+
+              <fieldset class="grid gap-4">
+                <legend class="font-medium text-foreground">
+                  Quiero saber más sobre...
+                </legend>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  {
+                    INTEREST_OPTIONS.map((label) => (
+                      <Checkbox
+                        id={connectOptionId("interes", label)}
+                        label={label}
+                        name="intereses"
+                        value={label}
+                        checked={values.getAll("intereses").includes(label)}
+                      />
+                    ))
+                  }
+                </div>
+                <div class="grid gap-2">
+                  <Label for="intereses_otro">Otro:</Label>
+                  <Input
+                    id="intereses_otro"
+                    name="intereses_otro"
+                    value={values.get("intereses_otro") ?? ""}
+                    maxlength={CONNECT_FIELD_LIMITS.intereses_otro}
+                    aria-invalid={exceedsLimit("intereses_otro")
+                      ? "true"
+                      : undefined}
+                    aria-describedby={exceedsLimit("intereses_otro")
+                      ? "formulario-error"
+                      : undefined}
+                  />
+                </div>
+              </fieldset>
+
+              <div>
+                <Button size="lg" type="submit" variant="primary">
+                  Enviar
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </SiteContainer>
+  </section>
+</BaseLayout>
