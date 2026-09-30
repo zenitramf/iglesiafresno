@@ -64,7 +64,8 @@ const escapeHtml = (value: string): string =>
     .replaceAll("'", "&#39;");
 
 const formatList = (values: string[], other: string): string => {
-  const items = [...values];
+  // The checked "Otro" checkbox collapses into its free-text line when present.
+  const items = other ? values.filter((value) => value !== "Otro") : [...values];
   if (other) {
     items.push(`Otro: ${other}`);
   }

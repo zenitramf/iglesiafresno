@@ -223,20 +223,29 @@ const contactDescribedBy = `contacto-ayuda${contactError ? " contacto-error" : "
                     ))
                   }
                 </div>
-                <div class="grid gap-2">
-                  <Label for="como_se_entero_otro">Otro:</Label>
-                  <Input
-                    id="como_se_entero_otro"
-                    name="como_se_entero_otro"
-                    value={values.get("como_se_entero_otro") ?? ""}
-                    maxlength={CONNECT_FIELD_LIMITS.como_se_entero_otro}
-                    aria-invalid={exceedsLimit("como_se_entero_otro")
-                      ? "true"
-                      : undefined}
-                    aria-describedby={exceedsLimit("como_se_entero_otro")
-                      ? "formulario-error"
-                      : undefined}
+                <div class="grid gap-3" data-otro-group>
+                  <Checkbox
+                    checked={values.getAll("como_se_entero").includes("Otro")}
+                    id={connectOptionId("como-se-entero", "Otro")}
+                    label="Otro"
+                    name="como_se_entero"
+                    value="Otro"
                   />
+                  <div class="grid gap-2" data-otro-input hidden>
+                    <Label for="como_se_entero_otro">Especifica:</Label>
+                    <Input
+                      id="como_se_entero_otro"
+                      name="como_se_entero_otro"
+                      value={values.get("como_se_entero_otro") ?? ""}
+                      maxlength={CONNECT_FIELD_LIMITS.como_se_entero_otro}
+                      aria-invalid={exceedsLimit("como_se_entero_otro")
+                        ? "true"
+                        : undefined}
+                      aria-describedby={exceedsLimit("como_se_entero_otro")
+                        ? "formulario-error"
+                        : undefined}
+                    />
+                  </div>
                 </div>
               </fieldset>
 
@@ -273,20 +282,29 @@ const contactDescribedBy = `contacto-ayuda${contactError ? " contacto-error" : "
                     ))
                   }
                 </div>
-                <div class="grid gap-2">
-                  <Label for="intereses_otro">Otro:</Label>
-                  <Input
-                    id="intereses_otro"
-                    name="intereses_otro"
-                    value={values.get("intereses_otro") ?? ""}
-                    maxlength={CONNECT_FIELD_LIMITS.intereses_otro}
-                    aria-invalid={exceedsLimit("intereses_otro")
-                      ? "true"
-                      : undefined}
-                    aria-describedby={exceedsLimit("intereses_otro")
-                      ? "formulario-error"
-                      : undefined}
+                <div class="grid gap-3" data-otro-group>
+                  <Checkbox
+                    checked={values.getAll("intereses").includes("Otro")}
+                    id={connectOptionId("interes", "Otro")}
+                    label="Otro"
+                    name="intereses"
+                    value="Otro"
                   />
+                  <div class="grid gap-2" data-otro-input hidden>
+                    <Label for="intereses_otro">Especifica:</Label>
+                    <Input
+                      id="intereses_otro"
+                      name="intereses_otro"
+                      value={values.get("intereses_otro") ?? ""}
+                      maxlength={CONNECT_FIELD_LIMITS.intereses_otro}
+                      aria-invalid={exceedsLimit("intereses_otro")
+                        ? "true"
+                        : undefined}
+                      aria-describedby={exceedsLimit("intereses_otro")
+                        ? "formulario-error"
+                        : undefined}
+                    />
+                  </div>
                 </div>
               </fieldset>
 
@@ -301,4 +319,17 @@ const contactDescribedBy = `contacto-ayuda${contactError ? " contacto-error" : "
       </div>
     </SiteContainer>
   </section>
+  <script>
+    // Reveal each "Otro" text input only while its checkbox is checked.
+    for (const group of document.querySelectorAll("[data-otro-group]")) {
+      const checkbox = group.querySelector<HTMLInputElement>(
+        'input[type="checkbox"]',
+      );
+      const target = group.querySelector<HTMLElement>("[data-otro-input]");
+      if (!checkbox || !target) continue;
+      const sync = () => (target.hidden = !checkbox.checked);
+      checkbox.addEventListener("change", sync);
+      sync();
+    }
+  </script>
 </BaseLayout>

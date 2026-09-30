@@ -147,6 +147,8 @@ test.describe("envío del formulario", () => {
     await page.getByLabel("¿Cómo podemos orar por usted?").fill(prayer);
     await page.getByLabel("Familia", { exact: true }).check();
     await page.getByLabel("Salvación", { exact: true }).check();
+    await page.locator("#como-se-entero-otro").check();
+    await page.locator("#interes-otro").check();
     await page.locator('[name="como_se_entero_otro"]').fill('Invitación "especial"');
     await page.locator('[name="intereses_otro"]').fill("Clases");
     await page.getByRole("button", { name: "Enviar" }).click();
@@ -155,6 +157,8 @@ test.describe("envío del formulario", () => {
     await expect(page.getByLabel("¿Cómo podemos orar por usted?")).toHaveValue(prayer);
     await expect(page.getByLabel("Familia", { exact: true })).toBeChecked();
     await expect(page.getByLabel("Salvación", { exact: true })).toBeChecked();
+    await expect(page.locator("#como-se-entero-otro")).toBeChecked();
+    await expect(page.locator('[name="como_se_entero_otro"]')).toBeVisible();
     await expect(page.locator('[name="como_se_entero_otro"]')).toHaveValue('Invitación "especial"');
     await expect(page.locator('[name="intereses_otro"]')).toHaveValue("Clases");
   });
@@ -174,7 +178,9 @@ test.describe("envío del formulario", () => {
     expect(response.status()).toBe(422);
     const html = await response.text();
     expect(html).toContain(prayer);
-    expect(html).toContain("los textos largos (petición de oración o mensaje) admiten hasta 2000 caracteres");
+    expect(html).toContain(
+      "los textos largos (petición de oración o mensaje) admiten hasta 2000 caracteres",
+    );
     expect(response.headers().location).toBeUndefined();
   });
 

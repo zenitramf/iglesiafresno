@@ -144,11 +144,11 @@ export const submitConnectForm = async (
     email: text("correo"),
     phone: text("telefono"),
     howHeard: [...new Set(parsed.values.getAll("como_se_entero"))].filter((value) =>
-      HOW_HEARD_OPTIONS.some((option) => option === value),
+      [...HOW_HEARD_OPTIONS, "Otro"].some((option) => option === value),
     ),
     howHeardOther: text("como_se_entero_otro"),
     interests: [...new Set(parsed.values.getAll("intereses"))].filter((value) =>
-      INTEREST_OPTIONS.some((option) => option === value),
+      [...INTEREST_OPTIONS, "Otro"].some((option) => option === value),
     ),
     interestsOther: text("intereses_otro"),
     prayer: text("oracion"),
