@@ -1,5 +1,5 @@
 /**
- * Minimal Worker binding types used by the connection form.
+ * Minimal Worker binding types used by the connection form and analytics.
  *
  * This is a hand-written stand-in for `npx wrangler types`
  * (`worker-configuration.d.ts`), which would otherwise commit ~600 KB of
@@ -21,6 +21,8 @@ interface ConnectEmailBinding {
 }
 
 interface IBVWorkerEnv {
+  /** Cloudflare Workers Analytics Engine dataset binding (`ibv_events`). */
+  ANALYTICS?: import("@/lib/analytics").AnalyticsDatasetBinding;
   /** Cloudflare Email Sending binding (see wrangler.jsonc). */
   CONNECT_EMAIL?: ConnectEmailBinding;
   /** Enables the Resend fallback transport. */

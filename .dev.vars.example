@@ -10,3 +10,6 @@ QR_CONNECT_SECRET=dev-only-change-me
 
 # Optional fallback when Cloudflare Email Sending is unavailable.
 # RESEND_API_KEY=re_xxxxxxxx
+#
+# Note: build-time Astro variables (such as PUBLIC_CF_WEB_ANALYTICS_TOKEN) are
+# read from `.env` or the CI/build environment by `astro build`, not `.dev.vars`.

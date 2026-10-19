@@ -8,6 +8,11 @@
  *
  * No session storage is involved: token and cookie are HMAC-signed values
  * derived from the same secret, verified with WebCrypto in the Worker.
+ *
+ * Keep this module import-free: `scripts/connect-qr-url.mjs` loads it directly
+ * with Node type stripping (no `@/` aliases), and the browser click tracker
+ * imports `CONNECT_ENTRY_PREFIX` from it. The request-level decision that also
+ * records analytics lives in `connect-gate-decision.ts`.
  */
 
 /** Where non-QR visitors (and expired/invalid cookies) are sent. */
@@ -34,7 +39,7 @@ export const GATE_REDIRECT_STATUS = 302;
 
 const ENTRY_TOKEN_CONTEXT = "connect-entry:v1";
 const COOKIE_CONTEXT = "connect-cookie:v1";
-const encoder = new TextEncoder();
+const encoder = /* @__PURE__ */ new TextEncoder();
 
 const toBase64Url = (bytes: Uint8Array): string => {
   let binary = "";
@@ -115,12 +120,17 @@ export const verifyConnectCookieValue = async (
   return timingSafeEqual(signature, await sign(secret, `${COOKIE_CONTEXT}:${expiresAt}`));
 };
 
-/** Paths that require a valid QR cookie. */
-const GATED_PATHS = new Set<string>([
+/** Gated HTML pages where an authorized GET represents a page view. */
+const GATED_PAGE_PATHS = new Set<string>([
   CONNECT_PATH,
   `${CONNECT_PATH}/`,
   CONNECT_THANKS_PATH,
   `${CONNECT_THANKS_PATH}/`,
+]);
+
+/** Paths that require a valid QR cookie. */
+const GATED_PATHS = new Set<string>([
+  ...GATED_PAGE_PATHS,
   CONNECT_API_PATH,
   `${CONNECT_API_PATH}/`,
 ]);
@@ -129,3 +139,9 @@ export const isConnectEntryPath = (pathname: string): boolean =>
   pathname.startsWith(CONNECT_ENTRY_PREFIX);
 
 export const isConnectGatePath = (pathname: string): boolean => GATED_PATHS.has(pathname);
+
+export const isConnectPagePath = (pathname: string): boolean => GATED_PAGE_PATHS.has(pathname);
+
+/** True for every path the gate handles (QR entry or cookie-protected). */
+export const requiresConnectGate = (pathname: string): boolean =>
+  isConnectEntryPath(pathname) || isConnectGatePath(pathname);

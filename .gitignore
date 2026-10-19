@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # wrangler local state (dev server, captured dev emails)
 .wrangler/
+
+# playwright test output
+test-results/

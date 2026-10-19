@@ -154,5 +154,53 @@ const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props,
       <slot />
     </main>
     <SiteFooter />
+    <script>
+      import {
+        resolveCtaPlacement,
+        resolveCtaTargetFromHref,
+        sanitizeAnalyticsPath,
+      } from "@/lib/analytics-dimensions";
+
+      const handlePointerActivation = (event: MouseEvent): void => {
+        if (event.defaultPrevented || !(event.target instanceof Element)) {
+          return;
+        }
+        const isPrimaryClick = event.type === "click" && event.button === 0;
+        const isMiddleClick = event.type === "auxclick" && event.button === 1;
+        if (!isPrimaryClick && !isMiddleClick) {
+          return;
+        }
+        const anchor = event.target.closest("a[href]");
+        if (!anchor) {
+          return;
+        }
+        const target = resolveCtaTargetFromHref(anchor.getAttribute("href"));
+        if (!target) {
+          return;
+        }
+        const payload = JSON.stringify({
+          path: sanitizeAnalyticsPath(window.location.pathname),
+          placement: resolveCtaPlacement(anchor),
+          target,
+        });
+        try {
+          if (navigator.sendBeacon) {
+            navigator.sendBeacon("/api/evento", payload);
+            return;
+          }
+          fetch("/api/evento", {
+            body: payload,
+            headers: { "Content-Type": "text/plain;charset=UTF-8" },
+            keepalive: true,
+            method: "POST",
+          }).catch(() => undefined);
+        } catch {
+          // Never block navigation if beacon dispatch fails.
+        }
+      };
+
+      document.addEventListener("click", handlePointerActivation);
+      document.addEventListener("auxclick", handlePointerActivation);
+    </script>
   </body>
 </html>

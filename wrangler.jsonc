@@ -21,6 +21,12 @@
       "name": "CONNECT_EMAIL",
     },
   ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "ibv_events",
+    },
+  ],
   "observability": {
     "enabled": true,
   },

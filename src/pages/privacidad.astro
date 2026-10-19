@@ -2,26 +2,271 @@
 import PageHero from "@/components/layout/page-hero.astro";
 import SiteContainer from "@/components/layout/site-container.astro";
 import BaseLayout from "@/layouts/base-layout.astro";
+import { churchInfo } from "@/lib/church-data";
+
+const updatedOn = "19 de octubre de 2026";
+const externalLinkClass =
+  "text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline";
 ---
 
 <BaseLayout
-  description="Lea cómo Iglesia Bautista Victory maneja la información del sitio web, los servicios externos y las preguntas relacionadas con la privacidad."
+  description="Lea cómo Iglesia Bautista Victory trata los formularios, las estadísticas del sitio, la cookie de la tarjeta de conexión y los servicios externos."
   title="Política de privacidad"
 >
   <PageHero
-    description="Cómo tratamos la información que usted comparte con nosotros."
+    description="Qué puede quedar registrado cuando usa este sitio, y para qué lo usamos."
     title="Política de privacidad"
   />
 
   <section class="site-gutter py-16 sm:py-20">
     <SiteContainer>
-      <div class="max-w-2xl">
-        <p class="text-base text-muted-foreground leading-relaxed">
-          Iglesia Bautista Victory respeta su privacidad. La información que
-          comparte a través de formularios de contacto o al planificar una
-          visita se usa únicamente para responder a su solicitud y para servir a
-          nuestra familia de la iglesia. No vendemos información personal.
-        </p>
+      <div class="grid max-w-2xl gap-10">
+        <div class="grid gap-4">
+          <p class="text-muted-foreground text-sm">
+            Última actualización: {updatedOn}.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Iglesia Bautista Victory respeta su privacidad. Esta página explica
+            qué puede quedar registrado cuando usa este sitio, para qué lo
+            usamos y con quién puede compartirse. No vendemos información
+            personal.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Quiénes somos
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            {churchInfo.name}<br />
+            {churchInfo.addressLine1}<br />
+            {churchInfo.addressLine2}
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Si tiene una pregunta sobre esta política, o desea que revisemos o
+            eliminemos un mensaje que nos envió, escríbanos a{" "}
+            <a class={externalLinkClass} href={`mailto:${churchInfo.email}`}>
+              {churchInfo.email}
+            </a>{" "}
+            o llame al{" "}
+            <a class={externalLinkClass} href={`tel:${churchInfo.phoneE164}`}>
+              {churchInfo.phone}
+            </a>. Buscaremos ese mensaje en el buzón de la iglesia. No guardamos
+            otra copia en el sitio.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Formularios
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Hay dos maneras de escribirnos. El formulario de contacto, en Planea
+            Tu Visita, pide su nombre, un correo o un teléfono, y un mensaje. La
+            tarjeta de conexión, al escanear el código QR impreso en la iglesia,
+            pide su nombre, un correo o un teléfono, cómo se enteró de nosotros,
+            los temas sobre los que quiere saber más y, si lo desea, una
+            petición de oración.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Usamos esa información solo para responderle y servir a nuestra
+            familia de la iglesia: contestarle, orar por usted o acompañarle en
+            un siguiente paso. No la usamos para publicidad.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            El sitio no guarda una base de datos de estos envíos. El contenido
+            se entrega por correo a {churchInfo.email}. El envío lo hace el
+            servicio de correo de Cloudflare o, si está configurado, Resend. El
+            destino es siempre el buzón de la iglesia. Ese correo incluye lo que
+            usted escribió, la fecha y hora del envío, y una descripción técnica
+            del navegador. No incluye su dirección IP.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Lo que escribió en «Otro» y el texto de la petición de oración
+            viajan solo en ese correo. No entran en las estadísticas. Un campo
+            oculto nos ayuda a reconocer envíos automáticos. Si se completa, no
+            enviamos el correo.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Estadísticas del sitio
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Usamos dos servicios de Cloudflare para entender, en conjunto, si el
+            sitio y los formularios sirven a quienes nos visitan. No usamos
+            cookies publicitarias ni creamos perfiles para seguirle de un sitio
+            a otro.
+          </p>
+          <h3 class="pt-2 font-semibold text-foreground text-lg tracking-tight">
+            Analítica web
+          </h3>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Un programa de Cloudflare puede medir visitas, páginas, de dónde
+            llegó la visita, el país, el tipo de dispositivo y la rapidez de
+            carga. No usa cookies ni el almacenamiento local del navegador para
+            esas métricas. Puede recibir la dirección de la página visitada.
+            Cuando la medición está activa, ese programa se carga desde los
+            servidores de Cloudflare. Nuestro registro propio de eventos,
+            descrito abajo, no guarda el código del QR: esa parte de la
+            dirección se descarta.
+          </p>
+          <h3 class="pt-2 font-semibold text-foreground text-lg tracking-tight">
+            Registro de eventos
+          </h3>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Además, el sitio anota eventos sueltos: por ejemplo, que alguien
+            abrió la tarjeta de conexión, que un formulario se envió o que se
+            pulsó un enlace. Cada evento es un registro separado, con fecha y
+            hora, la página (de una lista fija), el país —no la ciudad ni una
+            dirección— y una categoría general de dispositivo, como teléfono
+            móvil, computadora u otra. También anotamos el resultado: si el
+            formulario llegó o qué tipo de enlace se usó.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Esos registros no incluyen su nombre, correo, teléfono, el texto que
+            escribió ni su dirección IP. El código del QR tampoco se guarda ahí.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Cuando se envía la tarjeta de conexión, el registro sí incluye las
+            casillas marcadas. Pueden ser Sitio web, Redes sociales, Familia,
+            Amigo u Otro, y temas como Salvación, Bautismo, Grupos pequeños,
+            Servir u Otro. También incluye un sí o un no sobre si escribió una
+            petición de oración. No incluye el texto de «Otro» ni el de la
+            petición.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Consultamos esos registros en informes agrupados, para ver qué
+            resulta útil y si los formularios funcionan. No son públicos: solo
+            pueden consultarlos quienes administran la cuenta de Cloudflare de
+            la iglesia. Aun así, cada registro lleva fecha y hora. En una
+            iglesia pequeña, alguien con acceso a ese registro y al buzón podría
+            relacionar la hora de un envío con el correo recibido. Por eso
+            tratamos las casillas de interés espiritual como información
+            sensible de ministerio. No las usamos para identificar personas en
+            los informes, ni para publicidad, ni las vendemos.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Al pulsar ciertos enlaces, la página envía una nota breve a este
+            mismo sitio, sin cookie: la página, la zona del enlace y el tipo de
+            destino, por ejemplo mapa, teléfono o redes sociales. Esa nota entra
+            en el mismo registro y no incluye lo que escribió en un formulario.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Cookie técnica de la tarjeta de conexión
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Si entra con el código QR impreso en la iglesia, su navegador guarda
+            una cookie llamada <code>ibv_conexion</code> durante un máximo de 24 horas.
+            Sirve solo para mostrar y enviar la tarjeta de conexión. Su valor es una
+            firma y una hora de caducidad: no contiene su nombre ni sus datos de contacto.
+            Los programas de la página no pueden leerla, y en una conexión segura
+            el navegador solo la envía por HTTPS. No la usamos para publicidad ni
+            para seguirle en otros sitios. Al cumplirse el plazo, el navegador la
+            descarta.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Servicios externos
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            El sitio está alojado en Cloudflare. Para entregar las páginas y
+            protegerlas, Cloudflare procesa datos técnicos de la conexión,
+            incluida la dirección IP. Nosotros no copiamos esa dirección en las
+            estadísticas ni en los correos de los formularios. Cloudflare puede
+            conservar registros técnicos de funcionamiento según su propio
+            servicio.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Las letras del sitio se piden a Google Fonts. Al abrir una página,
+            su navegador se comunica con Google, que puede recibir su dirección
+            IP y datos técnicos del navegador. No usamos Google para
+            estadísticas ni para anuncios.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Los enlaces a mapas, Facebook, YouTube y las ofrendas en línea
+            (Tithe.ly) salen de este sitio. Esos servicios tienen sus propias
+            políticas. Nosotros solo anotamos que se usó el enlace, no lo que
+            usted hace después.
+          </p>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Puede leer las políticas de{" "}
+            <a
+              class={externalLinkClass}
+              href="https://www.cloudflare.com/privacypolicy/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Cloudflare
+            </a>,{" "}
+            <a
+              class={externalLinkClass}
+              href="https://policies.google.com/privacy"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Google
+            </a>{" "}
+            y{" "}
+            <a
+              class={externalLinkClass}
+              href="https://resend.com/legal/privacy-policy"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Resend
+            </a>.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Conservación
+          </h2>
+          <ul
+            class="list-disc space-y-2 pl-5 text-base text-muted-foreground leading-relaxed"
+          >
+            <li>
+              El correo del formulario permanece en el buzón de la iglesia el
+              tiempo necesario para responderle y servirle. Quien atiende el
+              buzón puede borrarlo. No guardamos otra copia en el sitio.
+            </li>
+            <li>La cookie de la tarjeta caduca a las 24 horas.</li>
+            <li>
+              Los registros de estadísticas permanecen en Cloudflare mientras
+              ese servicio los conserve. No fijamos en el sitio un plazo
+              distinto, y no guardamos una copia para identificar personas.
+            </li>
+          </ul>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Menores
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Este sitio no está pensado para recoger datos de menores por su
+            cuenta. Si un padre o tutor menciona a un niño en un mensaje o en
+            una petición de oración, ese texto solo llega al buzón de la
+            iglesia, no a las estadísticas.
+          </p>
+        </div>
+
+        <div class="grid gap-3">
+          <h2 class="font-semibold text-foreground text-xl tracking-tight">
+            Cambios
+          </h2>
+          <p class="text-base text-muted-foreground leading-relaxed">
+            Si cambiamos esta política, actualizaremos esta página y la fecha de
+            arriba. La versión vigente es la del {updatedOn}.
+          </p>
+        </div>
       </div>
     </SiteContainer>
   </section>

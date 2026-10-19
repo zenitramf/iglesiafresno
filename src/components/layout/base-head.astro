@@ -34,7 +34,8 @@ const {
   },
   canonicalUrl = getCanonicalUrl(),
   ogImageUrl = absoluteUrl(image),
-  siteName = churchInfo.name;
+  siteName = churchInfo.name,
+  cfWebAnalyticsToken = import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim();
 ---
 
 <meta charset="utf-8" />
@@ -85,5 +86,15 @@ const {
 {
   jsonLd && (
     <script set:html={JSON.stringify(jsonLd)} type="application/ld+json" />
+  )
+}
+{
+  cfWebAnalyticsToken && (
+    <script
+      data-cf-beacon={JSON.stringify({ token: cfWebAnalyticsToken })}
+      defer
+      is:inline
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+    />
   )
 }

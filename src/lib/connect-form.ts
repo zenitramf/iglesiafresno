@@ -9,6 +9,80 @@ import { churchInfo } from "@/lib/church-data";
 export const HOW_HEARD_OPTIONS = ["Sitio web", "Redes sociales", "Familia", "Amigo"] as const;
 export const INTEREST_OPTIONS = ["Salvación", "Bautismo", "Grupos pequeños", "Servir"] as const;
 
+export const ALLOWED_HOW_HEARD_VALUES: ReadonlySet<string> = new Set<string>([
+  ...HOW_HEARD_OPTIONS,
+  "Otro",
+]);
+export const ALLOWED_INTEREST_VALUES: ReadonlySet<string> = new Set<string>([
+  ...INTEREST_OPTIONS,
+  "Otro",
+]);
+
+/** Deduplicates values and keeps only entries present in the provided allowlist. */
+export const filterAllowedFormOptions = (
+  values: readonly string[] | undefined,
+  allowlist: ReadonlySet<string>,
+): string[] => {
+  if (!values || values.length === 0) {
+    return [];
+  }
+  const unique: string[] = [];
+  for (const item of values) {
+    if (allowlist.has(item) && !unique.includes(item)) {
+      unique.push(item);
+    }
+  }
+  return unique;
+};
+
+export type BoundedBodyReadResult =
+  | { body: string; ok: true }
+  | { ok: false; reason: "invalid_encoding" | "too_large" };
+
+/**
+ * Streams a UTF-8 request body up to `maxBytes`, cancelling the stream
+ * immediately if the byte limit is exceeded or UTF-8 decoding fails.
+ */
+export const readBoundedUtf8Body = async (
+  request: Request,
+  maxBytes: number,
+): Promise<BoundedBodyReadResult> => {
+  if (Number(request.headers.get("content-length")) > maxBytes) {
+    await request.body?.cancel();
+    return { ok: false, reason: "too_large" };
+  }
+  const reader = request.body?.getReader();
+  if (!reader) {
+    return { body: "", ok: true };
+  }
+  const decoder = new TextDecoder("utf-8", { fatal: true });
+  let length = 0;
+  let body = "";
+  try {
+    while (true) {
+      // Stream reads must stay sequential to enforce the byte limit.
+      // oxlint-disable-next-line no-await-in-loop
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      length += value.byteLength;
+      if (length > maxBytes) {
+        // oxlint-disable-next-line no-await-in-loop
+        await reader.cancel();
+        return { ok: false, reason: "too_large" };
+      }
+      body += decoder.decode(value, { stream: true });
+    }
+    body += decoder.decode();
+  } catch {
+    return { ok: false, reason: "invalid_encoding" };
+  } finally {
+    reader.releaseLock();
+  }
+  return { body, ok: true };
+};
+
 // UTF-16 lengths match the browser's native maxlength enforcement.
 export const CONNECT_FIELD_LIMITS = {
   nombre: 200,
@@ -47,11 +121,15 @@ export const CONNECT_ERROR_MESSAGES: Record<ConnectErrorCode, string> = {
   formato: "No pudimos leer el formulario. Envíalo desde esta página sin adjuntar archivos.",
 };
 
+const DIACRITICS_PATTERN = /[\u0300-\u036f]/g;
+const NON_ALPHANUMERIC_PATTERN = /[^a-z0-9]+/g;
+const EDGE_HYPHENS_PATTERN = /(^-|-$)/g;
+
 /** DOM id for a checkbox generated from its option label. */
 export const connectOptionId = (prefix: string, label: string): string =>
   `${prefix}-${label
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(DIACRITICS_PATTERN, "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")}`;
+    .replace(NON_ALPHANUMERIC_PATTERN, "-")
+    .replace(EDGE_HYPHENS_PATTERN, "")}`;
