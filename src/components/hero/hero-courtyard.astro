@@ -5,7 +5,11 @@ import { Button } from "@/components/starwind/button";
 import { Image } from "@/components/starwind/image";
 import CourtyardShape from "@/images/hero-courtyard-shape.svg";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
-import { HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from "@/lib/critical-images";
+import {
+  HERO_IMAGE_QUALITY,
+  HERO_IMAGE_SIZES,
+  HERO_IMAGE_WIDTHS,
+} from "@/lib/critical-images";
 
 /**
  * SVG viewBox 2522×937 — long-X artboard for height-locked horizontal slide.
@@ -64,8 +68,10 @@ const SHAPE_VB_W = 2522,
         alt={HERO_IMAGE_ALT}
         class="absolute inset-0 size-full object-cover object-center"
         critical
+        quality={HERO_IMAGE_QUALITY}
         sizes={HERO_IMAGE_SIZES}
         src={heroImage}
+        width={1920}
         widths={HERO_IMAGE_WIDTHS}
       />
       <div
@@ -148,7 +154,7 @@ const SHAPE_VB_W = 2522,
             >
               <Button
                 class="group"
-                href="/visitanos"
+                href="/visitanos/"
                 size="md"
                 variant="primary"
               >
@@ -158,7 +164,12 @@ const SHAPE_VB_W = 2522,
                   class="transition-transform group-hover:translate-x-1"
                 />
               </Button>
-              <Button class="group" href="/evangelio" size="md" variant="ghost">
+              <Button
+                class="group"
+                href="/evangelio/"
+                size="md"
+                variant="ghost"
+              >
                 Cómo ir al cielo
                 <ArrowRight
                   aria-hidden="true"
@@ -181,8 +192,10 @@ const SHAPE_VB_W = 2522,
         alt={HERO_IMAGE_ALT}
         class="absolute inset-0 size-full object-cover object-center"
         critical
+        quality={HERO_IMAGE_QUALITY}
         sizes={HERO_IMAGE_SIZES}
         src={heroImage}
+        width={1920}
         widths={HERO_IMAGE_WIDTHS}
       />
       <!-- Scrim so the hero title stays readable on the photo -->
@@ -221,7 +234,7 @@ const SHAPE_VB_W = 2522,
       <div class="grid gap-3 pt-3">
         <Button
           class="group w-full"
-          href="/visitanos"
+          href="/visitanos/"
           size="lg"
           variant="primary"
         >
@@ -233,7 +246,7 @@ const SHAPE_VB_W = 2522,
         </Button>
         <Button
           class="group w-full"
-          href="/evangelio"
+          href="/evangelio/"
           size="lg"
           variant="ghost"
         >

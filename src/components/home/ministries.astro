@@ -101,7 +101,8 @@ const featuredHighlights = [
             <Image
               alt="Puertas de casas en un vecindario residencial"
               class="absolute inset-0 size-full object-cover"
-              critical
+              decoding="async"
+              loading="lazy"
               sizes={EVANGELISMO_IMAGE_SIZES}
               src={evangelismoPersonal}
               widths={EVANGELISMO_IMAGE_WIDTHS}
@@ -134,7 +135,7 @@ const featuredHighlights = [
             <div class="mt-6">
               <Button
                 class="group/btn"
-                href="/evangelio"
+                href="/evangelio/"
                 size="md"
                 variant="primary"
               >

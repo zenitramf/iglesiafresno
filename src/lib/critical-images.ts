@@ -8,8 +8,9 @@ export interface CriticalPreload {
 }
 
 /** Full-bleed courtyard / inner-page hero. */
-export const HERO_IMAGE_WIDTHS: number[] = [640, 960, 1280, 1600, 1920, 2400];
+export const HERO_IMAGE_WIDTHS: number[] = [640, 960, 1280, 1600, 1920];
 export const HERO_IMAGE_SIZES = "100vw";
+export const HERO_IMAGE_QUALITY = 70;
 
 /** Featured Evangelismo Personal cell (half-width from @xl). */
 export const EVANGELISMO_IMAGE_WIDTHS: number[] = [480, 720, 960, 1024];
@@ -19,13 +20,17 @@ export const getCriticalImagePreload = async (
   src: ImageMetadata,
   widths: number[],
   sizes: string,
+  quality?: number,
 ): Promise<CriticalPreload> => {
-  const image = await getImage({
-    format: "webp",
-    sizes,
-    src,
-    widths,
-  });
+  const maxWidth = widths.at(-1),
+    image = await getImage({
+      format: "webp",
+      quality,
+      sizes,
+      src,
+      width: maxWidth,
+      widths,
+    });
 
   return {
     sizes,

@@ -5,6 +5,7 @@ import SiteHeader from "@/components/layout/site-header.astro";
 import heroImage from "@/images/iglesiaFresnoHeroImage.webp";
 import {
   getCriticalImagePreload,
+  HERO_IMAGE_QUALITY,
   HERO_IMAGE_SIZES,
   HERO_IMAGE_WIDTHS,
 } from "@/lib/critical-images";
@@ -14,47 +15,37 @@ import { buildSEO } from "@/lib/seo";
 import "@/styles/starwind.css";
 
 interface Props extends SEOInput {
-  /** Extra `<link rel="preload">` images (e.g. homepage evangelismo). */
+  /** Extra `<link rel="preload">` images. */
   extraCriticalPreloads?: CriticalPreload[];
+  /** Whether to preload the shared hero background image. Defaults to `true`. */
+  preloadHero?: boolean;
 }
 
-const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props,
+const {
+    extraCriticalPreloads = [],
+    preloadHero = true,
+    ...seoInput
+  }: Props = Astro.props,
   seo = buildSEO(seoInput),
-  heroPreload = await getCriticalImagePreload(
-    heroImage,
-    HERO_IMAGE_WIDTHS,
-    HERO_IMAGE_SIZES,
-  ),
-  criticalPreloads = [heroPreload, ...extraCriticalPreloads];
+  criticalPreloads = [
+    ...(preloadHero
+      ? [
+          await getCriticalImagePreload(
+            heroImage,
+            HERO_IMAGE_WIDTHS,
+            HERO_IMAGE_SIZES,
+            HERO_IMAGE_QUALITY,
+          ),
+        ]
+      : []),
+    ...extraCriticalPreloads,
+  ];
 ---
 
 <!doctype html>
-<html class="critical-pending dark" lang="es">
+<html class="dark" lang="es">
   <head>
     <BaseHead {...seo} currentUrl={Astro.url} />
-    <style is:inline>
-      #critical-boot {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        visibility: visible;
-        pointer-events: none;
-        background: oklch(0.147 0.004 49.25);
-        opacity: 1;
-        transition:
-          opacity 0.35s ease,
-          visibility 0.35s ease;
-      }
-      html:not(.critical-pending) #critical-boot {
-        visibility: hidden;
-        opacity: 0;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        #critical-boot {
-          transition: none;
-        }
-      }
-    </style>
     {
       criticalPreloads.map((image) => (
         <link
@@ -67,82 +58,8 @@ const { extraCriticalPreloads = [], ...seoInput }: Props = Astro.props,
         />
       ))
     }
-    <script is:inline>
-      (() => {
-        const html = document.documentElement,
-          maxWait = 2500;
-        let revealed = false;
-        function reveal() {
-          if (revealed) {
-            return;
-          }
-          revealed = true;
-          html.classList.remove("critical-pending");
-          document.body.removeAttribute("aria-busy");
-        }
-        function waitFor(img) {
-          if (img.complete && img.naturalWidth > 0) {
-            return img.decode
-              ? img.decode().catch(() => undefined)
-              : Promise.resolve();
-          }
-          return new Promise((resolve) => {
-            img.addEventListener(
-              "load",
-              () => {
-                if (img.decode) {
-                  img.decode().then(resolve, resolve);
-                } else {
-                  resolve();
-                }
-              },
-              { once: true },
-            );
-            img.addEventListener("error", resolve, { once: true });
-          });
-        }
-        function isShown(img) {
-          if (img.checkVisibility) {
-            return img.checkVisibility();
-          }
-          return img.getClientRects().length > 0;
-        }
-        function start() {
-          const imgs = [
-            ...document.querySelectorAll("img[data-critical]"),
-          ].filter(isShown);
-          if (!imgs.length) {
-            reveal();
-            return;
-          }
-          Promise.race([
-            Promise.all(imgs.map(waitFor)),
-            new Promise((resolve) => {
-              setTimeout(resolve, maxWait);
-            }),
-          ]).then(reveal);
-        }
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", start);
-        } else {
-          start();
-        }
-        setTimeout(reveal, maxWait + 200);
-      })();
-    </script>
   </head>
-  <body
-    aria-busy="true"
-    class="min-h-svh bg-background font-sans text-foreground antialiased"
-  >
-    <div aria-hidden="true" id="critical-boot"></div>
-    <noscript>
-      <style>
-        #critical-boot {
-          display: none !important;
-        }
-      </style>
-    </noscript>
+  <body class="min-h-svh bg-background font-sans text-foreground antialiased">
     <a
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
       href="#contenido-principal"

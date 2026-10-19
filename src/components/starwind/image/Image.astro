@@ -27,6 +27,7 @@ const {
     <AstroImage
       alt={alt}
       class={image({ class: className })}
+      decoding={rest.decoding ?? "async"}
       inferSize={inferSize}
       src={src}
       {...rest}

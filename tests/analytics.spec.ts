@@ -482,7 +482,7 @@ test.describe("E2E beacon endpoint and client click tracking", () => {
       (req) => req.url().endsWith("/api/evento") && req.method() === "POST",
     );
     await page
-      .locator("[data-hero] a[href='/evangelio']")
+      .locator("[data-hero] a[href^='/evangelio']")
       .first()
       .dispatchEvent("auxclick", { bubbles: true, button: 1 });
     const beaconReq = await beaconPromise;

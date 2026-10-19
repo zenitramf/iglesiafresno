@@ -6,24 +6,11 @@ import Ministries from "@/components/home/ministries.astro";
 import PlanVisit from "@/components/home/plan-visit.astro";
 import ServiceTimes from "@/components/home/service-times.astro";
 import WhoWeAre from "@/components/home/who-we-are.astro";
-import evangelismoPersonal from "@/images/evangelismo-personal.webp";
 import BaseLayout from "@/layouts/base-layout.astro";
-import {
-  EVANGELISMO_IMAGE_SIZES,
-  EVANGELISMO_IMAGE_WIDTHS,
-  getCriticalImagePreload,
-} from "@/lib/critical-images";
 import { churchOrganizationLd } from "@/lib/seo";
-
-const evangelismoPreload = await getCriticalImagePreload(
-  evangelismoPersonal,
-  EVANGELISMO_IMAGE_WIDTHS,
-  EVANGELISMO_IMAGE_SIZES,
-);
 ---
 
 <BaseLayout
-  extraCriticalPreloads={[evangelismoPreload]}
   jsonLd={churchOrganizationLd()}
   title="Iglesia Bautista Victory en Fresno"
   titleTemplate={false}

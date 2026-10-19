@@ -113,13 +113,27 @@ export const resolveCtaTargetFromHref = (rawHref: string | null | undefined): Ct
   if (href.includes("youtube.com")) {
     return "social_youtube";
   }
-  if (href === "#contacto" || href.endsWith("/visitanos#contacto")) {
+  if (
+    href === "#contacto" ||
+    href.endsWith("/visitanos#contacto") ||
+    href.endsWith("/visitanos/#contacto")
+  ) {
     return "contact_cta";
   }
-  if (href === "/visitanos" || href === "/visitanos/" || href.startsWith("/visitanos?")) {
+  if (
+    href === "/visitanos" ||
+    href === "/visitanos/" ||
+    href.startsWith("/visitanos?") ||
+    href.startsWith("/visitanos/?")
+  ) {
     return "plan_visit";
   }
-  if (href === "/evangelio" || href === "/evangelio/" || href.startsWith("/evangelio#")) {
+  if (
+    href === "/evangelio" ||
+    href === "/evangelio/" ||
+    href.startsWith("/evangelio#") ||
+    href.startsWith("/evangelio/#")
+  ) {
     return "gospel_cta";
   }
   return null;

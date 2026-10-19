@@ -3,9 +3,9 @@ import SiteContainer from "@/components/layout/site-container.astro";
 import { churchInfo, giveHref } from "@/lib/church-data";
 
 const exploreLinks = [
-    { href: "/visitanos", label: "Planea Tu Visita" },
-    { href: "/nosotros", label: "Nosotros" },
-    { href: "/equipo", label: "Equipo" },
+    { href: "/visitanos/", label: "Planea Tu Visita" },
+    { href: "/nosotros/", label: "Nosotros" },
+    { href: "/equipo/", label: "Equipo" },
     { external: true, href: giveHref, label: "Dar" },
   ] as const,
   connectLinks = [
@@ -22,10 +22,10 @@ const exploreLinks = [
     { external: true, href: giveHref, label: "Dar" },
   ] as const,
   resourceLinks = [
-    { href: "/evangelio", label: "Evangelio" },
-    { href: "/atribucion", label: "Atribución" },
-    { href: "/privacidad", label: "Privacidad" },
-    { href: "/terminos", label: "Términos de uso" },
+    { href: "/evangelio/", label: "Evangelio" },
+    { href: "/atribucion/", label: "Atribución" },
+    { href: "/privacidad/", label: "Privacidad" },
+    { href: "/terminos/", label: "Términos de uso" },
     { href: `mailto:${churchInfo.email}`, label: churchInfo.email },
   ] as const;
 ---

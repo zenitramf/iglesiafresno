@@ -1,3 +1,17 @@
 # Hashed Astro assets — cache at the Cloudflare edge for a year.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Static brand and icon assets — cache in browser and edge for 7 days.
+/vbc_logo.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/vbc_logo_text.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/favicon.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/favicon.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/og-default.jpg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
