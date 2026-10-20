@@ -47,7 +47,6 @@ export type KnownAnalyticsPath = (typeof KNOWN_PATHS)[number] | "other";
  * marked with `data-hero` (see `page-hero.astro`, `hero-courtyard.astro`).
  */
 export const KNOWN_PLACEMENTS = [
-  "banner",
   "conectar",
   "contacto",
   "conversemos",
@@ -141,9 +140,6 @@ export const resolveCtaTargetFromHref = (rawHref: string | null | undefined): Ct
 
 /** Resolves the allowlisted placement from the element's landmark or section. */
 export const resolveCtaPlacement = (anchor: Element): CtaPlacement => {
-  if (anchor.closest("[data-first-service-banner]")) {
-    return "banner";
-  }
   if (anchor.closest("#navbar-3-menu")) {
     return "mobile_menu";
   }
