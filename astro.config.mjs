@@ -29,6 +29,10 @@ export default defineConfig({
   // No Astro sessions are used — cookies are signed by hand in src/middleware.ts,
   // and this keeps the adapter from provisioning a SESSION KV namespace.
   session: false,
+  // Keep renamed URLs working: /cielo became /evangelio.
+  redirects: {
+    "/cielo": "/evangelio/",
+  },
   server: {
     allowedHosts: ["fresnovictory.ngrok.app"],
   },
