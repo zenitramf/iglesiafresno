@@ -1,9 +1,57 @@
 ---
 import ArrowRight from "@tabler/icons/outline/arrow-right.svg";
 import SiteContainer from "@/components/layout/site-container.astro";
+import ArtDirectedImage, {
+  type ArtDirectedCrop,
+} from "@/components/media/art-directed-image.astro";
 import { Button } from "@/components/starwind/button";
-import { Image } from "@/components/starwind/image";
 import whoWeAre from "@/images/who-we-are.webp";
+
+/**
+ * The section's box changes shape with the viewport, and `object-cover` on a
+ * 2.47:1 photo shows only a narrow, full-height slice of it on most screens.
+ * Each band ships just that slice, pre-cropped at full height and centered,
+ * so the framing matches the uncropped photo.
+ *
+ * A crop is only safe while it is at least as wide (relative to its height)
+ * as the box; a narrower crop would make `object-cover` zoom in. The box is
+ * about 38rem tall below 640px, 44rem to 1023px and 60rem above, capped near
+ * 0.9 of the viewport height, so each band also checks the viewport's aspect
+ * ratio. Short or very wide viewports fall through to the full photo.
+ */
+const WHO_WE_ARE_CROPS: ArtDirectedCrop[] = [
+  // Portrait phones: 3:4 crop; the box needs ~456 CSS px of width.
+  {
+    height: 1632,
+    media: "(max-width: 456px) and (max-aspect-ratio: 2/3)",
+    sizes: "456px",
+    width: 1224,
+    widths: [480, 640, 800, 960],
+  },
+  // Large phones and tablets in portrait: 3:2 crop.
+  {
+    height: 1632,
+    media: "(max-width: 1023px) and (max-aspect-ratio: 9/7)",
+    sizes: "(max-width: 639px) 912px, 1056px",
+    width: 2448,
+    widths: [960, 1280, 1600],
+  },
+  // Laptops and desktops up to 16:10: 16:9 crop.
+  {
+    height: 1620,
+    media: "(max-width: 1707px) and (max-aspect-ratio: 8/5)",
+    sizes: "100vw",
+    width: 2880,
+    widths: [1280, 1600, 1920, 2560],
+  },
+  // Wide desktops, landscape phones: the full photo.
+  {
+    height: 1036,
+    sizes: "100vw",
+    width: 2560,
+    widths: [1280, 1600, 1920, 2560],
+  },
+];
 ---
 
 <section
@@ -12,17 +60,13 @@ import whoWeAre from "@/images/who-we-are.webp";
   id="nosotros"
 >
   <div class="absolute inset-0 bg-muted">
-    <Image
+    <ArtDirectedImage
       alt="Familia de la congregación de Iglesia Bautista Victory"
       class="absolute inset-0 size-full object-cover object-top"
-      height={778}
-      inferSize={false}
-      loading="lazy"
-      quality={70}
-      sizes="100vw"
+      crops={WHO_WE_ARE_CROPS}
+      position="top"
+      quality={60}
       src={whoWeAre}
-      width={1920}
-      widths={[640, 960, 1280, 1600, 1920, 2560]}
     />
   </div>
 

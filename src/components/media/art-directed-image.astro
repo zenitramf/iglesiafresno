@@ -1,0 +1,103 @@
+---
+/**
+ * Art-directed photo: one build-time crop per viewport band.
+ *
+ * Use when `object-cover` would otherwise throw away most of a wide photo on
+ * narrow screens (or stretch too few pixels across a tall box). Each band
+ * gets its own aspect-ratio crop, so the downloaded pixels are the ones shown.
+ *
+ * `crops` are ordered narrowest band first; every crop except the last needs
+ * a `media` query, and the last one is the `<img>` fallback.
+ */
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+
+import { image } from "@/components/starwind/image/variants";
+
+export interface ArtDirectedCrop {
+  /** Crop size in source pixels; sets the aspect ratio and largest variant. */
+  height: number;
+  media?: string;
+  sizes: string;
+  width: number;
+  widths: number[];
+}
+
+interface Props {
+  alt: string;
+  class?: string;
+  crops: ArtDirectedCrop[];
+  loading?: "eager" | "lazy";
+  /** Crop anchor, in CSS `object-position` terms (match the img's class). */
+  position?: string;
+  quality?: number;
+  src: ImageMetadata;
+}
+
+const {
+    alt,
+    class: className,
+    crops,
+    loading = "lazy",
+    position = "center",
+    quality,
+    src,
+  } = Astro.props,
+  renderedCrops = await Promise.all(
+    crops.map(async (crop) => {
+      const result = await getImage({
+        fit: "cover",
+        format: "webp",
+        height: crop.height,
+        position,
+        quality,
+        sizes: crop.sizes,
+        src,
+        width: crop.width,
+        widths: crop.widths,
+      });
+
+      return {
+        height: crop.height,
+        media: crop.media,
+        sizes: crop.sizes,
+        src: result.src,
+        srcSet: result.srcSet.attribute,
+        width: crop.width,
+      };
+    }),
+  ),
+  fallback = renderedCrops.at(-1),
+  sources = renderedCrops.slice(0, -1);
+
+if (!fallback) {
+  throw new Error("ArtDirectedImage needs at least one crop.");
+}
+---
+
+<picture data-slot="picture">
+  {
+    sources.map((source) => (
+      <source
+        height={source.height}
+        media={source.media}
+        sizes={source.sizes}
+        srcset={source.srcSet}
+        type="image/webp"
+        width={source.width}
+      />
+    ))
+  }
+  <img
+    alt={alt}
+    class={image({ class: className })}
+    data-slot="image"
+    decoding="async"
+    height={fallback.height}
+    loading={loading}
+    sizes={fallback.sizes}
+    src={fallback.src}
+    srcset={fallback.srcSet}
+    width={fallback.width}
+  />
+</picture>
