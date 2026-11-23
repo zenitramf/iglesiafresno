@@ -40,14 +40,15 @@ const { headingLevel = "h1", id = "inicio" } = Astro.props,
 
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-[-28%] -inset-y-4 flex items-center justify-center sm:inset-x-[-12%] lg:inset-x-0"
+      class="pointer-events-none absolute -inset-y-4 inset-x-0 flex items-center justify-center"
       data-fresno-stage
     >
       <FresnoArchAngle
-        class="hero-fresno-arch h-[108%] w-auto max-w-none opacity-40 sm:h-[116%] sm:opacity-45 lg:h-[112%] lg:opacity-50"
+        class="hero-fresno-arch h-[112%] w-[150%] max-w-none opacity-35 sm:h-[116%] sm:opacity-40 lg:h-[112%] lg:opacity-45"
         data-fresno-arch
         data-hero-motion
         focusable="false"
+        preserveAspectRatio="none"
       />
     </div>
     <div
