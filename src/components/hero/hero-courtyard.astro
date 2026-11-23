@@ -38,23 +38,31 @@ const { headingLevel = "h1", id = "inicio" } = Astro.props,
     >
     </div>
 
-    <FresnoArchAngle
-      aria-hidden="true"
-      class="hero-fresno-arch pointer-events-none absolute -right-52 -bottom-20 h-[102%] w-auto opacity-45 sm:-right-28 sm:-bottom-10 sm:h-[112%] sm:opacity-65 lg:-right-8 lg:-bottom-8 lg:h-[110%] lg:opacity-75"
-      data-fresno-arch
-      data-hero-motion
-      focusable="false"
-    />
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 z-[1] bg-linear-to-b from-card/70 via-card/45 to-transparent sm:bg-linear-to-r sm:from-card/90 sm:via-card/25 sm:to-transparent"
+      class="pointer-events-none absolute inset-x-[-28%] -inset-y-4 flex items-center justify-center sm:inset-x-[-12%] lg:inset-x-0"
+      data-fresno-stage
+    >
+      <FresnoArchAngle
+        class="hero-fresno-arch h-[108%] w-auto max-w-none opacity-40 sm:h-[116%] sm:opacity-45 lg:h-[112%] lg:opacity-50"
+        data-fresno-arch
+        data-hero-motion
+        focusable="false"
+      />
+    </div>
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 z-[1] bg-card/25"
     >
     </div>
 
     <SiteContainer
-      class="relative z-10 flex min-h-[min(40rem,78svh)] items-center px-7 py-16 sm:min-h-[min(44rem,78svh)] sm:px-10 lg:px-14"
+      class="relative z-10 flex min-h-[min(40rem,78svh)] items-center justify-center px-7 py-16 text-center sm:min-h-[min(44rem,78svh)] sm:px-10 lg:px-14"
     >
-      <div class="max-w-2xl xl:max-w-3xl">
+      <div
+        class="grid max-w-2xl justify-items-center xl:max-w-3xl"
+        data-hero-copy
+      >
         <Heading
           class="text-balance font-light text-4xl leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
           id={headingId}
@@ -66,7 +74,7 @@ const { headingLevel = "h1", id = "inicio" } = Astro.props,
           }
         </Heading>
         <p
-          class="mt-6 max-w-xl text-pretty text-muted-foreground text-lg leading-relaxed sm:text-xl"
+          class="mx-auto mt-6 max-w-xl text-pretty text-muted-foreground text-lg leading-relaxed sm:text-xl"
         >
           {heroCopy.welcome}
         </p>

@@ -13,7 +13,10 @@ test.describe("Abstract growth hero", () => {
 
     await expect(hero.locator('[data-hero-abstract="arco-fresno"]')).toBeVisible();
     await expect(hero.locator("img")).toHaveCount(0);
+    await expect(hero.locator("[data-fresno-stage]")).toHaveCount(1);
     await expect(hero.locator("svg[data-fresno-arch][data-hero-motion]")).toHaveCount(1);
+    await expect(hero.locator("[data-hero-copy]")).toHaveCSS("justify-items", "center");
+    await expect(hero.locator("[data-hero-copy]")).toHaveCSS("text-align", "center");
     await expect(hero.getByRole("heading", { level: 1 })).toContainText("Crece en la fe.");
     await expect(hero.getByText("Bienvenidos a Iglesia Bautista Victory")).toHaveCount(1);
   });
