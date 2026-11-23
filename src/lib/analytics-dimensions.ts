@@ -44,7 +44,7 @@ export type KnownAnalyticsPath = (typeof KNOWN_PATHS)[number] | "other";
 
 /**
  * Landmarks plus the `section[id]` values that exist in the markup. Heroes are
- * marked with `data-hero` (see `page-hero.astro`, `hero-courtyard.astro`).
+ * marked with `data-hero` (see `page-hero.astro` and the homepage hero components).
  */
 export const KNOWN_PLACEMENTS = [
   "conectar",

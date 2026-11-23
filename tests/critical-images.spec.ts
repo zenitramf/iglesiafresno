@@ -3,19 +3,17 @@ import { expect, test } from "@playwright/test";
 import { gotoReady } from "./ready";
 
 test.describe("Critical image loading", () => {
-  test("homepage preloads hero only and lazy-loads below-the-fold images", async ({ page }) => {
+  test("homepage does not preload an image hero and lazy-loads below-the-fold images", async ({
+    page,
+  }) => {
     await page.setViewportSize({ height: 900, width: 1440 });
     await gotoReady(page);
 
     await expect(page.locator("#critical-boot")).toHaveCount(0);
 
     const preloads = page.locator('link[rel="preload"][as="image"]');
-    await expect(preloads).toHaveCount(1);
-
-    const hero = page.locator("[data-hero-frame] img");
-    await expect(hero).toHaveAttribute("fetchpriority", "high");
-    await expect(hero).toHaveAttribute("data-critical", "true");
-    await expect(hero).toHaveAttribute("decoding", "async");
+    await expect(preloads).toHaveCount(0);
+    await expect(page.locator("[data-hero] img")).toHaveCount(0);
 
     const evangelismo = page.locator("[data-featured-evangelism] img");
     await expect(evangelismo).toHaveAttribute("loading", "lazy");
