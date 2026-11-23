@@ -17,8 +17,8 @@ export const churchInfo = {
   /** E.164 form for `<a href="tel:">` and JSON-LD `telephone`. */
   phoneE164: "+15597656397",
   shortName: "IBV",
-  /** Dark page background (`--background`) as a hex for `<meta name="theme-color">`. */
-  themeColor: "#211e1c",
+  /** Page background (`--background`) as a hex for `<meta name="theme-color">`. */
+  themeColor: "#faf7ef",
   /** Canonical public origin. Also drives `astro.config.mjs` `site`. */
   url: "https://iglesiafresno.com",
   youtube: "https://www.youtube.com/@fresnovictory",

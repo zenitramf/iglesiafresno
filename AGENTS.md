@@ -12,6 +12,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 This is a **Spanish-language website** (primary locale: `es`).
 
+- Always respond to the user in **English**. This applies to agent messages
+  and commentary; keep only the website's user-facing content in Spanish.
 - Use `lang="es"` on the root `<html>` element (and any document/layout that sets language).
 - Write all user-facing copy in Spanish: headings, body text, buttons, labels, placeholders, form validation messages, empty states, toasts, tooltips, and navigation.
 - Write accessibility text in Spanish: `alt`, `aria-label`, `aria-describedby` content, and visually hidden helper text.
