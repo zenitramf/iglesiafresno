@@ -9,15 +9,15 @@ const times = await getSpanishServiceTimes();
   times.length > 0 && (
     <section
       aria-label="Horarios de servicio"
-      class="site-gutter border-border border-y bg-card py-8"
+      class="site-gutter border-border border-y bg-background py-8"
     >
       <SiteContainer class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {times.map((item) => (
-          <div class="grid gap-1 rounded-lg border border-border/70 bg-background/40 px-4 py-4">
-            <p class="font-medium text-primary-accent text-xs uppercase tracking-[0.16em]">
+          <div class="grid gap-2 rounded-lg border border-border/60 bg-card px-4 py-4 shadow-sm">
+            <p class="font-semibold text-secondary text-xs uppercase tracking-[0.16em]">
               {item.label}
             </p>
-            <p class="font-semibold text-foreground text-lg tracking-tight">
+            <p class="font-bold text-foreground text-xl tracking-tight">
               {item.time}
             </p>
           </div>
